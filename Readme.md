@@ -1,7 +1,7 @@
 # Личный проект «Что посмотреть» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дарья Дубовцева](https://up.htmlacademy.ru/react/6/user/1189877).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Отставнов](https://htmlacademy.ru/profile/id1617127).
 
 ---
 
