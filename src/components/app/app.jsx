@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import MainScreen from "../main/main";
-import NotFoundScreen from "../not-found/not-found";
-import MyListScreen from "../my-list/my-list";
-import SignInScreen from "../sign-in/sign-in";
-import PlayerScreen from "../player/player";
-import FilmScreen from "../film/film";
-import AddReviewScreen from "../add-review/add-review";
+import MainScreen from "../main-screen/main-screen";
+import NotFoundScreen from "../not-found-screen/not-found-screen";
+import MyListScreen from "../my-list-screen/my-list-screen";
+import SignInScreen from "../sign-in-screen/sign-in-screen";
+import PlayerScreen from "../player-screen/player-screen";
+import FilmScreen from "../film-screen/film-screen";
+import AddReviewScreen from "../add-review-screen/add-review-screen";
 import {PropType} from "../../utils/const";
 
 const App = ({movieCards, poster}) => {
