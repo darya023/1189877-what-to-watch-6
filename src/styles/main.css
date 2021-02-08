@@ -1377,6 +1377,8 @@ main {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column; }
+  .user-page--fill {
+    height: 100vh;}
 
 .user-page__head {
   margin-bottom: 40px;

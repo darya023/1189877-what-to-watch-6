@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import App from "./components/app/app";
 
 const POSTER = {
+  id: nanoid(),
   title: `The Grand Budapest Hotel`,
   genre: `Drama`,
   year: 2014,
