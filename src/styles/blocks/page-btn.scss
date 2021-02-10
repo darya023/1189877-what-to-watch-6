@@ -1,0 +1,16 @@
+.page-btn {
+    display: block;
+    padding: 24px 40px;
+    background: none;
+    border: 1px solid rgba(217, 205, 141, 0.41);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+    text-align: center;
+    color: #D9CD8D;
+    text-decoration: none;
+    cursor: pointer; 
+
+    &:hover, &:focus {
+        border: 1px solid rgba(217, 205, 141, 0.7); 
+    }
+}

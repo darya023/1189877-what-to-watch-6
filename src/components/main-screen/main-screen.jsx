@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import MovieCard from "../movie-card/movie-card";
+import {defaultProps, movieCardProps, posterProps} from "../../utils/prop-types";
+import {Link} from "react-router-dom";
 
-const Main = ({movieCards, poster}) => {
+const MainScreen = ({movieCards, poster}) => {
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -37,16 +39,19 @@ const Main = ({movieCards, poster}) => {
       <h1 className="visually-hidden">WTW</h1>
       <header className="page-header movie-card__head">
         <div className="logo">
-          <a className="logo__link">
+          <Link to="/" className="logo__link">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
-          </a>
+          </Link>
         </div>
         <div className="user-block">
           <div className="user-block__avatar">
-            <img src="img/avatar.jpg" alt="User avatar" width={63} height={63} />
+            <Link to="/mylist">
+              <img src="img/avatar.jpg" alt="User avatar" width={63} height={63} />
+            </Link>
           </div>
+          <Link to="/login" className="user-block__link">Sign in</Link>
         </div>
       </header>
       <div className="movie-card__wrap">
@@ -61,12 +66,12 @@ const Main = ({movieCards, poster}) => {
               <span className="movie-card__year">{poster.year}</span>
             </p>
             <div className="movie-card__buttons">
-              <button className="btn btn--play movie-card__button" type="button">
+              <Link to={`/player/` + poster.id} className="btn btn--play movie-card__button">
                 <svg viewBox="0 0 19 19" width={19} height={19}>
                   <use xlinkHref="#play-s" />
                 </svg>
                 <span>Play</span>
-              </button>
+              </Link>
               <button className="btn btn--list movie-card__button" type="button">
                 <svg viewBox="0 0 19 20" width={19} height={20}>
                   <use xlinkHref="#add" />
@@ -115,7 +120,7 @@ const Main = ({movieCards, poster}) => {
         </ul>
         <div className="catalog__movies-list">
           {
-            movieCards.map((movieCard) => <MovieCard key={movieCard.id} title={movieCard.title} image={movieCard.image}/>)
+            movieCards.map((movieCard) => <MovieCard key={movieCard.id} id={movieCard.id} title={movieCard.title} image={movieCard.image}/>)
           }
         </div>
         <div className="catalog__more">
@@ -124,11 +129,11 @@ const Main = ({movieCards, poster}) => {
       </section>
       <footer className="page-footer">
         <div className="logo">
-          <a className="logo__link logo__link--light">
+          <Link to="/" className="logo__link">
             <span className="logo__letter logo__letter--1">W</span>
             <span className="logo__letter logo__letter--2">T</span>
             <span className="logo__letter logo__letter--3">W</span>
-          </a>
+          </Link>
         </div>
         <div className="copyright">
           <p>© 2019 What to watch Ltd.</p>
@@ -138,20 +143,39 @@ const Main = ({movieCards, poster}) => {
   </React.Fragment>;
 };
 
-Main.propTypes = {
+// // Вот тут линтер ругается - "is missing in props validation"
+// MainScreen.propTypes = Object.assign(
+//     {},
+//     defaultProps,
+//     {
+//       movieCards: PropTypes.arrayOf(
+//           PropTypes.shape(movieCardProps)
+//       ),
+//       poster: PropTypes.shape(posterProps)
+//     }
+// );
+
+// // Вот тут все работает
+// MainScreen.propTypes = {
+//   ...Object.assign(
+//       {},
+//       defaultProps,
+//       {
+//         movieCards: PropTypes.arrayOf(
+//             PropTypes.shape(movieCardProps)
+//         ),
+//         poster: PropTypes.shape(posterProps)
+//       }
+//   )
+// };
+
+// // И тут работает
+MainScreen.propTypes = {
+  ...defaultProps,
   movieCards: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        title: PropTypes.string,
-        image: PropTypes.string,
-      })
+      PropTypes.shape(movieCardProps)
   ),
-  poster: PropTypes.shape({
-    title: PropTypes.string,
-    genre: PropTypes.string,
-    year: PropTypes.number,
-    image: PropTypes.string
-  })
+  poster: PropTypes.shape(posterProps)
 };
 
-export default Main;
+export default MainScreen;

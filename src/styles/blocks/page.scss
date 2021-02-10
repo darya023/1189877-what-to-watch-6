@@ -1,0 +1,15 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    flex-grow: 1;
+    max-width: 480px;
+    margin: auto;
+    font-size: 30px;
+    line-height: 44px;
+
+    &__text {
+        margin-bottom: 50px;
+    }
+}

@@ -1,7 +1,9 @@
 const path = require('path');
+const miniCss = require('mini-css-extract-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: ['./src/index.js', './src/styles/main.css', './src/styles/styles.scss'],
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'public')
@@ -11,6 +13,7 @@ module.exports = {
         watchContentBase: true,
         open: true,
         port: 1337,
+        historyApiFallback: true,
     },
     module: {
         rules: [
@@ -20,9 +23,32 @@ module.exports = {
             use: {
             loader: 'babel-loader',
             },
+        },
+        {
+            test:/\.(s*)css$/,
+            use: [
+               miniCss.loader,
+               'css-loader',
+               {
+                    loader: "postcss-loader",
+                    options: {
+                        plugins: [
+                            autoprefixer({
+                                browsers:['ie >= 8', 'last 4 version']
+                            })
+                        ]
+                    }
+                },
+               'sass-loader',
+            ]
         }
         ],
     },
+    plugins: [
+        new miniCss({
+           filename: './css/main.min.css',
+        }),
+    ],
     resolve: {
         extensions: ['.js', '.jsx']
     },
