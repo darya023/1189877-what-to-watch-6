@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {PropType} from "../../utils/const";
+import {defaultProps} from "../../utils/prop-types";
 
 const FilmScreen = (props) => {
   const id = props.match.params.id;
@@ -167,6 +167,6 @@ const FilmScreen = (props) => {
   </React.Fragment>;
 };
 
-FilmScreen.propTypes = PropType.DEFAULT_PROPS;
+FilmScreen.propTypes = defaultProps;
 
 export default FilmScreen;

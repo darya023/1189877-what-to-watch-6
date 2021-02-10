@@ -1,5 +1,5 @@
 import React from "react";
-import {PropType} from "../../utils/const";
+import {movieCardProps} from "../../utils/prop-types";
 import {Link} from "react-router-dom";
 
 const MovieCard = ({id, title, image}) => {
@@ -13,6 +13,6 @@ const MovieCard = ({id, title, image}) => {
   </article>;
 };
 
-MovieCard.propTypes = PropType.MOVIE_CARD;
+MovieCard.propTypes = movieCardProps;
 
 export default MovieCard;

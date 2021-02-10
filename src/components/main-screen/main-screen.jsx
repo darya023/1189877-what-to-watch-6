@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import MovieCard from "../movie-card/movie-card";
-import {PropType} from "../../utils/const";
+import {defaultProps, movieCardProps, posterProps} from "../../utils/prop-types";
 import {Link} from "react-router-dom";
 
 const MainScreen = ({movieCards, poster}) => {
@@ -143,12 +143,39 @@ const MainScreen = ({movieCards, poster}) => {
   </React.Fragment>;
 };
 
+// // Вот тут линтер ругается - "is missing in props validation"
+// MainScreen.propTypes = Object.assign(
+//     {},
+//     defaultProps,
+//     {
+//       movieCards: PropTypes.arrayOf(
+//           PropTypes.shape(movieCardProps)
+//       ),
+//       poster: PropTypes.shape(posterProps)
+//     }
+// );
+
+// // Вот тут все работает
+// MainScreen.propTypes = {
+//   ...Object.assign(
+//       {},
+//       defaultProps,
+//       {
+//         movieCards: PropTypes.arrayOf(
+//             PropTypes.shape(movieCardProps)
+//         ),
+//         poster: PropTypes.shape(posterProps)
+//       }
+//   )
+// };
+
+// // И тут работает
 MainScreen.propTypes = {
-  ...PropType.DEFAULT_PROPS,
+  ...defaultProps,
   movieCards: PropTypes.arrayOf(
-      PropTypes.shape(PropType.MOVIE_CARD)
+      PropTypes.shape(movieCardProps)
   ),
-  poster: PropTypes.shape(PropType.POSTER)
+  poster: PropTypes.shape(posterProps)
 };
 
 export default MainScreen;

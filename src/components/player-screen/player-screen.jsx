@@ -1,5 +1,5 @@
 import React from "react";
-import {PropType} from "../../utils/const";
+import {defaultProps} from "../../utils/prop-types";
 
 const PlayerScreen = (props) => {
   const backPath = props.history.goBack;
@@ -61,6 +61,6 @@ const PlayerScreen = (props) => {
   </React.Fragment>;
 };
 
-PlayerScreen.propTypes = PropType.DEFAULT_PROPS;
+PlayerScreen.propTypes = defaultProps;
 
 export default PlayerScreen;

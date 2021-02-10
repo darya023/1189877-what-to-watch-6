@@ -8,7 +8,7 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {PropType} from "../../utils/const";
+import {movieCardProps, posterProps} from "../../utils/prop-types";
 
 const App = ({movieCards, poster}) => {
   return (
@@ -34,9 +34,9 @@ const App = ({movieCards, poster}) => {
 
 App.propTypes = {
   movieCards: PropTypes.arrayOf(
-      PropTypes.shape(PropType.MOVIE_CARD)
+      PropTypes.shape(movieCardProps)
   ),
-  poster: PropTypes.shape(PropType.POSTER)
+  poster: PropTypes.shape(posterProps)
 };
 
 export default App;
