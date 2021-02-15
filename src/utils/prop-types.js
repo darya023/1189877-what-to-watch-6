@@ -6,15 +6,26 @@ export const defaultProps = {
   history: PropTypes.object
 };
 
-export const posterProps = {
-  title: PropTypes.string,
-  genre: PropTypes.string,
-  year: PropTypes.number,
-  image: PropTypes.string
+export const filmProps = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
+  genre: PropTypes.string.isRequired,
+  year: PropTypes.number.isRequired,
+  video: PropTypes.string.isRequired,
+  promoVideo: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  director: PropTypes.string.isRequired,
+  actors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  duration: PropTypes.number.isRequired,
+  rating: PropTypes.number.isRequired,
+  reviewsCount: PropTypes.number.isRequired,
+  isFavorite: PropTypes.bool.isRequired,
 };
 
-export const movieCardProps = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  image: PropTypes.string,
+export const userProps = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
 };

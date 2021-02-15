@@ -8,9 +8,12 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {movieCardProps, posterProps} from "../../utils/prop-types";
+import {filmProps, userProps} from "../../utils/prop-types";
 
-const App = ({movieCards, poster}) => {
+
+const App = ({films, poster, user}) => {
+  const favoriteFilms = films.filter((film) => film.isFavorite);
+
   return (
     <BrowserRouter>
       <Switch>
@@ -18,14 +21,38 @@ const App = ({movieCards, poster}) => {
           path="/"
           exact
           render={
-            (props)=>(<MainScreen {...props} movieCards={movieCards} poster={poster} />)
+            (props)=>(<MainScreen {...props} films={films} poster={poster} user={user}/>)
           }
         />
         <Route path="/login" exact component={SignInScreen} />
-        <Route path="/mylist" exact component={MyListScreen} />
-        <Route path="/player/:id" exact component={PlayerScreen} />
-        <Route path="/films/:id" exact component={FilmScreen} />
-        <Route path="/films/:id/review" exact component={AddReviewScreen} />
+        <Route
+          path="/mylist"
+          exact
+          render={
+            (props)=>(<MyListScreen {...props} films={favoriteFilms} user={user} />)
+          }
+        />
+        <Route
+          path="/player/:id"
+          exact
+          render={
+            (props)=>(<PlayerScreen {...props} films={films} />)
+          }
+        />
+        <Route
+          path="/films/:id"
+          exact
+          render={
+            (props)=>(<FilmScreen {...props} films={films} user={user} />)
+          }
+        />
+        <Route
+          path="/films/:id/review"
+          exact
+          render={
+            (props)=>(<AddReviewScreen {...props} films={films} user={user} />)
+          }
+        />
         <Route component={NotFoundScreen} />
       </Switch>
     </BrowserRouter>
@@ -33,10 +60,11 @@ const App = ({movieCards, poster}) => {
 };
 
 App.propTypes = {
-  movieCards: PropTypes.arrayOf(
-      PropTypes.shape(movieCardProps)
+  films: PropTypes.arrayOf(
+      PropTypes.shape(filmProps)
   ),
-  poster: PropTypes.shape(posterProps)
+  poster: PropTypes.shape(filmProps),
+  user: PropTypes.shape(userProps),
 };
 
 export default App;
