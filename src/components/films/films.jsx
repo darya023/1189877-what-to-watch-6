@@ -4,7 +4,7 @@ import {filmProps} from "../../utils/prop-types";
 import MovieCard from "../movie-card/movie-card";
 
 const Films = ({films}) => {
-  const [activeMovieCard, setActiveMovieCard] = useState(``);
+  const [activeMovieCardId, setActiveMovieCardId] = useState(``);
 
   return <div className="catalog__movies-list">
     {
@@ -17,9 +17,9 @@ const Films = ({films}) => {
         } = film;
 
         return <MovieCard
-          onMouseEnter={()=>setActiveMovieCard(id)}
-          onMouseLeave={()=>setActiveMovieCard(``)}
-          activeFilm={activeMovieCard}
+          onMouseEnter={()=>setActiveMovieCardId(id)}
+          onMouseLeave={()=>setActiveMovieCardId(``)}
+          isActive={activeMovieCardId === id}
           key={id}
           id={id}
           title={title}

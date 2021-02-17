@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
+import {filmProps, userProps} from "../../utils/prop-types";
 import Films from "../films/films";
 import User from "../user/user";
 import Logo from "../logo/logo";
@@ -53,7 +53,6 @@ const MyListScreen = ({films, user}) => {
 };
 
 MyListScreen.propTypes = {
-  ...defaultProps,
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),

@@ -9,10 +9,10 @@ const MovieCard = ({
   promoVideo,
   onMouseEnter,
   onMouseLeave,
-  activeFilm
+  isActive
 }) => {
   return <article onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="small-movie-card catalog__movies-card">
-    {activeFilm === id ?
+    {isActive ?
       <video src={promoVideo} autoPlay className="small-movie-card__video" width={280} height={175} poster={image} />
       : <div className="small-movie-card__image">
         <img src={image} alt={title} width={280} height={175} />
@@ -25,7 +25,7 @@ const MovieCard = ({
 };
 
 MovieCard.propTypes = {
-  activeFilm: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
   onMouseEnter: PropTypes.func.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,

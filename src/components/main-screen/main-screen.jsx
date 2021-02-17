@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
+import {filmProps, userProps} from "../../utils/prop-types";
 import {Link} from "react-router-dom";
 import Films from "../films/films";
 import User from "../user/user";
@@ -122,37 +122,7 @@ const MainScreen = ({films, poster, user}) => {
   </React.Fragment>;
 };
 
-// // Вот тут линтер ругается - "is missing in props validation"
-// MainScreen.propTypes = Object.assign(
-//     {},
-//     defaultProps,
-//     {
-//       films: PropTypes.arrayOf(
-//           PropTypes.shape(filmProps)
-//       ),
-//       poster: PropTypes.shape(filmProps),
-//       user: PropTypes.shape(userProps),
-//     }
-// );
-
-// // Вот тут все работает
-// MainScreen.propTypes = {
-//   ...Object.assign(
-//       {},
-//       defaultProps,
-//       {
-//         films: PropTypes.arrayOf(
-//             PropTypes.shape(filmProps)
-//         ),
-//         poster: PropTypes.shape(filmProps),
-//         user: PropTypes.shape(userProps),
-//       }
-//   )
-// };
-
-// // И тут работает
 MainScreen.propTypes = {
-  ...defaultProps,
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),

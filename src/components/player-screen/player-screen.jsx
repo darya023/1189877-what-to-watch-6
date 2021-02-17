@@ -1,14 +1,16 @@
 import React from "react";
-import {defaultProps} from "../../utils/prop-types";
+import PropTypes from 'prop-types';
+import {useHistory} from "react-router-dom";
+import {filmProps} from "../../utils/prop-types";
 
-const PlayerScreen = ({films, ...props}) => {
-  const goBack = props.history.goBack;
-  const currentFilmId = props.match.params.id;
-  const [{
+const PlayerScreen = ({film}) => {
+  const history = useHistory();
+  const goBack = history.goBack;
+  const {
     title,
     image,
     video
-  }] = films.filter((film) => film.id === currentFilmId);
+  } = film;
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -67,6 +69,8 @@ const PlayerScreen = ({films, ...props}) => {
   </React.Fragment>;
 };
 
-PlayerScreen.propTypes = defaultProps;
+PlayerScreen.propTypes = {
+  film: PropTypes.shape(filmProps)
+};
 
 export default PlayerScreen;

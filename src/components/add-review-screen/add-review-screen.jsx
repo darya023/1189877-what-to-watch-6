@@ -1,19 +1,18 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
+import {filmProps, userProps} from "../../utils/prop-types";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import ReviewForm from "../review-form/review-form";
 
-const AddReviewScreen = ({films, user, ...props}) => {
-  const currentFilmId = props.match.params.id;
-  const [{
+const AddReviewScreen = ({film, user}) => {
+  const {
     id,
     title,
     poster,
     backgroundImage,
-  }] = films.filter((film) => film.id === currentFilmId);
+  } = film;
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -73,10 +72,7 @@ const AddReviewScreen = ({films, user, ...props}) => {
 };
 
 AddReviewScreen.propTypes = {
-  ...defaultProps,
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ),
+  film: PropTypes.shape(filmProps),
   user: PropTypes.shape(userProps),
 };
 

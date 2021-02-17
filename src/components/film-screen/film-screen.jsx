@@ -1,13 +1,12 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
+import {filmProps, userProps} from "../../utils/prop-types";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import Films from "../films/films";
 
-const FilmScreen = ({films, user, ...props}) => {
-  const currentFilmId = props.match.params.id;
+const FilmScreen = ({currentFilmId, films, user}) => {
   const [{
     id,
     title,
@@ -161,7 +160,7 @@ const FilmScreen = ({films, user, ...props}) => {
 };
 
 FilmScreen.propTypes = {
-  ...defaultProps,
+  currentFilmId: PropTypes.string.isRequired,
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),
