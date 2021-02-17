@@ -1317,6 +1317,13 @@ main {
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(25%, rgba(0, 0, 0, 0)), color-stop(97%, rgba(0, 0, 0, 0.63)));
     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.63) 97%); }
 
+.small-movie-card__video {
+  display: block;
+  width: 100%;
+  z-index: 1;
+  object-fit: cover;
+}
+
 .small-movie-card__title {
   position: absolute;
   z-index: 2;

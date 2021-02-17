@@ -8,9 +8,9 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {movieCardProps, posterProps} from "../../utils/prop-types";
+import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
 
-const App = ({movieCards, poster}) => {
+const App = ({films, poster, user}) => {
   return (
     <BrowserRouter>
       <Switch>
@@ -18,14 +18,57 @@ const App = ({movieCards, poster}) => {
           path="/"
           exact
           render={
-            (props)=>(<MainScreen {...props} movieCards={movieCards} poster={poster} />)
+            ()=>(<MainScreen films={films} poster={poster} user={user}/>)
           }
         />
         <Route path="/login" exact component={SignInScreen} />
-        <Route path="/mylist" exact component={MyListScreen} />
-        <Route path="/player/:id" exact component={PlayerScreen} />
-        <Route path="/films/:id" exact component={FilmScreen} />
-        <Route path="/films/:id/review" exact component={AddReviewScreen} />
+        <Route
+          path="/mylist"
+          exact
+          render={
+            ()=>{
+              const favoriteFilms = films.filter((film) => film.isFavorite);
+
+              return <MyListScreen films={favoriteFilms} user={user} />;
+            }
+          }
+        />
+        <Route
+          path="/player/:id"
+          exact
+          render={
+            (props)=>{
+              const id = props.match.params.id;
+              const currentFilm = films.find((film) => film.id === id);
+
+              return currentFilm ? <PlayerScreen film={currentFilm} /> : <NotFoundScreen />;
+            }
+          }
+        />
+        <Route
+          path="/films/:id"
+          exact
+          render={
+            (props)=>{
+              const id = props.match.params.id;
+              const currentFilm = films.find((film) => film.id === id);
+
+              return currentFilm ? <FilmScreen currentFilmId={id} films={films} user={user} /> : <NotFoundScreen />;
+            }
+          }
+        />
+        <Route
+          path="/films/:id/review"
+          exact
+          render={
+            (props)=> {
+              const id = props.match.params.id;
+              const currentFilm = films.find((film) => film.id === id);
+
+              return currentFilm ? <AddReviewScreen film={currentFilm} user={user} /> : <NotFoundScreen />;
+            }
+          }
+        />
         <Route component={NotFoundScreen} />
       </Switch>
     </BrowserRouter>
@@ -33,10 +76,12 @@ const App = ({movieCards, poster}) => {
 };
 
 App.propTypes = {
-  movieCards: PropTypes.arrayOf(
-      PropTypes.shape(movieCardProps)
+  ...defaultProps,
+  films: PropTypes.arrayOf(
+      PropTypes.shape(filmProps)
   ),
-  poster: PropTypes.shape(posterProps)
+  poster: PropTypes.shape(filmProps),
+  user: PropTypes.shape(userProps),
 };
 
 export default App;

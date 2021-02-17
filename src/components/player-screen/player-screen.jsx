@@ -1,8 +1,16 @@
 import React from "react";
-import {defaultProps} from "../../utils/prop-types";
+import PropTypes from 'prop-types';
+import {useHistory} from "react-router-dom";
+import {filmProps} from "../../utils/prop-types";
 
-const PlayerScreen = (props) => {
-  const backPath = props.history.goBack;
+const PlayerScreen = ({film}) => {
+  const history = useHistory();
+  const goBack = history.goBack;
+  const {
+    title,
+    image,
+    video
+  } = film;
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -31,8 +39,8 @@ const PlayerScreen = (props) => {
       </symbol></svg>{/* endinject */}
     </div>
     <div className="player">
-      <video src="#" className="player__video" poster="img/player-poster.jpg" />
-      <button className="player__exit" onClick={backPath}>Exit</button>
+      <video src={video} className="player__video" poster={image} />
+      <button className="player__exit" onClick={goBack}>Exit</button>
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time">
@@ -48,7 +56,7 @@ const PlayerScreen = (props) => {
             </svg>
             <span>Play</span>
           </button>
-          <div className="player__name">Transpotting</div>
+          <div className="player__name">{title}</div>
           <button type="button" className="player__full-screen">
             <svg viewBox="0 0 27 27" width={27} height={27}>
               <use xlinkHref="#full-screen" />
@@ -61,6 +69,8 @@ const PlayerScreen = (props) => {
   </React.Fragment>;
 };
 
-PlayerScreen.propTypes = defaultProps;
+PlayerScreen.propTypes = {
+  film: PropTypes.shape(filmProps)
+};
 
 export default PlayerScreen;
