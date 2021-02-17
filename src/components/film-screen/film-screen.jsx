@@ -7,7 +7,7 @@ import Logo from "../logo/logo";
 import Films from "../films/films";
 
 const FilmScreen = ({currentFilmId, films, user}) => {
-  const [{
+  const {
     id,
     title,
     poster,
@@ -19,7 +19,7 @@ const FilmScreen = ({currentFilmId, films, user}) => {
     actors,
     rating,
     reviewsCount
-  }] = films.filter((film) => film.id === currentFilmId);
+  } = films.find((film) => film.id === currentFilmId);
 
   const humanizeRating = (filmRating) => {
     filmRating = Number(filmRating);

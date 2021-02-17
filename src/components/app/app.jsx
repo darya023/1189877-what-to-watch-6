@@ -39,7 +39,7 @@ const App = ({films, poster, user}) => {
           render={
             (props)=>{
               const id = props.match.params.id;
-              const [currentFilm] = films.filter((film) => film.id === id);
+              const currentFilm = films.find((film) => film.id === id);
 
               return currentFilm ? <PlayerScreen film={currentFilm} /> : <NotFoundScreen />;
             }
@@ -51,7 +51,7 @@ const App = ({films, poster, user}) => {
           render={
             (props)=>{
               const id = props.match.params.id;
-              const [currentFilm] = films.filter((film) => film.id === id);
+              const currentFilm = films.find((film) => film.id === id);
 
               return currentFilm ? <FilmScreen currentFilmId={id} films={films} user={user} /> : <NotFoundScreen />;
             }
@@ -63,7 +63,7 @@ const App = ({films, poster, user}) => {
           render={
             (props)=> {
               const id = props.match.params.id;
-              const [currentFilm] = films.filter((film) => film.id === id);
+              const currentFilm = films.find((film) => film.id === id);
 
               return currentFilm ? <AddReviewScreen film={currentFilm} user={user} /> : <NotFoundScreen />;
             }
