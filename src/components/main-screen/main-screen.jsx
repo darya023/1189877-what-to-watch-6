@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {filmProps, userProps} from "../../utils/prop-types";
+import {userProps} from "../user/user.prop";
+import {filmProps} from "../film-screen/film-screen.prop";
 import {Link} from "react-router-dom";
 import Films from "../films/films";
 import User from "../user/user";
@@ -55,7 +56,7 @@ const MainScreen = ({films, poster, user}) => {
               <span className="movie-card__year">{poster.year}</span>
             </p>
             <div className="movie-card__buttons">
-              <Link to={`/player/` + poster.id} className="btn btn--play movie-card__button">
+              <Link to={`/player/${poster.id}`} className="btn btn--play movie-card__button">
                 <svg viewBox="0 0 19 19" width={19} height={19}>
                   <use xlinkHref="#play-s" />
                 </svg>
