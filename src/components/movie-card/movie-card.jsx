@@ -30,8 +30,8 @@ const MovieCard = ({
 
   return <article onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="small-movie-card catalog__movies-card">
     {
-      isPlaying ?
-        <VideoPlayer
+      isPlaying
+        ? <VideoPlayer
           image={image}
           video={promoVideo}
           isMuted={true}

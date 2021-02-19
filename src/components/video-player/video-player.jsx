@@ -21,11 +21,15 @@ const VideoPlayer = ({
   });
 
   return <video
-    className={isPreview ? `small-movie-card__video` : `player__video`}
+    className={
+      isPreview
+        ? `small-movie-card__video`
+        : `player__video`
+    }
     muted={isMuted}
     src={video}
-    width={`100%`}
-    height={`100%`}
+    width='100%'
+    height='100%'
     poster={image}
     ref={videoRef}
   />;
