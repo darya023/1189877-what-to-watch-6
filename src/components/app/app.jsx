@@ -8,7 +8,8 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {defaultProps, filmProps, userProps} from "../../utils/prop-types";
+import {userProps} from "../user/user.prop";
+import {filmProps} from "../film-screen/film-screen.prop";
 
 const App = ({films, poster, user}) => {
   return (
@@ -41,7 +42,9 @@ const App = ({films, poster, user}) => {
               const id = props.match.params.id;
               const currentFilm = films.find((film) => film.id === id);
 
-              return currentFilm ? <PlayerScreen film={currentFilm} /> : <NotFoundScreen />;
+              return currentFilm
+                ? <PlayerScreen title={currentFilm.title} image={currentFilm.image} video={currentFilm.video} />
+                : <NotFoundScreen />;
             }
           }
         />
@@ -53,7 +56,9 @@ const App = ({films, poster, user}) => {
               const id = props.match.params.id;
               const currentFilm = films.find((film) => film.id === id);
 
-              return currentFilm ? <FilmScreen currentFilmId={id} films={films} user={user} /> : <NotFoundScreen />;
+              return currentFilm
+                ? <FilmScreen currentFilmId={id} films={films} user={user} />
+                : <NotFoundScreen />;
             }
           }
         />
@@ -65,7 +70,9 @@ const App = ({films, poster, user}) => {
               const id = props.match.params.id;
               const currentFilm = films.find((film) => film.id === id);
 
-              return currentFilm ? <AddReviewScreen film={currentFilm} user={user} /> : <NotFoundScreen />;
+              return currentFilm
+                ? <AddReviewScreen id={currentFilm.id} title={currentFilm.title} poster={currentFilm.poster} backgroundImage={currentFilm.backgroundImage} user={user} />
+                : <NotFoundScreen />;
             }
           }
         />
@@ -76,7 +83,9 @@ const App = ({films, poster, user}) => {
 };
 
 App.propTypes = {
-  ...defaultProps,
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object,
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),

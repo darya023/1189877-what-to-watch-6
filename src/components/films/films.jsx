@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import PropTypes from 'prop-types';
-import {filmProps} from "../../utils/prop-types";
 import MovieCard from "../movie-card/movie-card";
+import {filmProps} from "../film-screen/film-screen.prop";
 
 const Films = ({films}) => {
   const [activeMovieCardId, setActiveMovieCardId] = useState(``);

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {userProps} from "../../utils/prop-types";
+import {userProps} from "../user/user.prop";
 import {Link} from "react-router-dom";
 
 const User = ({user}) => {

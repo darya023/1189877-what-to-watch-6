@@ -1,7 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {filmProps, userProps} from "../../utils/prop-types";
+import {userProps} from "../user/user.prop";
+import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import Films from "../films/films";

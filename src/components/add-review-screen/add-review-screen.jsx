@@ -1,18 +1,12 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {filmProps, userProps} from "../../utils/prop-types";
+import {userProps} from "../user/user.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import ReviewForm from "../review-form/review-form";
 
-const AddReviewScreen = ({film, user}) => {
-  const {
-    id,
-    title,
-    poster,
-    backgroundImage,
-  } = film;
+const AddReviewScreen = ({id, title, poster, backgroundImage, user}) => {
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -72,7 +66,10 @@ const AddReviewScreen = ({film, user}) => {
 };
 
 AddReviewScreen.propTypes = {
-  film: PropTypes.shape(filmProps),
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  backgroundImage: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
   user: PropTypes.shape(userProps),
 };
 

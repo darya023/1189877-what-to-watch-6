@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import VideoPlayer from "../video-player/video-player";
 
 const MovieCard = ({
   id,
@@ -11,12 +12,35 @@ const MovieCard = ({
   onMouseLeave,
   isActive
 }) => {
+  const PLAYING_DELAY = 1000;
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(()=>{
+    const timeout = setTimeout(() => {
+      if (isActive) {
+        setIsPlaying(true);
+      }
+    }, PLAYING_DELAY, isActive);
+
+    return () => {
+      clearTimeout(timeout);
+      setIsPlaying(false);
+    };
+  }, [isActive]);
+
   return <article onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="small-movie-card catalog__movies-card">
-    {isActive ?
-      <video src={promoVideo} autoPlay className="small-movie-card__video" width={280} height={175} poster={image} />
-      : <div className="small-movie-card__image">
-        <img src={image} alt={title} width={280} height={175} />
-      </div>
+    {
+      isPlaying
+        ? <VideoPlayer
+          image={image}
+          video={promoVideo}
+          isMuted={true}
+          isPreview={true}
+          isPlaying={isPlaying}
+        />
+        : <div className="small-movie-card__image">
+          <img src={image} alt={title} width={280} height={175} />
+        </div>
     }
     <h3 className="small-movie-card__title">
       <Link to={`/films/${id}`} className="small-movie-card__link">{title}</Link>
