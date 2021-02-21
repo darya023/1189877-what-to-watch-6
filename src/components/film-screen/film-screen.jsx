@@ -5,9 +5,31 @@ import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import Films from "../films/films";
+import Tabs from "../tabs/tabs";
+import {reviewsProp} from "../panel/reviews.prop";
+import CatalogSmall from "../catalog/catalog-small";
 
-const FilmScreen = ({currentFilmId, films, user}) => {
+const getRandomInteger = (a = 0, b = 1) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+
+  return Math.floor(lower + Math.random() * (upper - lower + 1));
+};
+
+const getRandomFilms = (films, count)=>{
+  const lastIndex = films.length - 1;
+  let randomIndexes = new Set();
+
+  while (randomIndexes.size < Math.min(lastIndex + 1, count)) {
+    randomIndexes.add(getRandomInteger(0, lastIndex));
+  }
+
+  const randomSimularFilms = films.filter((film, index)=>randomIndexes.has(index));
+
+  return randomSimularFilms;
+};
+
+const FilmScreen = ({currentFilmId, films, user, reviews}) => {
   const {
     id,
     title,
@@ -18,33 +40,14 @@ const FilmScreen = ({currentFilmId, films, user}) => {
     description,
     director,
     actors,
+    starring,
+    duration,
     rating,
-    reviewsCount
+    reviewsCount,
   } = films.find((film) => film.id === currentFilmId);
-
-  const humanizeRating = (filmRating) => {
-    filmRating = Number(filmRating);
-
-    if (filmRating < 3) {
-      return `Bad`;
-    }
-
-    if (filmRating < 5) {
-      return `Normal`;
-    }
-
-    if (filmRating < 8) {
-      return `Good`;
-    }
-
-    if (filmRating < 10) {
-      return `Very good`;
-    }
-
-    return `Awesome`;
-  };
-
-  const humanizedRating = humanizeRating(rating);
+  const COUNT_SIMULAR_FILMS = 4;
+  const simularFilms = films.filter((film)=>film.genre === genre && film.id !== id);
+  const randomSimularFilms = getRandomFilms(simularFilms, COUNT_SIMULAR_FILMS);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -114,42 +117,24 @@ const FilmScreen = ({currentFilmId, films, user}) => {
             <img src={poster} alt={title} width={218} height={327} />
           </div>
           <div className="movie-card__desc">
-            <nav className="movie-nav movie-card__nav">
-              <ul className="movie-nav__list">
-                <li className="movie-nav__item movie-nav__item--active">
-                  <a href="#" className="movie-nav__link">Overview</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Details</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Reviews</a>
-                </li>
-              </ul>
-            </nav>
-            <div className="movie-rating">
-              <div className="movie-rating__score">{rating}</div>
-              <p className="movie-rating__meta">
-                <span className="movie-rating__level">{humanizedRating}</span>
-                <span className="movie-rating__count">{reviewsCount} ratings</span>
-              </p>
-            </div>
-            <div className="movie-card__text">
-              <p>
-                {description}
-              </p>
-              <p className="movie-card__director"><strong>Director: {director}</strong></p>
-              <p className="movie-card__starring"><strong>Starring: {actors.join(`, `)} and other</strong></p>
-            </div>
+            <Tabs
+              genre={genre}
+              year={year}
+              description={description}
+              director={director}
+              actors={actors}
+              starring={starring}
+              duration={duration}
+              rating={rating}
+              reviewsCount={reviewsCount}
+              reviews={reviews}
+            />
           </div>
         </div>
       </div>
     </section>
     <div className="page-content">
-      <section className="catalog catalog--like-this">
-        <h2 className="catalog__title">More like this</h2>
-        <Films films={films}/>
-      </section>
+      <CatalogSmall films={randomSimularFilms} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -166,6 +151,9 @@ FilmScreen.propTypes = {
       PropTypes.shape(filmProps)
   ),
   user: PropTypes.shape(userProps),
+  reviews: PropTypes.arrayOf(
+      PropTypes.shape(reviewsProp)
+  )
 };
 
 export default FilmScreen;
