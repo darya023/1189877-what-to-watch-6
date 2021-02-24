@@ -5,9 +5,11 @@ import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import Films from "../films/films";
+import Tabs from "../tabs/tabs";
+import {reviewsProp} from "../reviews-panel/reviews.prop";
+import CatalogSimilar from "../catalog/catalog-similar";
 
-const FilmScreen = ({currentFilmId, films, user}) => {
+const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
   const {
     id,
     title,
@@ -18,33 +20,11 @@ const FilmScreen = ({currentFilmId, films, user}) => {
     description,
     director,
     actors,
+    starring,
+    duration,
     rating,
-    reviewsCount
-  } = films.find((film) => film.id === currentFilmId);
-
-  const humanizeRating = (filmRating) => {
-    filmRating = Number(filmRating);
-
-    if (filmRating < 3) {
-      return `Bad`;
-    }
-
-    if (filmRating < 5) {
-      return `Normal`;
-    }
-
-    if (filmRating < 8) {
-      return `Good`;
-    }
-
-    if (filmRating < 10) {
-      return `Very good`;
-    }
-
-    return `Awesome`;
-  };
-
-  const humanizedRating = humanizeRating(rating);
+    reviewsCount,
+  } = currentFilm;
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -114,42 +94,24 @@ const FilmScreen = ({currentFilmId, films, user}) => {
             <img src={poster} alt={title} width={218} height={327} />
           </div>
           <div className="movie-card__desc">
-            <nav className="movie-nav movie-card__nav">
-              <ul className="movie-nav__list">
-                <li className="movie-nav__item movie-nav__item--active">
-                  <a href="#" className="movie-nav__link">Overview</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Details</a>
-                </li>
-                <li className="movie-nav__item">
-                  <a href="#" className="movie-nav__link">Reviews</a>
-                </li>
-              </ul>
-            </nav>
-            <div className="movie-rating">
-              <div className="movie-rating__score">{rating}</div>
-              <p className="movie-rating__meta">
-                <span className="movie-rating__level">{humanizedRating}</span>
-                <span className="movie-rating__count">{reviewsCount} ratings</span>
-              </p>
-            </div>
-            <div className="movie-card__text">
-              <p>
-                {description}
-              </p>
-              <p className="movie-card__director"><strong>Director: {director}</strong></p>
-              <p className="movie-card__starring"><strong>Starring: {actors.join(`, `)} and other</strong></p>
-            </div>
+            <Tabs
+              genre={genre}
+              year={year}
+              description={description}
+              director={director}
+              actors={actors}
+              starring={starring}
+              duration={duration}
+              rating={rating}
+              reviewsCount={reviewsCount}
+              reviews={reviews}
+            />
           </div>
         </div>
       </div>
     </section>
     <div className="page-content">
-      <section className="catalog catalog--like-this">
-        <h2 className="catalog__title">More like this</h2>
-        <Films films={films}/>
-      </section>
+      <CatalogSimilar films={similarFilms} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -161,11 +123,14 @@ const FilmScreen = ({currentFilmId, films, user}) => {
 };
 
 FilmScreen.propTypes = {
-  currentFilmId: PropTypes.string.isRequired,
-  films: PropTypes.arrayOf(
+  currentFilm: PropTypes.shape(filmProps),
+  similarFilms: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),
   user: PropTypes.shape(userProps),
+  reviews: PropTypes.arrayOf(
+      PropTypes.shape(reviewsProp)
+  )
 };
 
 export default FilmScreen;

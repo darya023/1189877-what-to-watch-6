@@ -10,8 +10,10 @@ import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
 import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
+import {reviews} from "../../mocks/reviews";
+import {getRandomFilms} from "../../utils/app";
 
-const App = ({films, poster, user}) => {
+const App = ({films, poster, user, users}) => {
   return (
     <BrowserRouter>
       <Switch>
@@ -53,11 +55,32 @@ const App = ({films, poster, user}) => {
           exact
           render={
             (props)=>{
+              const COUNT_SIMILAR_FILMS = 4;
+
               const id = props.match.params.id;
               const currentFilm = films.find((film) => film.id === id);
+              const currentFilmReviews = [];
+              let randomSimilarFilms = [];
+
+              if (currentFilm) {
+                currentFilmReviews.push(...reviews
+                    .slice()
+                    .filter((review)=>review.filmId === id)
+                    .map((review)=>{
+                      return Object.assign(
+                          {},
+                          review,
+                          {
+                            autorName: users.find((autor)=>autor.id === review.autorId).name
+                          }
+                      );
+                    }));
+                const similarFilms = films.filter((film)=>film.genre === currentFilm.genre && film.id !== id);
+                randomSimilarFilms = getRandomFilms(similarFilms, COUNT_SIMILAR_FILMS);
+              }
 
               return currentFilm
-                ? <FilmScreen currentFilmId={id} films={films} user={user} />
+                ? <FilmScreen currentFilm={currentFilm} similarFilms={randomSimilarFilms} user={user} reviews={currentFilmReviews}/>
                 : <NotFoundScreen />;
             }
           }
@@ -90,6 +113,9 @@ App.propTypes = {
       PropTypes.shape(filmProps)
   ),
   poster: PropTypes.shape(filmProps),
+  users: PropTypes.arrayOf(
+      PropTypes.shape(userProps)
+  ),
   user: PropTypes.shape(userProps),
 };
 
