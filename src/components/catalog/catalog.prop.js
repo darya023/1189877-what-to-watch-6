@@ -8,10 +8,7 @@ export const catalogProps = {
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),
-  children: PropTypes.oneOf([
-    PropTypes.arrayOf(
-        PropTypes.object
-    ),
-    PropTypes.string
-  ])
+  children: PropTypes.arrayOf(
+      PropTypes.object
+  )
 };

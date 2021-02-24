@@ -6,30 +6,10 @@ import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import Tabs from "../tabs/tabs";
-import {reviewsProp} from "../panel/reviews.prop";
-import CatalogSmall from "../catalog/catalog-small";
+import {reviewsProp} from "../reviews-panel/reviews.prop";
+import CatalogSimilar from "../catalog/catalog-similar";
 
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-const getRandomFilms = (films, count)=>{
-  const lastIndex = films.length - 1;
-  let randomIndexes = new Set();
-
-  while (randomIndexes.size < Math.min(lastIndex + 1, count)) {
-    randomIndexes.add(getRandomInteger(0, lastIndex));
-  }
-
-  const randomSimularFilms = films.filter((film, index)=>randomIndexes.has(index));
-
-  return randomSimularFilms;
-};
-
-const FilmScreen = ({currentFilmId, films, user, reviews}) => {
+const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
   const {
     id,
     title,
@@ -44,10 +24,7 @@ const FilmScreen = ({currentFilmId, films, user, reviews}) => {
     duration,
     rating,
     reviewsCount,
-  } = films.find((film) => film.id === currentFilmId);
-  const COUNT_SIMULAR_FILMS = 4;
-  const simularFilms = films.filter((film)=>film.genre === genre && film.id !== id);
-  const randomSimularFilms = getRandomFilms(simularFilms, COUNT_SIMULAR_FILMS);
+  } = currentFilm;
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -134,7 +111,7 @@ const FilmScreen = ({currentFilmId, films, user, reviews}) => {
       </div>
     </section>
     <div className="page-content">
-      <CatalogSmall films={randomSimularFilms} />
+      <CatalogSimilar films={similarFilms} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -146,8 +123,8 @@ const FilmScreen = ({currentFilmId, films, user, reviews}) => {
 };
 
 FilmScreen.propTypes = {
-  currentFilmId: PropTypes.string.isRequired,
-  films: PropTypes.arrayOf(
+  currentFilm: PropTypes.shape(filmProps),
+  similarFilms: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),
   user: PropTypes.shape(userProps),

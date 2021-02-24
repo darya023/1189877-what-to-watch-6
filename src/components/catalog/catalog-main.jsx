@@ -43,7 +43,7 @@ const CatalogMain = (props) => {
   </Catalog>;
 };
 
-Catalog.propTypes = {
+CatalogMain.propTypes = {
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),

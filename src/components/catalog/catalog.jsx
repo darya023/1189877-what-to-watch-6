@@ -2,7 +2,7 @@ import React from "react";
 import Films from "../films/films";
 import {catalogProps} from "./catalog.prop";
 
-const Catalog = ({className, headerClassName, header, films, children}) => {
+const Catalog = ({className = ``, headerClassName = ``, header, films, children}) => {
   let genres; let button;
 
   if (children) {

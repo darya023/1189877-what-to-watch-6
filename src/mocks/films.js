@@ -2,7 +2,7 @@ import nanoid from "nanoid";
 
 export const films = [
   {
-    id: nanoid(),
+    id: `1`,
     title: `The Grand Budapest Hotel`,
     image: `img/the-grand-budapest-hotel-poster.jpg`,
     poster: `img/the-grand-budapest-hotel-poster.jpg`,

@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
-import Panel from "../panel/panel";
-import {reviewsProp} from "../panel/reviews.prop";
-import {Tab} from "../../utils/const";
+import {reviewsProp} from "../reviews-panel/reviews.prop";
+import {Tab} from "../../const";
+import OverwiewPanel from "../overview-panel/overview-panel";
+import DetailsPanel from "../details-panel/details-panel";
+import ReviewsPanel from "../reviews-panel/reviews-panel";
 
 const Tabs = ({
   genre,
@@ -37,6 +39,31 @@ const Tabs = ({
 
   const [activeTabId, setActiveTabId] = useState(tabs.find((tab)=>tab.isActive === true).id);
 
+  const getPanel = (id) => {
+    switch (id) {
+      case Tab.OVERVIEW:
+        return <OverwiewPanel
+          description={description}
+          director={director}
+          starring={starring}
+          rating={rating}
+          reviewsCount={reviewsCount}
+        />;
+      case Tab.DETAILS:
+        return <DetailsPanel
+          genre={genre}
+          year={year}
+          director={director}
+          actors={actors}
+          duration={duration}
+        />;
+      case Tab.REVIEWS:
+        return <ReviewsPanel reviews={reviews} />;
+    }
+
+    return null;
+  };
+
   return <>
     <nav className="movie-nav movie-card__nav">
       <ul className="movie-nav__list">
@@ -63,20 +90,7 @@ const Tabs = ({
         }
       </ul>
     </nav>
-    <Panel
-      panelId={activeTabId}
-      genre={genre}
-      year={year}
-      description={description}
-      director={director}
-      actors={actors}
-      starring={starring}
-      duration={duration}
-      rating={rating}
-      reviewsCount={reviewsCount}
-      reviews={reviews}
-    />
-
+    {getPanel(activeTabId)}
   </>;
 };
 
