@@ -118,17 +118,4 @@ App.propTypes = {
   user: PropTypes.shape(userProps),
 };
 
-// const mapStateToProps = (state) => ({
-//   genre: state.genre,
-//   films: state.films,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   resetGenre() {
-//     dispatch(ActionCreator.resetGenre());
-//   },
-// });
-
-// export {App};
-// export default connect(null, mapDispatchToProps)(App);
 export default App;

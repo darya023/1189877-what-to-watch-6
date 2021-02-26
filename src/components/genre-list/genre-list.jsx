@@ -52,6 +52,5 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-// export default GenreList;
 export {GenreList};
 export default connect(mapStateToProps, mapDispatchToProps)(GenreList);
