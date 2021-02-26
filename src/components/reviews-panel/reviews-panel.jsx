@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {reviewsProp} from "./reviews.prop";
-import {humanizeDate} from "../../utils/reviews-panel";
+import {humanizeDate} from "../../utils/humanize-date";
 
 const ReviewsPanel = ({reviews}) => {
   return <>

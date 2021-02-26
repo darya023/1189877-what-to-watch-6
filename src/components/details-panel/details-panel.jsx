@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {humanizeDuration} from "../../utils/details-panel";
+import {humanizeDuration} from "../../utils/humanize-duration";
 
 const DetailsPanel = ({
   genre,

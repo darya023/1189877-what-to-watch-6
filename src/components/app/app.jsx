@@ -11,7 +11,7 @@ import AddReviewScreen from "../add-review-screen/add-review-screen";
 import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import {reviews} from "../../mocks/reviews";
-import {getRandomFilms} from "../../utils/app";
+import {getRandomFilms} from "../../utils/get-random-films";
 
 const App = ({films, poster, user, users}) => {
   return (
@@ -59,11 +59,11 @@ const App = ({films, poster, user, users}) => {
 
               const id = props.match.params.id;
               const currentFilm = films.find((film) => film.id === id);
-              const currentFilmReviews = [];
+              let currentFilmReviews = [];
               let randomSimilarFilms = [];
 
               if (currentFilm) {
-                currentFilmReviews.push(...reviews
+                currentFilmReviews = reviews
                     .slice()
                     .filter((review)=>review.filmId === id)
                     .map((review)=>{
@@ -74,7 +74,7 @@ const App = ({films, poster, user, users}) => {
                             autorName: users.find((autor)=>autor.id === review.autorId).name
                           }
                       );
-                    }));
+                    });
                 const similarFilms = films.filter((film)=>film.genre === currentFilm.genre && film.id !== id);
                 randomSimilarFilms = getRandomFilms(similarFilms, COUNT_SIMILAR_FILMS);
               }

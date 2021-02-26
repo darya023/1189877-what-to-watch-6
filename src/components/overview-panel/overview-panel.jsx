@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {humanizeRating} from "../../utils/overview-panel";
+import {humanizeRating} from "../../utils/humanize-rating";
 
 const OverwiewPanel = ({
   description,

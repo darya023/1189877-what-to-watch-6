@@ -4,7 +4,7 @@ import {filmProps} from '../film-screen/film-screen.prop';
 export const catalogProps = {
   className: PropTypes.string,
   headerClassName: PropTypes.string,
-  header: PropTypes.string.isRequired,
+  header: PropTypes.string,
   films: PropTypes.arrayOf(
       PropTypes.shape(filmProps)
   ),

@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
-import Films from "../films/films";
 import User from "../user/user";
 import Logo from "../logo/logo";
+import Catalog from "../catalog/catalog";
 
 const MyListScreen = ({films, user}) => {
   return <React.Fragment>
@@ -39,10 +39,7 @@ const MyListScreen = ({films, user}) => {
         <h1 className="page-title user-page__title">My list</h1>
         <User user={user}/>
       </header>
-      <section className="catalog">
-        <h2 className="catalog__title visually-hidden">Catalog</h2>
-        <Films films={films}/>
-      </section>
+      <Catalog films={films} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">

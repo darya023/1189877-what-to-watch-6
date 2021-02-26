@@ -4,7 +4,12 @@ import {filmProps} from "../film-screen/film-screen.prop";
 import Catalog from "./catalog";
 
 const CatalogSimilar = (props) => {
-  return <Catalog className={`catalog--like-this`} header={`More like this`} {...props} />;
+  return <Catalog 
+    isHeaderVisual={true} 
+    className={`catalog--like-this`} 
+    header={`More like this`} 
+    {...props} 
+  />;
 };
 
 CatalogSimilar.propTypes = {
