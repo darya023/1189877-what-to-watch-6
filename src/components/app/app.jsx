@@ -74,7 +74,7 @@ const App = ({films, user, users}) => {
                           }
                       );
                     });
-                const similarFilms = getFilms(currentFilm.genre, films, id);
+                const similarFilms = getFilms({activeGenre: currentFilm.genre, films}, id);
                 randomSimilarFilms = getRandomFilms(similarFilms, COUNT_SIMILAR_FILMS);
               }
 

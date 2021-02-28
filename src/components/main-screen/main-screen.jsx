@@ -8,6 +8,7 @@ import Logo from "../logo/logo";
 import Catalog from "../catalog/catalog";
 import GenreList from "../genre-list/genre-list";
 import {connect} from "react-redux";
+import {getFilms} from "../../utils/get-films";
 
 const MainScreen = ({
   films,
@@ -105,7 +106,7 @@ MainScreen.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  films: state.films,
+  films: getFilms(state),
   poster: state.poster,
 });
 

@@ -1,6 +1,5 @@
 import {INITIAL_GENRE} from "../const";
 import {films} from "../mocks/films";
-import {getFilms} from "../utils/get-films";
 import {getGenres} from "../utils/get-genres";
 import {ActionType} from "./actions";
 
@@ -17,16 +16,10 @@ export const reducer = (state = initialState, action) => {
         ...state,
         activeGenre: action.payload
       };
-    case ActionType.GET_FILMS:
-      return {
-        ...state,
-        films: getFilms(state.activeGenre, films)
-      };
     case ActionType.RESET_GENRE:
       return {
         ...initialState
       };
-
     default:
       return state;
   }

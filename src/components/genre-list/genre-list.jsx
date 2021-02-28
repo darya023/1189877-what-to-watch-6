@@ -9,29 +9,23 @@ const GenreList = ({activeGenre, genres, onGenreChange, resetGenre}) => {
     resetGenre();
   }, []);
 
-  const getGenreList = (genreNames) => {
-    const result = [];
-
-    for (const genre of genreNames.keys()) {
-      result.push(<li key={genre} className={`catalog__genres-item ${genre === activeGenre && `catalog__genres-item--active`}`}>
-        <a onClick={
-          (event) => {
-            event.preventDefault();
-            onGenreChange(genre);
-          }
-        }
-        href="#"
-        className="catalog__genres-link"
-        >{genre}</a>
-      </li>);
-    }
-
-    return result;
-  };
-
-
   return <ul className="catalog__genres-list">
-    {getGenreList(genres)}
+    {
+      genres.map((genre) => (
+        <li key={genre} className={`catalog__genres-item ${genre === activeGenre && `catalog__genres-item--active`}`}>
+          <a
+            onClick={
+              (event) => {
+                event.preventDefault();
+                onGenreChange(genre);
+              }
+            }
+            href="#"
+            className="catalog__genres-link"
+          >{genre}</a>
+        </li>
+      ))
+    }
   </ul>;
 };
 
@@ -48,7 +42,6 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onGenreChange(activeGenre) {
     dispatch(ActionCreator.changeGenre(activeGenre));
-    dispatch(ActionCreator.getFilms());
   },
 });
 

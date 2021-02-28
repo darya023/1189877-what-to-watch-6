@@ -1,9 +1,9 @@
 import {INITIAL_GENRE} from "../const";
 
-export const getFilms = (genre, films, id) => {
-  if (genre === INITIAL_GENRE) {
+export const getFilms = ({activeGenre, films}, id) => {
+  if (activeGenre === INITIAL_GENRE) {
     return films;
   }
 
-  return films.filter((film)=>film.genre === genre && film.id !== id);
+  return films.filter((film)=>film.genre === activeGenre && film.id !== id);
 };

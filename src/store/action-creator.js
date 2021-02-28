@@ -5,9 +5,6 @@ export const ActionCreator = {
     type: ActionType.CHANGE_GENRE,
     payload: genre
   }),
-  getFilms: () => ({
-    type: ActionType.GET_FILMS
-  }),
   resetGenre: () => ({
     type: ActionType.RESET_GENRE
   }),
