@@ -3,3 +3,5 @@ export const Tab = {
   DETAILS: `Details`,
   REVIEWS: `Reviews`,
 };
+
+export const INITIAL_GENRE = `All genres`;

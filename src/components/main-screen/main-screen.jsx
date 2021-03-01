@@ -5,9 +5,16 @@ import {filmProps} from "../film-screen/film-screen.prop";
 import {Link} from "react-router-dom";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import CatalogMain from "../catalog/catalog-main";
+import Catalog from "../catalog/catalog";
+import GenreList from "../genre-list/genre-list";
+import {connect} from "react-redux";
+import {getFilms} from "../../utils/get-films";
 
-const MainScreen = ({films, poster, user}) => {
+const MainScreen = ({
+  films,
+  poster,
+  user,
+}) => {
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -74,7 +81,12 @@ const MainScreen = ({films, poster, user}) => {
       </div>
     </section>
     <div className="page-content">
-      <CatalogMain films={films} />
+      <Catalog films={films}>
+        <GenreList />
+        <div className="catalog__more">
+          <button className="catalog__button" type="button">Show more</button>
+        </div>
+      </ Catalog>
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -93,4 +105,10 @@ MainScreen.propTypes = {
   user: PropTypes.shape(userProps),
 };
 
-export default MainScreen;
+const mapStateToProps = (state) => ({
+  films: getFilms(state),
+  poster: state.poster,
+});
+
+export {MainScreen};
+export default connect(mapStateToProps, null)(MainScreen);

@@ -1,16 +1,7 @@
-const getTime = function (timeInMinutes) {
-  const MINUTES_PER_HOUR = 60;
-  const hours = Math.trunc(timeInMinutes / MINUTES_PER_HOUR);
-  const time = {
-    hours,
-    minutes: timeInMinutes - (hours * MINUTES_PER_HOUR),
-  };
+import {getTime} from "./get-time";
 
-  return time;
-};
-
-export const humanizeDuration = (filmDuration) => {
-  const {hours, minutes} = getTime(filmDuration);
+export const humanizeDuration = (duration) => {
+  const {hours, minutes} = getTime(duration);
   const Time = {
     HOURS: `HOURS`,
     MINUTES: `MINUTES`

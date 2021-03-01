@@ -2,7 +2,7 @@ import React from "react";
 import Films from "../films/films";
 import {catalogProps} from "./catalog.prop";
 
-const Catalog = ({className = ``, headerClassName = ``, header, films, children}) => {
+const Catalog = ({className = ``, isHeaderVisual = ``, header, films, children}) => {
   let genres; let button;
 
   if (children) {
@@ -13,7 +13,7 @@ const Catalog = ({className = ``, headerClassName = ``, header, films, children}
     {films.some(Boolean)
       ?
       <section className={`catalog ${className || ``}`} >
-        <h2 className={`catalog__title ${headerClassName || ``}`} >{header}</h2>
+        <h2 className={`catalog__title ${isHeaderVisual || `visually-hidden`}`} >{header || `Catalog`}</h2>
         {genres}
         <Films films={films}/>
         {button}
