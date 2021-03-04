@@ -29,7 +29,6 @@ const FilmScreen = ({
     year,
     description,
     director,
-    actors,
     starring,
     duration,
     rating,
@@ -117,7 +116,6 @@ const FilmScreen = ({
               year={year}
               description={description}
               director={director}
-              actors={actors}
               starring={starring}
               duration={duration}
               rating={rating}

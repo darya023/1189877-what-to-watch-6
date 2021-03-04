@@ -12,7 +12,6 @@ export const filmProps = {
   promoVideo: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   director: PropTypes.string.isRequired,
-  actors: PropTypes.arrayOf(PropTypes.string).isRequired,
   starring: PropTypes.arrayOf(PropTypes.string).isRequired,
   duration: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,

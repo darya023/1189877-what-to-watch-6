@@ -6,7 +6,7 @@ const DetailsPanel = ({
   genre,
   year,
   director,
-  actors,
+  starring,
   duration,
 }) => {
   const humanizedDuration = humanizeDuration(duration);
@@ -21,7 +21,7 @@ const DetailsPanel = ({
         <strong className="movie-card__details-name">Starring</strong>
         <span className="movie-card__details-value">
           {
-            actors.map((actor)=>{
+            starring.map((actor)=>{
               return <React.Fragment key={actor}>
                 {actor}<br />
               </ React.Fragment>;
@@ -51,7 +51,7 @@ DetailsPanel.propTypes = {
   genre: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   director: PropTypes.string.isRequired,
-  actors: PropTypes.arrayOf(PropTypes.string).isRequired,
+  starring: PropTypes.arrayOf(PropTypes.string).isRequired,
   duration: PropTypes.number.isRequired,
 };
 
