@@ -1,12 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import Catalog from "../catalog/catalog";
+import {connect} from "react-redux";
+import {ActionCreator} from "../../store/action-creator";
 
-const MyListScreen = ({films, user}) => {
+const MyListScreen = ({user, changeActiveFilter, filterType}) => {
+  useEffect(()=>{
+    changeActiveFilter(filterType);
+  });
+
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -39,7 +45,7 @@ const MyListScreen = ({films, user}) => {
         <h1 className="page-title user-page__title">My list</h1>
         <User user={user}/>
       </header>
-      <Catalog films={films} />
+      <Catalog />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -55,6 +61,15 @@ MyListScreen.propTypes = {
       PropTypes.shape(filmProps)
   ),
   user: PropTypes.shape(userProps),
+  changeActiveFilter: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired
 };
 
-export default MyListScreen;
+const mapDispatchToProps = (dispatch) => ({
+  changeActiveFilter(filter) {
+    dispatch(ActionCreator.changeActiveFilter(filter));
+  }
+});
+
+export {MyListScreen};
+export default connect(null, mapDispatchToProps)(MyListScreen);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
@@ -8,13 +8,24 @@ import Logo from "../logo/logo";
 import Catalog from "../catalog/catalog";
 import GenreList from "../genre-list/genre-list";
 import {connect} from "react-redux";
-import {getFilms} from "../../utils/get-films";
+import Spinner from "../spinner/spinner";
+import {ActionCreator} from "../../store/action-creator";
 
 const MainScreen = ({
-  films,
   poster,
   user,
+  isPosterLoaded,
+  changeActiveFilter,
+  changeCurrentFilm,
+  filterType
 }) => {
+  useEffect(() => {
+    changeActiveFilter(filterType);
+    if (poster) {
+      changeCurrentFilm(poster.id, poster);
+    }
+  }, []);
+
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -43,45 +54,52 @@ const MainScreen = ({
       </symbol></svg>{/* endinject */}
     </div>
     <section className="movie-card">
-      <div className="movie-card__bg">
-        <img src={poster.backgroundImage} alt="The Grand Budapest Hotel" />
-      </div>
-      <h1 className="visually-hidden">WTW</h1>
-      <header className="page-header movie-card__head">
-        <Logo />
-        <User user={user}/>
-      </header>
-      <div className="movie-card__wrap">
-        <div className="movie-card__info">
-          <div className="movie-card__poster">
-            <img src={poster.poster} alt={poster.title} width={218} height={327} />
-          </div>
-          <div className="movie-card__desc">
-            <h2 className="movie-card__title">{poster.title}</h2>
-            <p className="movie-card__meta">
-              <span className="movie-card__genre">{poster.genre}</span>
-              <span className="movie-card__year">{poster.year}</span>
-            </p>
-            <div className="movie-card__buttons">
-              <Link to={`/player/${poster.id}`} className="btn btn--play movie-card__button">
-                <svg viewBox="0 0 19 19" width={19} height={19}>
-                  <use xlinkHref="#play-s" />
-                </svg>
-                <span>Play</span>
-              </Link>
-              <button className="btn btn--list movie-card__button" type="button">
-                <svg viewBox="0 0 19 20" width={19} height={20}>
-                  <use xlinkHref="#add" />
-                </svg>
-                <span>My list</span>
-              </button>
+      {
+        !isPosterLoaded
+          ? <Spinner />
+          : <>
+            <div className="movie-card__bg">
+              <img src={poster.backgroundImage} alt="The Grand Budapest Hotel" />
             </div>
-          </div>
-        </div>
-      </div>
+            <h1 className="visually-hidden">WTW</h1>
+            <header className="page-header movie-card__head">
+              <Logo />
+              <User user={user}/>
+            </header>
+
+            <div className="movie-card__wrap">
+              <div className="movie-card__info">
+                <div className="movie-card__poster">
+                  <img src={poster.poster} alt={poster.title} width={218} height={327} />
+                </div>
+                <div className="movie-card__desc">
+                  <h2 className="movie-card__title">{poster.title}</h2>
+                  <p className="movie-card__meta">
+                    <span className="movie-card__genre">{poster.genre}</span>
+                    <span className="movie-card__year">{poster.year}</span>
+                  </p>
+                  <div className="movie-card__buttons">
+                    <Link to={`/player/${poster.id}`} className="btn btn--play movie-card__button">
+                      <svg viewBox="0 0 19 19" width={19} height={19}>
+                        <use xlinkHref="#play-s" />
+                      </svg>
+                      <span>Play</span>
+                    </Link>
+                    <button className="btn btn--list movie-card__button" type="button">
+                      <svg viewBox="0 0 19 20" width={19} height={20}>
+                        <use xlinkHref="#add" />
+                      </svg>
+                      <span>My list</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+      }
     </section>
     <div className="page-content">
-      <Catalog films={films}>
+      <Catalog>
         <GenreList />
         <div className="catalog__more">
           <button className="catalog__button" type="button">Show more</button>
@@ -103,12 +121,25 @@ MainScreen.propTypes = {
   ),
   poster: PropTypes.shape(filmProps),
   user: PropTypes.shape(userProps),
+  isPosterLoaded: PropTypes.bool.isRequired,
+  changeActiveFilter: PropTypes.func.isRequired,
+  changeCurrentFilm: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  films: getFilms(state),
   poster: state.poster,
+  isPosterLoaded: state.isPosterLoaded,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeActiveFilter(filter) {
+    dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+  changeCurrentFilm(id, film) {
+    dispatch(ActionCreator.changeCurrentFilm(id, film));
+  }
 });
 
 export {MainScreen};
-export default connect(mapStateToProps, null)(MainScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);

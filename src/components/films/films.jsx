@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import MovieCard from "../movie-card/movie-card";
 import {filmProps} from "../film-screen/film-screen.prop";
+import {connect} from "react-redux";
+import {filter} from "../../utils/filter";
 
 const Films = ({films}) => {
   const [activeMovieCardId, setActiveMovieCardId] = useState(``);
@@ -37,4 +39,9 @@ Films.propTypes = {
   ),
 };
 
-export default Films;
+const mapStateToProps = (state) => ({
+  films: filter[state.activeFilter](state)
+});
+
+export {Films};
+export default connect(mapStateToProps, null)(Films);

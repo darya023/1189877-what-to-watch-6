@@ -1,20 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import {createStore} from "redux";
+import {applyMiddleware, createStore} from "redux";
 import {composeWithDevTools} from "redux-devtools-extension";
+import thunk from "redux-thunk";
 import App from "./components/app/app";
-import {films} from "./mocks/films";
 import {users} from "./mocks/users";
+import {createAPI} from "./services/api";
 import {reducer} from "./store/reducer";
 
 const user = users[0];
-const store = createStore(reducer, composeWithDevTools());
+const api = createAPI();
+const store = createStore(
+    reducer,
+    composeWithDevTools(
+        applyMiddleware(thunk.withExtraArgument(api))
+    )
+);
 
 ReactDOM.render(
     <Provider store={store} >
       <App
-        films={films}
         user={user}
         users={users}
       />
