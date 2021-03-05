@@ -12,7 +12,6 @@ const Tabs = ({
   year,
   description,
   director,
-  actors,
   starring,
   duration,
   rating,
@@ -54,7 +53,7 @@ const Tabs = ({
           genre={genre}
           year={year}
           director={director}
-          actors={actors}
+          starring={starring}
           duration={duration}
         />;
       case Tab.REVIEWS:
@@ -100,7 +99,6 @@ Tabs.propTypes = {
   year: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
   director: PropTypes.string.isRequired,
-  actors: PropTypes.arrayOf(PropTypes.string).isRequired,
   starring: PropTypes.arrayOf(PropTypes.string).isRequired,
   duration: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,

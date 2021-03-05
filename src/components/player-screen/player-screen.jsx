@@ -1,10 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {useHistory} from "react-router-dom";
+import {ActionCreator} from "../../store/action-creator";
+import {connect} from "react-redux";
+import {filmProps} from "../film-screen/film-screen.prop";
 
-const PlayerScreen = ({title, image, video}) => {
+const PlayerScreen = ({currentFilmId, currentFilm, changeCurrentFilm}) => {
+  const {title, image, video} = currentFilm;
   const history = useHistory();
   const goBack = history.goBack;
+
+  useEffect(()=>{
+    changeCurrentFilm(currentFilmId);
+  }, [currentFilmId]);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -64,9 +72,21 @@ const PlayerScreen = ({title, image, video}) => {
 };
 
 PlayerScreen.propTypes = {
-  title: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  video: PropTypes.string.isRequired,
+  currentFilmId: PropTypes.string.isRequired,
+  currentFilm: PropTypes.shape(filmProps),
+  changeCurrentFilm: PropTypes.func.isRequired,
 };
 
-export default PlayerScreen;
+const mapStateToProps = (state) => ({
+  currentFilm: state.currentFilm,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeCurrentFilm(id) {
+    dispatch(ActionCreator.changeCurrentFilm(id));
+  },
+});
+
+export {PlayerScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerScreen);
+

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
@@ -8,8 +8,18 @@ import Logo from "../logo/logo";
 import Tabs from "../tabs/tabs";
 import {reviewsProp} from "../reviews-panel/reviews.prop";
 import CatalogSimilar from "../catalog/catalog-similar";
+import {ActionCreator} from "../../store/action-creator";
+import {connect} from "react-redux";
 
-const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
+const FilmScreen = ({
+  currentFilm,
+  currentFilmId,
+  user,
+  reviews,
+  changeActiveFilter,
+  filterType,
+  changeCurrentFilm
+}) => {
   const {
     id,
     title,
@@ -19,12 +29,19 @@ const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
     year,
     description,
     director,
-    actors,
     starring,
     duration,
     rating,
     reviewsCount,
   } = currentFilm;
+
+  useEffect(()=>{
+    changeActiveFilter(filterType);
+  }, []);
+
+  useEffect(()=>{
+    changeCurrentFilm(currentFilmId);
+  }, [currentFilmId]);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -99,7 +116,6 @@ const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
               year={year}
               description={description}
               director={director}
-              actors={actors}
               starring={starring}
               duration={duration}
               rating={rating}
@@ -111,7 +127,7 @@ const FilmScreen = ({currentFilm, similarFilms, user, reviews}) => {
       </div>
     </section>
     <div className="page-content">
-      <CatalogSimilar films={similarFilms} />
+      <CatalogSimilar />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -130,7 +146,25 @@ FilmScreen.propTypes = {
   user: PropTypes.shape(userProps),
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
-  )
+  ),
+  changeActiveFilter: PropTypes.func.isRequired,
+  changeCurrentFilm: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired,
+  currentFilmId: PropTypes.string.isRequired,
 };
 
-export default FilmScreen;
+const mapStateToProps = (state) => ({
+  currentFilm: state.currentFilm,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  changeActiveFilter(filter) {
+    dispatch(ActionCreator.changeActiveFilter(filter));
+  },
+  changeCurrentFilm(id) {
+    dispatch(ActionCreator.changeCurrentFilm(id));
+  },
+});
+
+export {FilmScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(FilmScreen);
