@@ -8,7 +8,7 @@ import Catalog from "../catalog/catalog";
 import {connect} from "react-redux";
 import {ActionCreator} from "../../store/action-creator";
 
-const MyListScreen = ({user, changeActiveFilter, filterType}) => {
+const MyListScreen = ({changeActiveFilter, filterType}) => {
   useEffect(()=>{
     changeActiveFilter(filterType);
   });
@@ -43,7 +43,7 @@ const MyListScreen = ({user, changeActiveFilter, filterType}) => {
       <header className="page-header user-page__head">
         <Logo />
         <h1 className="page-title user-page__title">My list</h1>
-        <User user={user}/>
+        <User/>
       </header>
       <Catalog />
       <footer className="page-footer">

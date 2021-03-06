@@ -23,5 +23,17 @@ export const ActionCreator = {
   changeActiveFilter: (filter) => ({
     type: ActionType.CHANGE_ACTIVE_FILTER,
     payload: filter
-  })
+  }),
+  changeAuthorizationStatus: (status) => ({
+    type: ActionType.CHANGE_AUTHORIZATION_STATUS,
+    payload: status
+  }),
+  changeIsSendingData: (status) => ({
+    type: ActionType.CHANGE_IS_SENDING,
+    payload: status
+  }),
+  setUser: (user) => ({
+    type: ActionType.SET_USER,
+    payload: user
+  }),
 };

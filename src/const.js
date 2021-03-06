@@ -12,3 +12,8 @@ export const FilterType = {
   ID: `ID`,
   SIMILAR: `SIMILAR`,
 };
+
+export const DataType = {
+  FILMS: `FILMS`,
+  USER: `USER`,
+};

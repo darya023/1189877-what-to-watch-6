@@ -7,10 +7,13 @@ import thunk from "redux-thunk";
 import App from "./components/app/app";
 import {users} from "./mocks/users";
 import {createAPI} from "./services/api";
+import {ActionCreator} from "./store/action-creator";
+import {checkAuthorization} from "./store/api-actions";
 import {reducer} from "./store/reducer";
 
-const user = users[0];
-const api = createAPI();
+const api = createAPI(
+    () => store.dispatch(ActionCreator.changeAuthorizationStatus(false))
+);
 const store = createStore(
     reducer,
     composeWithDevTools(
@@ -18,10 +21,11 @@ const store = createStore(
     )
 );
 
+store.dispatch(checkAuthorization());
+
 ReactDOM.render(
     <Provider store={store} >
       <App
-        user={user}
         users={users}
       />
     </Provider>,

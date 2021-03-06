@@ -11,7 +11,10 @@ const initialState = {
   poster: null,
   isFilmsLoaded: false,
   isPosterLoaded: false,
+  isSendingData: false,
   currentFilm: null,
+  authorizationStatus: false,
+  user: null,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -48,6 +51,21 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         activeFilter: action.payload,
+      };
+    case ActionType.CHANGE_AUTHORIZATION_STATUS:
+      return {
+        ...state,
+        authorizationStatus: action.payload,
+      };
+    case ActionType.CHANGE_IS_SENDING:
+      return {
+        ...state,
+        isSendingData: action.payload,
+      };
+    case ActionType.SET_USER:
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;

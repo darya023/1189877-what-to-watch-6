@@ -1,7 +1,31 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
+import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+import {useHistory} from "react-router-dom";
 import Logo from "../logo/logo";
+import {login} from "../../store/api-actions";
+import {ActionCreator} from "../../store/action-creator";
 
-const SignInScreen = () => {
+const SignInScreen = ({onSubmit, authorizationStatus, isSendingData}) => {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const buttonRef = useRef();
+  const history = useHistory();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSubmit({
+      email: emailRef.current.value,
+      password: passwordRef.current.value
+    });
+  };
+
+  useEffect(() => {
+    if (authorizationStatus && !isSendingData) {
+      history.push(`/`);
+    }
+  }, [authorizationStatus, isSendingData]);
+
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -34,19 +58,44 @@ const SignInScreen = () => {
         <h1 className="page-title user-page__title">Sign in</h1>
       </header>
       <div className="sign-in user-page__content">
-        <form action="#" className="sign-in__form">
+        <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
           <div className="sign-in__fields">
             <div className="sign-in__field">
-              <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" />
+              <input
+                className="sign-in__input"
+                type="email"
+                placeholder="Email address"
+                name="user-email"
+                id="user-email"
+                ref={emailRef}
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-email">Email address</label>
             </div>
             <div className="sign-in__field">
-              <input className="sign-in__input" type="password" placeholder="Password" name="user-password" id="user-password" />
+              <input
+                className="sign-in__input"
+                type="password"
+                placeholder="Password"
+                name="user-password"
+                id="user-password"
+                ref={passwordRef}
+              />
               <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
             </div>
           </div>
           <div className="sign-in__submit">
-            <button className="sign-in__btn" type="submit">Sign in</button>
+            <button
+              className="sign-in__btn"
+              type="submit"
+              ref={buttonRef}
+              disabled={isSendingData === true}
+            >
+              {
+                isSendingData
+                  ? `Sending...`
+                  : `Sign in`
+              }
+            </button>
           </div>
         </form>
       </div>
@@ -60,4 +109,23 @@ const SignInScreen = () => {
   </React.Fragment>;
 };
 
-export default SignInScreen;
+SignInScreen.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.bool.isRequired,
+  isSendingData: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+  isSendingData: state.isSendingData
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit(formData) {
+    dispatch(ActionCreator.changeIsSendingData(true));
+    dispatch(login(formData));
+  },
+});
+
+export {SignInScreen};
+export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);

@@ -14,11 +14,11 @@ import {connect} from "react-redux";
 const FilmScreen = ({
   currentFilm,
   currentFilmId,
-  user,
   reviews,
   changeActiveFilter,
   filterType,
-  changeCurrentFilm
+  changeCurrentFilm,
+  authorizationStatus
 }) => {
   const {
     id,
@@ -78,7 +78,7 @@ const FilmScreen = ({
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header movie-card__head">
           <Logo />
-          <User user={user}/>
+          <User/>
         </header>
         <div className="movie-card__wrap">
           <div className="movie-card__desc">
@@ -100,7 +100,11 @@ const FilmScreen = ({
                 </svg>
                 <span>My list</span>
               </button>
-              <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
+              {
+                authorizationStatus
+                  ? <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
+                  : ``
+              }
             </div>
           </div>
         </div>
@@ -151,10 +155,12 @@ FilmScreen.propTypes = {
   changeCurrentFilm: PropTypes.func.isRequired,
   filterType: PropTypes.string.isRequired,
   currentFilmId: PropTypes.string.isRequired,
+  authorizationStatus: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   currentFilm: state.currentFilm,
+  authorizationStatus: state.authorizationStatus,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -14,9 +14,9 @@ import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {connect} from "react-redux";
 import {FilterType} from "../../const";
+import PrivateRoute from "../private-route/private-route";
 
 const App = ({
-  user,
   users,
   currentFilm,
   isFilmsLoaded,
@@ -42,13 +42,13 @@ const App = ({
         <Route
           path="/"
           exact
-          render={()=><MainScreen filterType={FilterType.GENRE} user={user} />}
+          render={()=><MainScreen filterType={FilterType.GENRE} />}
         />
         <Route path="/login" exact component={SignInScreen} />
-        <Route
+        <PrivateRoute
           path="/mylist"
           exact
-          render={()=><MyListScreen filterType={FilterType.IS_FAVORITE} user={user} />}
+          component={()=><MyListScreen filterType={FilterType.IS_FAVORITE} />}
         />
         <Route
           path="/player/:id"
@@ -87,20 +87,20 @@ const App = ({
               }
 
               return currentFilm
-                ? <FilmScreen currentFilmId={id} filterType={FilterType.SIMILAR} user={user} reviews={currentFilmReviews}/>
+                ? <FilmScreen currentFilmId={id} filterType={FilterType.SIMILAR} reviews={currentFilmReviews}/>
                 : <NotFoundScreen />;
             }
           }
         />
-        <Route
+        <PrivateRoute
           path="/films/:id/review"
           exact
-          render={
+          component={
             (props)=> {
               const id = props.match.params.id;
 
               return currentFilm
-                ? <AddReviewScreen currentFilmId={id} user={user} />
+                ? <AddReviewScreen currentFilmId={id} />
                 : <NotFoundScreen />;
             }
           }

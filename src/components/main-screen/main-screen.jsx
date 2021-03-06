@@ -13,7 +13,6 @@ import {ActionCreator} from "../../store/action-creator";
 
 const MainScreen = ({
   poster,
-  user,
   isPosterLoaded,
   changeActiveFilter,
   changeCurrentFilm,
@@ -64,7 +63,7 @@ const MainScreen = ({
             <h1 className="visually-hidden">WTW</h1>
             <header className="page-header movie-card__head">
               <Logo />
-              <User user={user}/>
+              <User/>
             </header>
 
             <div className="movie-card__wrap">

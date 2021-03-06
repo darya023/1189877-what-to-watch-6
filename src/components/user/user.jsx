@@ -2,21 +2,33 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {userProps} from "../user/user.prop";
 import {Link} from "react-router-dom";
+import {connect} from "react-redux";
 
-const User = ({user}) => {
-  const {image} = user;
+const User = ({user, authorizationStatus}) => {
   return <div className="user-block">
-    <div className="user-block__avatar">
-      <Link to="/mylist">
-        <img src={image} alt="User avatar" width={63} height={63} />
-      </Link>
-    </div>
-    <Link to="/login" className="user-block__link">Sign in</Link>
+    {authorizationStatus
+      ? <>
+        <div className="user-block__avatar">
+          <Link to="/mylist">
+            <img src={user.image} alt="User avatar" width={63} height={63} />
+          </Link>
+        </div>
+        <div>{user.email}</div>
+      </>
+      : <Link to="/login" className="user-block__link">Sign in</Link>
+    }
   </div>;
 };
 
 User.propTypes = {
-  user: PropTypes.shape(userProps)
+  user: PropTypes.shape(userProps),
+  authorizationStatus: PropTypes.bool.isRequired,
 };
 
-export default User;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+  user: state.user,
+});
+
+export {User};
+export default connect(mapStateToProps, null)(User);

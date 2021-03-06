@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 import {filmProps} from "../film-screen/film-screen.prop";
 import {ActionCreator} from "../../store/action-creator";
 
-const AddReviewScreen = ({currentFilm, user, currentFilmId, changeCurrentFilm}) => {
+const AddReviewScreen = ({currentFilm, currentFilmId, changeCurrentFilm}) => {
   const {id, title, poster, backgroundImage} = currentFilm;
 
   useEffect(()=>{
@@ -60,7 +60,7 @@ const AddReviewScreen = ({currentFilm, user, currentFilmId, changeCurrentFilm}) 
               </li>
             </ul>
           </nav>
-          <User user={user} />
+          <User />
         </header>
         <div className="movie-card__poster movie-card__poster--small">
           <img src={poster} alt={title} width={218} height={327} />
