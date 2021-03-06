@@ -13,16 +13,17 @@ import {filmProps} from "../film-screen/film-screen.prop";
 import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {connect} from "react-redux";
-import {FilterType} from "../../const";
 import PrivateRoute from "../private-route/private-route";
+import {filter} from "../../utils/filter";
+import {FilterType} from "../../const";
 
 const App = ({
   users,
-  currentFilm,
   isFilmsLoaded,
   isPosterLoaded,
   onLoadFilms,
   onLoadPoster,
+  films
 }) => {
   useEffect(() => {
     if (!isFilmsLoaded) {
@@ -42,13 +43,13 @@ const App = ({
         <Route
           path="/"
           exact
-          render={()=><MainScreen filterType={FilterType.GENRE} />}
+          render={()=><MainScreen />}
         />
         <Route path="/login" exact component={SignInScreen} />
         <PrivateRoute
           path="/mylist"
           exact
-          component={()=><MyListScreen filterType={FilterType.IS_FAVORITE} />}
+          component={()=><MyListScreen />}
         />
         <Route
           path="/player/:id"
@@ -56,9 +57,10 @@ const App = ({
           render={
             (props)=>{
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               return currentFilm
-                ? <PlayerScreen currentFilmId={id} />
+                ? <PlayerScreen currentFilm={currentFilm} />
                 : <NotFoundScreen />;
             }
           }
@@ -70,6 +72,7 @@ const App = ({
             (props)=>{
               let currentFilmReviews = [];
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               if (currentFilm) {
                 currentFilmReviews = reviews
@@ -87,7 +90,7 @@ const App = ({
               }
 
               return currentFilm
-                ? <FilmScreen currentFilmId={id} filterType={FilterType.SIMILAR} reviews={currentFilmReviews}/>
+                ? <FilmScreen currentFilm={currentFilm} reviews={currentFilmReviews}/>
                 : <NotFoundScreen />;
             }
           }
@@ -98,9 +101,10 @@ const App = ({
           component={
             (props)=> {
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               return currentFilm
-                ? <AddReviewScreen currentFilmId={id} />
+                ? <AddReviewScreen currentFilm={currentFilm} />
                 : <NotFoundScreen />;
             }
           }
@@ -115,23 +119,23 @@ App.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
-  poster: PropTypes.shape(filmProps),
   users: PropTypes.arrayOf(
       PropTypes.shape(userProps)
-  ),
-  user: PropTypes.shape(userProps),
-  currentFilm: PropTypes.shape(filmProps),
+  ).isRequired,
   onLoadFilms: PropTypes.func.isRequired,
   onLoadPoster: PropTypes.func.isRequired,
   isPosterLoaded: PropTypes.bool.isRequired,
   isFilmsLoaded: PropTypes.bool.isRequired,
+  films: PropTypes.arrayOf(
+      PropTypes.shape(filmProps)
+  ).isRequired,
 };
 
 
 const mapStateToProps = (state) => ({
   isFilmsLoaded: state.isFilmsLoaded,
   isPosterLoaded: state.isPosterLoaded,
-  currentFilm: state.currentFilm,
+  films: filter[FilterType.ALL](state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

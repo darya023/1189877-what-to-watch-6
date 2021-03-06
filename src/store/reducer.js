@@ -1,18 +1,15 @@
-import {FilterType, INITIAL_GENRE} from "../const";
-import {filter} from "../utils/filter";
+import {INITIAL_GENRE} from "../const";
 import {getGenres} from "../utils/get-genres";
 import {ActionType} from "./actions";
 
 const initialState = {
   activeGenre: INITIAL_GENRE,
-  activeFilter: FilterType.GENRE,
   genres: [],
   films: [],
   poster: null,
   isFilmsLoaded: false,
   isPosterLoaded: false,
   isSendingData: false,
-  currentFilm: null,
   authorizationStatus: false,
   user: null,
 };
@@ -41,16 +38,6 @@ export const reducer = (state = initialState, action) => {
         ...state,
         poster: action.payload,
         isPosterLoaded: true
-      };
-    case ActionType.CHANGE_CURRENT_FILM:
-      return {
-        ...state,
-        currentFilm: filter[FilterType.ID](state, action.payload),
-      };
-    case ActionType.CHANGE_ACTIVE_FILTER:
-      return {
-        ...state,
-        activeFilter: action.payload,
       };
     case ActionType.CHANGE_AUTHORIZATION_STATUS:
       return {

@@ -1,29 +1,18 @@
-import React, {useEffect} from "react";
+import React from "react";
 import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import {Link} from "react-router-dom";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import Catalog from "../catalog/catalog";
-import GenreList from "../genre-list/genre-list";
 import {connect} from "react-redux";
 import Spinner from "../spinner/spinner";
-import {ActionCreator} from "../../store/action-creator";
+import CatalogMain from "../catalog-main/catalog-main";
+import {FilterType} from "../../const";
 
 const MainScreen = ({
   poster,
   isPosterLoaded,
-  changeActiveFilter,
-  changeCurrentFilm,
-  filterType
 }) => {
-  useEffect(() => {
-    changeActiveFilter(filterType);
-    if (poster) {
-      changeCurrentFilm(poster.id, poster);
-    }
-  }, []);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -98,12 +87,7 @@ const MainScreen = ({
       }
     </section>
     <div className="page-content">
-      <Catalog>
-        <GenreList />
-        <div className="catalog__more">
-          <button className="catalog__button" type="button">Show more</button>
-        </div>
-      </ Catalog>
+      <CatalogMain filterType={FilterType.GENRE} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -115,15 +99,8 @@ const MainScreen = ({
 };
 
 MainScreen.propTypes = {
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ),
   poster: PropTypes.shape(filmProps),
-  user: PropTypes.shape(userProps),
   isPosterLoaded: PropTypes.bool.isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
-  changeCurrentFilm: PropTypes.func.isRequired,
-  filterType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -131,14 +108,5 @@ const mapStateToProps = (state) => ({
   isPosterLoaded: state.isPosterLoaded,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  changeCurrentFilm(id, film) {
-    dispatch(ActionCreator.changeCurrentFilm(id, film));
-  }
-});
-
 export {MainScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default connect(mapStateToProps, null)(MainScreen);

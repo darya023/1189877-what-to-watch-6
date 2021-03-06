@@ -20,10 +20,6 @@ export const ActionCreator = {
     type: ActionType.CHANGE_CURRENT_FILM,
     payload
   }),
-  changeActiveFilter: (filter) => ({
-    type: ActionType.CHANGE_ACTIVE_FILTER,
-    payload: filter
-  }),
   changeAuthorizationStatus: (status) => ({
     type: ActionType.CHANGE_AUTHORIZATION_STATUS,
     payload: status

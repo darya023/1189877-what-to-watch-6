@@ -21,7 +21,7 @@ const User = ({user, authorizationStatus}) => {
 };
 
 User.propTypes = {
-  user: PropTypes.shape(userProps),
+  user: PropTypes.shape(userProps).isRequired,
   authorizationStatus: PropTypes.bool.isRequired,
 };
 

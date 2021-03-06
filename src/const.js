@@ -7,6 +7,7 @@ export const Tab = {
 export const INITIAL_GENRE = `All genres`;
 
 export const FilterType = {
+  All: `All`,
   GENRE: `GENRE`,
   IS_FAVORITE: `IS_FAVORITE`,
   ID: `ID`,
