@@ -7,13 +7,11 @@ import Logo from "../logo/logo";
 import {connect} from "react-redux";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {FilterType} from "../../const";
 
 const MainScreen = ({
   poster,
   isPosterLoaded,
 }) => {
-
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -87,7 +85,7 @@ const MainScreen = ({
       }
     </section>
     <div className="page-content">
-      <CatalogMain filterType={FilterType.GENRE} />
+      <CatalogMain />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">

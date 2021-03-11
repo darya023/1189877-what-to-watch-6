@@ -2,7 +2,6 @@ import React from "react";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import CatalogFavorites from "../catalog-favorites/catalog-favorites";
-import {FilterType} from "../../const";
 
 const MyListScreen = () => {
   return <React.Fragment>
@@ -37,7 +36,7 @@ const MyListScreen = () => {
         <h1 className="page-title user-page__title">My list</h1>
         <User/>
       </header>
-      <CatalogFavorites filterType={FilterType.IS_FAVORITE} />
+      <CatalogFavorites />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">

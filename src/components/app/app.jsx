@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Router, Route, Switch} from "react-router-dom";
 import MainScreen from "../main-screen/main-screen";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import MyListScreen from "../my-list-screen/my-list-screen";
@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
 import {filter} from "../../utils/filter";
 import {FilterType} from "../../const";
+import browserHistory from "../../browser-history";
 
 const App = ({
   users,
@@ -38,7 +39,7 @@ const App = ({
   }, [isPosterLoaded]);
 
   return (
-    <BrowserRouter>
+    <Router history={browserHistory}>
       <Switch>
         <Route
           path="/"
@@ -111,7 +112,7 @@ const App = ({
         />
         <Route component={NotFoundScreen} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 

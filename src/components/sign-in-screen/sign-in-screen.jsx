@@ -1,16 +1,14 @@
 import React, {useEffect, useRef} from "react";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {useHistory} from "react-router-dom";
 import Logo from "../logo/logo";
 import {login} from "../../store/api-actions";
 import {ActionCreator} from "../../store/action-creator";
 
-const SignInScreen = ({onSubmit, authorizationStatus, isSendingData}) => {
+const SignInScreen = ({onSubmit, onRedirect, authorizationStatus, isSendingData}) => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const buttonRef = useRef();
-  const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,7 +20,7 @@ const SignInScreen = ({onSubmit, authorizationStatus, isSendingData}) => {
 
   useEffect(() => {
     if (authorizationStatus && !isSendingData) {
-      history.push(`/`);
+      onRedirect(`/`);
     }
   }, [authorizationStatus, isSendingData]);
 
@@ -111,6 +109,7 @@ const SignInScreen = ({onSubmit, authorizationStatus, isSendingData}) => {
 
 SignInScreen.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  onRedirect: PropTypes.func.isRequired,
   authorizationStatus: PropTypes.bool.isRequired,
   isSendingData: PropTypes.bool.isRequired,
 };
@@ -124,6 +123,9 @@ const mapDispatchToProps = (dispatch) => ({
   onSubmit(formData) {
     dispatch(ActionCreator.changeIsSendingData(true));
     dispatch(login(formData));
+  },
+  onRedirect(url) {
+    dispatch(ActionCreator.redirectToRoute(url));
   },
 });
 

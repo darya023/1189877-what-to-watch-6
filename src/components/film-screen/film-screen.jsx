@@ -7,7 +7,6 @@ import Tabs from "../tabs/tabs";
 import {reviewsProp} from "../reviews-panel/reviews.prop";
 import {connect} from "react-redux";
 import CatalogSimilar from "../catalog-similar/catalog-similar";
-import {FilterType} from "../../const";
 import {filmProps} from "./film-screen.prop";
 
 const FilmScreen = ({
@@ -118,7 +117,7 @@ const FilmScreen = ({
       </div>
     </section>
     <div className="page-content">
-      <CatalogSimilar filterType={FilterType.SIMILAR} currentFilmId={currentFilm.id} currentFilmGenre={currentFilm.genre} />
+      <CatalogSimilar currentFilm={currentFilm} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">

@@ -18,3 +18,9 @@ export const DataType = {
   FILMS: `FILMS`,
   USER: `USER`,
 };
+
+export const APIRoute = {
+  LOGIN: `/login`,
+  FILMS: `/films`,
+  POSTER: `/films/promo`,
+};
