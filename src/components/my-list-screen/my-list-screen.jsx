@@ -1,18 +1,9 @@
-import React, {useEffect} from "react";
-import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
-import {filmProps} from "../film-screen/film-screen.prop";
+import React from "react";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import Catalog from "../catalog/catalog";
-import {connect} from "react-redux";
-import {ActionCreator} from "../../store/action-creator";
+import CatalogFavorites from "../catalog-favorites/catalog-favorites";
 
-const MyListScreen = ({user, changeActiveFilter, filterType}) => {
-  useEffect(()=>{
-    changeActiveFilter(filterType);
-  });
-
+const MyListScreen = () => {
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -43,9 +34,9 @@ const MyListScreen = ({user, changeActiveFilter, filterType}) => {
       <header className="page-header user-page__head">
         <Logo />
         <h1 className="page-title user-page__title">My list</h1>
-        <User user={user}/>
+        <User/>
       </header>
-      <Catalog />
+      <CatalogFavorites />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -56,20 +47,4 @@ const MyListScreen = ({user, changeActiveFilter, filterType}) => {
   </React.Fragment>;
 };
 
-MyListScreen.propTypes = {
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ),
-  user: PropTypes.shape(userProps),
-  changeActiveFilter: PropTypes.func.isRequired,
-  filterType: PropTypes.string.isRequired
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  }
-});
-
-export {MyListScreen};
-export default connect(null, mapDispatchToProps)(MyListScreen);
+export default MyListScreen;

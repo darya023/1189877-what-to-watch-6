@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
 import {reviewsProp} from "../reviews-panel/reviews.prop";
 import {Tab} from "../../const";
 import OverwiewPanel from "../overview-panel/overview-panel";
@@ -94,7 +93,6 @@ const Tabs = ({
 };
 
 Tabs.propTypes = {
-  user: PropTypes.shape(userProps),
   genre: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
@@ -105,7 +103,7 @@ Tabs.propTypes = {
   reviewsCount: PropTypes.number.isRequired,
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
-  )
+  ).isRequired
 };
 
 export default Tabs;

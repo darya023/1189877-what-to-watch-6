@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {Router, Route, Switch} from "react-router-dom";
 import MainScreen from "../main-screen/main-screen";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import MyListScreen from "../my-list-screen/my-list-screen";
@@ -13,16 +13,18 @@ import {filmProps} from "../film-screen/film-screen.prop";
 import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {connect} from "react-redux";
+import PrivateRoute from "../private-route/private-route";
+import {filter} from "../../utils/filter";
 import {FilterType} from "../../const";
+import browserHistory from "../../browser-history";
 
 const App = ({
-  user,
   users,
-  currentFilm,
   isFilmsLoaded,
   isPosterLoaded,
   onLoadFilms,
   onLoadPoster,
+  films
 }) => {
   useEffect(() => {
     if (!isFilmsLoaded) {
@@ -37,18 +39,18 @@ const App = ({
   }, [isPosterLoaded]);
 
   return (
-    <BrowserRouter>
+    <Router history={browserHistory}>
       <Switch>
         <Route
           path="/"
           exact
-          render={()=><MainScreen filterType={FilterType.GENRE} user={user} />}
+          render={()=><MainScreen />}
         />
         <Route path="/login" exact component={SignInScreen} />
-        <Route
+        <PrivateRoute
           path="/mylist"
           exact
-          render={()=><MyListScreen filterType={FilterType.IS_FAVORITE} user={user} />}
+          component={()=><MyListScreen />}
         />
         <Route
           path="/player/:id"
@@ -56,9 +58,10 @@ const App = ({
           render={
             (props)=>{
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               return currentFilm
-                ? <PlayerScreen currentFilmId={id} />
+                ? <PlayerScreen currentFilm={currentFilm} />
                 : <NotFoundScreen />;
             }
           }
@@ -70,6 +73,7 @@ const App = ({
             (props)=>{
               let currentFilmReviews = [];
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               if (currentFilm) {
                 currentFilmReviews = reviews
@@ -87,27 +91,28 @@ const App = ({
               }
 
               return currentFilm
-                ? <FilmScreen currentFilmId={id} filterType={FilterType.SIMILAR} user={user} reviews={currentFilmReviews}/>
+                ? <FilmScreen currentFilm={currentFilm} reviews={currentFilmReviews}/>
                 : <NotFoundScreen />;
             }
           }
         />
-        <Route
+        <PrivateRoute
           path="/films/:id/review"
           exact
-          render={
+          component={
             (props)=> {
               const id = props.match.params.id;
+              const currentFilm = filter[FilterType.ID]({films}, id);
 
               return currentFilm
-                ? <AddReviewScreen currentFilmId={id} user={user} />
+                ? <AddReviewScreen currentFilm={currentFilm} />
                 : <NotFoundScreen />;
             }
           }
         />
         <Route component={NotFoundScreen} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 
@@ -115,23 +120,23 @@ App.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
-  poster: PropTypes.shape(filmProps),
   users: PropTypes.arrayOf(
       PropTypes.shape(userProps)
-  ),
-  user: PropTypes.shape(userProps),
-  currentFilm: PropTypes.shape(filmProps),
+  ).isRequired,
   onLoadFilms: PropTypes.func.isRequired,
   onLoadPoster: PropTypes.func.isRequired,
   isPosterLoaded: PropTypes.bool.isRequired,
   isFilmsLoaded: PropTypes.bool.isRequired,
+  films: PropTypes.arrayOf(
+      PropTypes.shape(filmProps)
+  ).isRequired,
 };
 
 
 const mapStateToProps = (state) => ({
   isFilmsLoaded: state.isFilmsLoaded,
   isPosterLoaded: state.isPosterLoaded,
-  currentFilm: state.currentFilm,
+  films: filter[FilterType.ALL](state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

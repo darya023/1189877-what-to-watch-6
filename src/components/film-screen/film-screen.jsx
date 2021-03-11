@@ -1,24 +1,18 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
-import {filmProps} from "../film-screen/film-screen.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import Tabs from "../tabs/tabs";
 import {reviewsProp} from "../reviews-panel/reviews.prop";
-import CatalogSimilar from "../catalog/catalog-similar";
-import {ActionCreator} from "../../store/action-creator";
 import {connect} from "react-redux";
+import CatalogSimilar from "../catalog-similar/catalog-similar";
+import {filmProps} from "./film-screen.prop";
 
 const FilmScreen = ({
   currentFilm,
-  currentFilmId,
-  user,
   reviews,
-  changeActiveFilter,
-  filterType,
-  changeCurrentFilm
+  authorizationStatus,
 }) => {
   const {
     id,
@@ -34,14 +28,6 @@ const FilmScreen = ({
     rating,
     reviewsCount,
   } = currentFilm;
-
-  useEffect(()=>{
-    changeActiveFilter(filterType);
-  }, []);
-
-  useEffect(()=>{
-    changeCurrentFilm(currentFilmId);
-  }, [currentFilmId]);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -78,7 +64,7 @@ const FilmScreen = ({
         <h1 className="visually-hidden">WTW</h1>
         <header className="page-header movie-card__head">
           <Logo />
-          <User user={user}/>
+          <User/>
         </header>
         <div className="movie-card__wrap">
           <div className="movie-card__desc">
@@ -100,7 +86,11 @@ const FilmScreen = ({
                 </svg>
                 <span>My list</span>
               </button>
-              <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
+              {
+                authorizationStatus
+                  ? <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
+                  : ``
+              }
             </div>
           </div>
         </div>
@@ -127,7 +117,7 @@ const FilmScreen = ({
       </div>
     </section>
     <div className="page-content">
-      <CatalogSimilar />
+      <CatalogSimilar currentFilm={currentFilm} />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -139,32 +129,16 @@ const FilmScreen = ({
 };
 
 FilmScreen.propTypes = {
-  currentFilm: PropTypes.shape(filmProps),
-  similarFilms: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ),
-  user: PropTypes.shape(userProps),
+  currentFilm: PropTypes.shape(filmProps).isRequired,
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
-  ),
-  changeActiveFilter: PropTypes.func.isRequired,
-  changeCurrentFilm: PropTypes.func.isRequired,
-  filterType: PropTypes.string.isRequired,
-  currentFilmId: PropTypes.string.isRequired,
+  ).isRequired,
+  authorizationStatus: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  currentFilm: state.currentFilm,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  changeCurrentFilm(id) {
-    dispatch(ActionCreator.changeCurrentFilm(id));
-  },
+  authorizationStatus: state.authorizationStatus,
 });
 
 export {FilmScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(FilmScreen);
+export default connect(mapStateToProps, null)(FilmScreen);

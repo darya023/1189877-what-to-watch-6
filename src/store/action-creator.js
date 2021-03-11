@@ -16,12 +16,20 @@ export const ActionCreator = {
     type: ActionType.LOAD_POSTER,
     payload: poster
   }),
-  changeCurrentFilm: (...payload) => ({
-    type: ActionType.CHANGE_CURRENT_FILM,
-    payload
+  changeAuthorizationStatus: (status) => ({
+    type: ActionType.CHANGE_AUTHORIZATION_STATUS,
+    payload: status
   }),
-  changeActiveFilter: (filter) => ({
-    type: ActionType.CHANGE_ACTIVE_FILTER,
-    payload: filter
+  changeIsSendingData: (status) => ({
+    type: ActionType.CHANGE_IS_SENDING,
+    payload: status
+  }),
+  setUser: (user) => ({
+    type: ActionType.SET_USER,
+    payload: user
+  }),
+  redirectToRoute: (url) => ({
+    type: ActionType.REDIRECT_TO_ROUTE,
+    payload: url
   })
 };

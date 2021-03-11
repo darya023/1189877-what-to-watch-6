@@ -44,7 +44,7 @@ const ReviewsPanel = ({reviews}) => {
 ReviewsPanel.propTypes = {
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
-  )
+  ).isRequired
 };
 
 export default ReviewsPanel;

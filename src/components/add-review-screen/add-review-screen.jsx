@@ -1,20 +1,13 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
 import User from "../user/user";
 import Logo from "../logo/logo";
 import ReviewForm from "../review-form/review-form";
-import {connect} from "react-redux";
 import {filmProps} from "../film-screen/film-screen.prop";
-import {ActionCreator} from "../../store/action-creator";
 
-const AddReviewScreen = ({currentFilm, user, currentFilmId, changeCurrentFilm}) => {
+const AddReviewScreen = ({currentFilm}) => {
   const {id, title, poster, backgroundImage} = currentFilm;
-
-  useEffect(()=>{
-    changeCurrentFilm(currentFilmId);
-  }, [currentFilmId]);
 
   return <React.Fragment>
     <div className="visually-hidden">
@@ -60,7 +53,7 @@ const AddReviewScreen = ({currentFilm, user, currentFilmId, changeCurrentFilm}) 
               </li>
             </ul>
           </nav>
-          <User user={user} />
+          <User />
         </header>
         <div className="movie-card__poster movie-card__poster--small">
           <img src={poster} alt={title} width={218} height={327} />
@@ -74,21 +67,7 @@ const AddReviewScreen = ({currentFilm, user, currentFilmId, changeCurrentFilm}) 
 };
 
 AddReviewScreen.propTypes = {
-  user: PropTypes.shape(userProps),
-  currentFilmId: PropTypes.string.isRequired,
-  currentFilm: PropTypes.shape(filmProps),
-  changeCurrentFilm: PropTypes.func.isRequired,
+  currentFilm: PropTypes.shape(filmProps).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  currentFilm: state.currentFilm,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  changeCurrentFilm(id) {
-    dispatch(ActionCreator.changeCurrentFilm(id));
-  },
-});
-
-export {AddReviewScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(AddReviewScreen);
+export default AddReviewScreen;

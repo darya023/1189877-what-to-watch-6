@@ -1,31 +1,17 @@
-import React, {useEffect} from "react";
+import React from "react";
 import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
 import {filmProps} from "../film-screen/film-screen.prop";
 import {Link} from "react-router-dom";
 import User from "../user/user";
 import Logo from "../logo/logo";
-import Catalog from "../catalog/catalog";
-import GenreList from "../genre-list/genre-list";
 import {connect} from "react-redux";
 import Spinner from "../spinner/spinner";
-import {ActionCreator} from "../../store/action-creator";
+import CatalogMain from "../catalog-main/catalog-main";
 
 const MainScreen = ({
   poster,
-  user,
   isPosterLoaded,
-  changeActiveFilter,
-  changeCurrentFilm,
-  filterType
 }) => {
-  useEffect(() => {
-    changeActiveFilter(filterType);
-    if (poster) {
-      changeCurrentFilm(poster.id, poster);
-    }
-  }, []);
-
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -64,7 +50,7 @@ const MainScreen = ({
             <h1 className="visually-hidden">WTW</h1>
             <header className="page-header movie-card__head">
               <Logo />
-              <User user={user}/>
+              <User/>
             </header>
 
             <div className="movie-card__wrap">
@@ -99,12 +85,7 @@ const MainScreen = ({
       }
     </section>
     <div className="page-content">
-      <Catalog>
-        <GenreList />
-        <div className="catalog__more">
-          <button className="catalog__button" type="button">Show more</button>
-        </div>
-      </ Catalog>
+      <CatalogMain />
       <footer className="page-footer">
         <Logo />
         <div className="copyright">
@@ -116,15 +97,8 @@ const MainScreen = ({
 };
 
 MainScreen.propTypes = {
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ),
   poster: PropTypes.shape(filmProps),
-  user: PropTypes.shape(userProps),
   isPosterLoaded: PropTypes.bool.isRequired,
-  changeActiveFilter: PropTypes.func.isRequired,
-  changeCurrentFilm: PropTypes.func.isRequired,
-  filterType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -132,14 +106,5 @@ const mapStateToProps = (state) => ({
   isPosterLoaded: state.isPosterLoaded,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  changeActiveFilter(filter) {
-    dispatch(ActionCreator.changeActiveFilter(filter));
-  },
-  changeCurrentFilm(id, film) {
-    dispatch(ActionCreator.changeCurrentFilm(id, film));
-  }
-});
-
 export {MainScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
+export default connect(mapStateToProps, null)(MainScreen);
