@@ -17,6 +17,7 @@ import PrivateRoute from "../private-route/private-route";
 import {filter} from "../../utils/filter";
 import {FilterType} from "../../const";
 import browserHistory from "../../browser-history";
+import {getFilms} from "../../store/selectors/films";
 
 const App = ({
   users,
@@ -136,7 +137,7 @@ App.propTypes = {
 const mapStateToProps = (state) => ({
   isFilmsLoaded: state.isFilmsLoaded,
   isPosterLoaded: state.isPosterLoaded,
-  films: filter[FilterType.ALL](state),
+  films: getFilms(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

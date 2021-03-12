@@ -1,11 +1,10 @@
 import React from "react";
 import {connect} from "react-redux";
-import {filter} from "../../utils/filter";
 import {catalogProps} from "./catalog.prop";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 import GenreList from "../genre-list/genre-list";
-import {FilterType} from "../../const";
+import {getFilmsByActiveGenre} from "../../store/selectors/films";
 
 const CatalogMain = ({isFilmsLoaded, films}) => {
   return <>
@@ -31,7 +30,7 @@ CatalogMain.propTypes = catalogProps;
 
 const mapStateToProps = (state) => ({
   isFilmsLoaded: state.isFilmsLoaded,
-  films: filter[FilterType.GENRE](state),
+  films: getFilmsByActiveGenre(state),
 });
 
 export {CatalogMain};
