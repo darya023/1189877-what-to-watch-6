@@ -1,14 +1,13 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import {filter} from "../../utils/filter";
-import {catalogProps} from "../catalog-main/catalog.prop";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
-import {FilterType} from "../../const";
-import {filmProps} from "../film-screen/film-screen.prop";
+import {getLoadedFilmsStatus, getSimilarFilms} from "../../store/data/selectors";
+import {useSelector} from "react-redux";
 
-const CatalogSimilar = ({isFilmsLoaded, films}) => {
+const CatalogSimilar = () => {
+  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
+  const films = useSelector((state) => getSimilarFilms(state));
+
   return <>
     {
       !isFilmsLoaded && <Spinner />
@@ -24,15 +23,5 @@ const CatalogSimilar = ({isFilmsLoaded, films}) => {
   </>;
 };
 
-CatalogSimilar.propTypes = {
-  ...catalogProps,
-  currentFilm: PropTypes.shape(filmProps).isRequired,
-};
-
-const mapStateToProps = (state, ownProps) => ({
-  isFilmsLoaded: state.isFilmsLoaded,
-  films: filter[FilterType.SIMILAR](state, ownProps.currentFilm.id, ownProps.currentFilm.genre),
-});
-
 export {CatalogSimilar};
-export default connect(mapStateToProps, null)(CatalogSimilar);
+export default CatalogSimilar;

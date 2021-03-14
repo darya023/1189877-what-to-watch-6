@@ -106,4 +106,4 @@ Tabs.propTypes = {
   ).isRequired
 };
 
-export default Tabs;
+export default React.memo(Tabs);

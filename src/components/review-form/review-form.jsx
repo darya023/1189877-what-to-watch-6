@@ -1,34 +1,23 @@
-import React, {useState} from "react";
+import React from "react";
 import PropTypes from 'prop-types';
-import {useHistory} from "react-router-dom";
+import {useFormData} from "../../hooks/useFormData";
+import {useDispatch} from "react-redux";
+import {redirectToRoute} from "../../store/action-creator";
 
 const ReviewForm = ({onSubmit}) => {
+  const dispatch = useDispatch();
+
+  const redirect = (url) => {
+    dispatch(redirectToRoute(url));
+  };
+
   const RATING_LENGTH = 10;
-  const ratings = new Array(RATING_LENGTH).fill().map((item, index)=>{
+  const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
     return index + 1;
   });
   const lastRating = ratings[RATING_LENGTH - 1];
 
-  const goBack = useHistory().goBack;
-  const [formData, setFormData] = useState({
-    "rating": lastRating,
-    "review-text": ``
-  });
-
-  const handleFieldChange = (event) => {
-    const {name, value} = event.target;
-
-    setFormData((state)=>({
-      ...state,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSubmit(formData);
-    goBack();
-  };
+  const [formData, handleFieldChange, handleSubmit] = useFormData(lastRating, onSubmit, redirect);
 
   return <form onSubmit={handleSubmit} action="#" className="add-review__form">
     <div className="rating">

@@ -58,4 +58,7 @@ MovieCard.propTypes = {
   promoVideo: PropTypes.string.isRequired,
 };
 
-export default MovieCard;
+export {MovieCard};
+export default React.memo(MovieCard, (prevProps, nextProps) => {
+  return prevProps.isActive === nextProps.isActive;
+});

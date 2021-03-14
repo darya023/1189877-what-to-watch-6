@@ -1,10 +1,10 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import PropTypes from 'prop-types';
-import User from "../user/user";
-import Logo from "../logo/logo";
 import ReviewForm from "../review-form/review-form";
 import {filmProps} from "../film-screen/film-screen.prop";
+import FilmHeader from "../film-header/film-header";
+import PosterSmall from "../poster/poster-small";
 
 const AddReviewScreen = ({currentFilm}) => {
   const {id, title, poster, backgroundImage} = currentFilm;
@@ -37,12 +37,7 @@ const AddReviewScreen = ({currentFilm}) => {
     </div>
     <section className="movie-card movie-card--full">
       <div className="movie-card__header">
-        <div className="movie-card__bg">
-          <img src={backgroundImage} alt={title} />
-        </div>
-        <h1 className="visually-hidden">WTW</h1>
-        <header className="page-header">
-          <Logo />
+        <FilmHeader title={title} backgroundImage={backgroundImage}>
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
@@ -53,11 +48,8 @@ const AddReviewScreen = ({currentFilm}) => {
               </li>
             </ul>
           </nav>
-          <User />
-        </header>
-        <div className="movie-card__poster movie-card__poster--small">
-          <img src={poster} alt={title} width={218} height={327} />
-        </div>
+        </FilmHeader>
+        <PosterSmall src={poster} alt={title} />
       </div>
       <div className="add-review">
         <ReviewForm onSubmit={()=>{}}/>

@@ -1,13 +1,14 @@
 import React from "react";
-import {connect} from "react-redux";
-import {filter} from "../../utils/filter";
-import {catalogProps} from "./catalog.prop";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
-import GenreList from "../genre-list/genre-list";
-import {FilterType} from "../../const";
+import GenresList from "../genres-list/genres-list";
+import {getFilmsByActiveGenre, getLoadedFilmsStatus} from "../../store/data/selectors";
+import {useSelector} from "react-redux";
 
-const CatalogMain = ({isFilmsLoaded, films}) => {
+const CatalogMain = () => {
+  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
+  const films = useSelector((state) => getFilmsByActiveGenre(state));
+
   return <>
     {
       !isFilmsLoaded && <Spinner />
@@ -16,7 +17,7 @@ const CatalogMain = ({isFilmsLoaded, films}) => {
       films.some(Boolean)
         ? <section className={`catalog`} >
           <h2 className={`catalog__title visually-hidden`} >Catalog</h2>
-          <GenreList />
+          <GenresList />
           <Films films={films} />
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
@@ -27,12 +28,7 @@ const CatalogMain = ({isFilmsLoaded, films}) => {
   </>;
 };
 
-CatalogMain.propTypes = catalogProps;
-
-const mapStateToProps = (state) => ({
-  isFilmsLoaded: state.isFilmsLoaded,
-  films: filter[FilterType.GENRE](state),
-});
-
 export {CatalogMain};
-export default connect(mapStateToProps, null)(CatalogMain);
+export default CatalogMain;
+// export default React.memo(CatalogMain);
+

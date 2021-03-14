@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {humanizeDuration} from "../../utils/humanize-duration";
+import DetailsPanelItem from "../details-panel-item/details-panel-item";
 
 const DetailsPanel = ({
   genre,
@@ -13,36 +14,21 @@ const DetailsPanel = ({
 
   return <div className="movie-card__text movie-card__row">
     <div className="movie-card__text-col">
-      <p className="movie-card__details-item">
-        <strong className="movie-card__details-name">Director</strong>
-        <span className="movie-card__details-value">{director}</span>
-      </p>
-      <p className="movie-card__details-item">
-        <strong className="movie-card__details-name">Starring</strong>
-        <span className="movie-card__details-value">
-          {
-            starring.map((actor)=>{
-              return <React.Fragment key={actor}>
-                {actor}<br />
-              </ React.Fragment>;
-            })
-          }
-        </span>
-      </p>
+      <DetailsPanelItem name="Director" value={director} />
+      <DetailsPanelItem name="Starring">
+        {
+          starring.map((actor)=>{
+            return <React.Fragment key={actor}>
+              {actor}<br />
+            </ React.Fragment>;
+          })
+        }
+      </DetailsPanelItem>
     </div>
     <div className="movie-card__text-col">
-      <p className="movie-card__details-item">
-        <strong className="movie-card__details-name">Run Time</strong>
-        <span className="movie-card__details-value">{humanizedDuration}</span>
-      </p>
-      <p className="movie-card__details-item">
-        <strong className="movie-card__details-name">Genre</strong>
-        <span className="movie-card__details-value">{genre}</span>
-      </p>
-      <p className="movie-card__details-item">
-        <strong className="movie-card__details-name">Released</strong>
-        <span className="movie-card__details-value">{year}</span>
-      </p>
+      <DetailsPanelItem name="Run Time" value={humanizedDuration} />
+      <DetailsPanelItem name="Genre" value={genre} />
+      <DetailsPanelItem name="Released" value={year} />
     </div>
   </div>;
 };

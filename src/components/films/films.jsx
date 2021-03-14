@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import PropTypes from 'prop-types';
 import MovieCard from "../movie-card/movie-card";
 import {filmProps} from "../film-screen/film-screen.prop";
 
 const Films = ({films}) => {
   const [activeMovieCardId, setActiveMovieCardId] = useState(``);
+  useCallback(setActiveMovieCardId);
 
   return <div className="catalog__movies-list">
     {
@@ -38,3 +39,6 @@ Films.propTypes = {
 };
 
 export default Films;
+// export default React.memo(Films, (prevProps, nextProps) => {
+//   return prevProps.films === nextProps.films;
+// });

@@ -1,17 +1,19 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
-import {Link} from "react-router-dom";
-import User from "../user/user";
-import Logo from "../logo/logo";
-import {connect} from "react-redux";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
+import {getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
+import {useSelector} from "react-redux";
+import Poster from "../poster/poster";
+import FilmInfo from "../film-info/film-info";
+import FilmHeader from "../film-header/film-header";
+import Footer from "../footer/footer";
 
-const MainScreen = ({
-  poster,
-  isPosterLoaded,
-}) => {
+const MainScreen = () => {
+  const poster = useSelector((state) => getPoster(state));
+  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+
   return <React.Fragment>
     <div className="visually-hidden">
       {/* inject:svg */}<svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"><symbol id="add" viewBox="0 0 19 20">
@@ -44,41 +46,17 @@ const MainScreen = ({
         !isPosterLoaded
           ? <Spinner />
           : <>
-            <div className="movie-card__bg">
-              <img src={poster.backgroundImage} alt="The Grand Budapest Hotel" />
-            </div>
-            <h1 className="visually-hidden">WTW</h1>
-            <header className="page-header movie-card__head">
-              <Logo />
-              <User/>
-            </header>
-
+            <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
             <div className="movie-card__wrap">
-              <div className="movie-card__info">
-                <div className="movie-card__poster">
-                  <img src={poster.poster} alt={poster.title} width={218} height={327} />
-                </div>
-                <div className="movie-card__desc">
-                  <h2 className="movie-card__title">{poster.title}</h2>
-                  <p className="movie-card__meta">
-                    <span className="movie-card__genre">{poster.genre}</span>
-                    <span className="movie-card__year">{poster.year}</span>
-                  </p>
-                  <div className="movie-card__buttons">
-                    <Link to={`/player/${poster.id}`} className="btn btn--play movie-card__button">
-                      <svg viewBox="0 0 19 19" width={19} height={19}>
-                        <use xlinkHref="#play-s" />
-                      </svg>
-                      <span>Play</span>
-                    </Link>
-                    <button className="btn btn--list movie-card__button" type="button">
-                      <svg viewBox="0 0 19 20" width={19} height={20}>
-                        <use xlinkHref="#add" />
-                      </svg>
-                      <span>My list</span>
-                    </button>
-                  </div>
-                </div>
+              <div id="info" className="movie-card__info">
+                <Poster src={poster.poster} alt={poster.title} />
+                <FilmInfo
+                  id={poster.id}
+                  title={poster.title}
+                  genre={poster.genre}
+                  year={poster.year}
+                  hasAddReviewButton={false}
+                />
               </div>
             </div>
           </>
@@ -86,25 +64,14 @@ const MainScreen = ({
     </section>
     <div className="page-content">
       <CatalogMain />
-      <footer className="page-footer">
-        <Logo />
-        <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   </React.Fragment>;
 };
 
 MainScreen.propTypes = {
   poster: PropTypes.shape(filmProps),
-  isPosterLoaded: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  poster: state.poster,
-  isPosterLoaded: state.isPosterLoaded,
-});
-
 export {MainScreen};
-export default connect(mapStateToProps, null)(MainScreen);
+export default MainScreen;

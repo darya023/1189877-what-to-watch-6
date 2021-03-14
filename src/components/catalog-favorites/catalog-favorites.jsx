@@ -1,12 +1,13 @@
 import React from "react";
-import {connect} from "react-redux";
-import {FilterType} from "../../const";
-import {filter} from "../../utils/filter";
-import {catalogProps} from "../catalog-main/catalog.prop";
+import {useSelector} from "react-redux";
+import {getFavoriteFilms, getLoadedFilmsStatus} from "../../store/data/selectors";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 
-const CatalogFavorites = ({isFilmsLoaded, films}) => {
+const CatalogFavorites = () => {
+  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
+  const films = useSelector((state) => getFavoriteFilms(state));
+
   return <>
     {
       !isFilmsLoaded && <Spinner />
@@ -22,12 +23,5 @@ const CatalogFavorites = ({isFilmsLoaded, films}) => {
   </>;
 };
 
-CatalogFavorites.propTypes = catalogProps;
-
-const mapStateToProps = (state) => ({
-  isFilmsLoaded: state.isFilmsLoaded,
-  films: filter[FilterType.IS_FAVORITE](state),
-});
-
 export {CatalogFavorites};
-export default connect(mapStateToProps, null)(CatalogFavorites);
+export default CatalogFavorites;

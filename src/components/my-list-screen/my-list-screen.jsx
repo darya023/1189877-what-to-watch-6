@@ -1,7 +1,7 @@
 import React from "react";
-import User from "../user/user";
-import Logo from "../logo/logo";
 import CatalogFavorites from "../catalog-favorites/catalog-favorites";
+import Footer from "../footer/footer";
+import HeaderUserPage from "../header/header-user-page";
 
 const MyListScreen = () => {
   return <React.Fragment>
@@ -31,18 +31,11 @@ const MyListScreen = () => {
       </symbol></svg>{/* endinject */}
     </div>
     <div className="user-page">
-      <header className="page-header user-page__head">
-        <Logo />
+      <HeaderUserPage>
         <h1 className="page-title user-page__title">My list</h1>
-        <User/>
-      </header>
+      </HeaderUserPage>
       <CatalogFavorites />
-      <footer className="page-footer">
-        <Logo />
-        <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   </React.Fragment>;
 };

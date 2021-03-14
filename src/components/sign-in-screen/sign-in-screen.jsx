@@ -1,11 +1,26 @@
 import React, {useEffect, useRef} from "react";
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import Logo from "../logo/logo";
 import {login} from "../../store/api-actions";
-import {ActionCreator} from "../../store/action-creator";
+import {changeIsSendingData, redirectToRoute} from "../../store/action-creator";
+import {getAuthorizationStatus} from "../../store/user/selectors";
+import {getSendingDataStatus} from "../../store/data/selectors";
+import {useDispatch, useSelector} from "react-redux";
+import Footer from "../footer/footer";
+import HeaderUserPage from "../header/header-user-page";
 
-const SignInScreen = ({onSubmit, onRedirect, authorizationStatus, isSendingData}) => {
+const SignInScreen = () => {
+  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
+  const isSendingData = useSelector((state) => getSendingDataStatus(state));
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (formData) => {
+    dispatch(changeIsSendingData(true));
+    dispatch(login(formData));
+  };
+  const onRedirect = (url) => {
+    dispatch(redirectToRoute(url));
+  };
+
   const emailRef = useRef();
   const passwordRef = useRef();
   const buttonRef = useRef();
@@ -51,10 +66,9 @@ const SignInScreen = ({onSubmit, onRedirect, authorizationStatus, isSendingData}
       </symbol></svg>{/* endinject */}
     </div>
     <div className="user-page">
-      <header className="page-header user-page__head">
-        <Logo />
+      <HeaderUserPage withoutUserComponent={true}>
         <h1 className="page-title user-page__title">Sign in</h1>
-      </header>
+      </HeaderUserPage>
       <div className="sign-in user-page__content">
         <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
           <div className="sign-in__fields">
@@ -97,37 +111,10 @@ const SignInScreen = ({onSubmit, onRedirect, authorizationStatus, isSendingData}
           </div>
         </form>
       </div>
-      <footer className="page-footer">
-        <Logo />
-        <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   </React.Fragment>;
 };
 
-SignInScreen.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  onRedirect: PropTypes.func.isRequired,
-  authorizationStatus: PropTypes.bool.isRequired,
-  isSendingData: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-  isSendingData: state.isSendingData
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit(formData) {
-    dispatch(ActionCreator.changeIsSendingData(true));
-    dispatch(login(formData));
-  },
-  onRedirect(url) {
-    dispatch(ActionCreator.redirectToRoute(url));
-  },
-});
-
 export {SignInScreen};
-export default connect(mapStateToProps, mapDispatchToProps)(SignInScreen);
+export default SignInScreen;

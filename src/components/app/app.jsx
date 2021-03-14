@@ -8,24 +8,35 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {userProps} from "../user/user.prop";
-import {filmProps} from "../film-screen/film-screen.prop";
 import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
-import {filter} from "../../utils/filter";
-import {FilterType} from "../../const";
 import browserHistory from "../../browser-history";
+import {getCurrentFilm, getCurrentFilmID, getLoadedFilmsStatus, getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
+import {changeCurrentFilmID} from "../../store/action-creator";
+import {userProps} from "../user/user.prop";
 
-const App = ({
-  users,
-  isFilmsLoaded,
-  isPosterLoaded,
-  onLoadFilms,
-  onLoadPoster,
-  films
-}) => {
+const App = ({users}) => {
+  // const {isFilmsLoaded, isPosterLoaded, currentFilmID, poster} = useSelector((state) => state[NameSpace.DATA]);
+  const currentFilm = useSelector((state) => getCurrentFilm(state));
+  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
+  const currentFilmID = useSelector((state) => getCurrentFilmID(state));
+  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+  const poster = useSelector((state) => getPoster(state));
+
+  const dispatch = useDispatch();
+
+  const onLoadFilms = () => {
+    dispatch(fetchFilms());
+  };
+  const onLoadPoster = () => {
+    dispatch(fetchPoster());
+  };
+  const onChangeCurrentFilmID = (id) => {
+    dispatch(changeCurrentFilmID(id));
+  };
+
   useEffect(() => {
     if (!isFilmsLoaded) {
       onLoadFilms();
@@ -44,7 +55,15 @@ const App = ({
         <Route
           path="/"
           exact
-          render={()=><MainScreen />}
+          render={
+            ()=>{
+              if (isPosterLoaded && currentFilmID !== poster.id) {
+                onChangeCurrentFilmID(poster.id);
+              }
+
+              return <MainScreen />;
+            }
+          }
         />
         <Route path="/login" exact component={SignInScreen} />
         <PrivateRoute
@@ -58,7 +77,10 @@ const App = ({
           render={
             (props)=>{
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
+
+              if (currentFilmID !== id) {
+                onChangeCurrentFilmID(id);
+              }
 
               return currentFilm
                 ? <PlayerScreen currentFilm={currentFilm} />
@@ -73,7 +95,10 @@ const App = ({
             (props)=>{
               let currentFilmReviews = [];
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
+
+              if (currentFilmID !== id) {
+                onChangeCurrentFilmID(id);
+              }
 
               if (currentFilm) {
                 currentFilmReviews = reviews
@@ -102,7 +127,10 @@ const App = ({
           component={
             (props)=> {
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
+
+              if (currentFilmID !== id) {
+                onChangeCurrentFilmID(id);
+              }
 
               return currentFilm
                 ? <AddReviewScreen currentFilm={currentFilm} />
@@ -118,35 +146,10 @@ const App = ({
 
 App.propTypes = {
   match: PropTypes.object,
-  location: PropTypes.object,
-  history: PropTypes.object,
   users: PropTypes.arrayOf(
       PropTypes.shape(userProps)
   ).isRequired,
-  onLoadFilms: PropTypes.func.isRequired,
-  onLoadPoster: PropTypes.func.isRequired,
-  isPosterLoaded: PropTypes.bool.isRequired,
-  isFilmsLoaded: PropTypes.bool.isRequired,
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ).isRequired,
 };
 
-
-const mapStateToProps = (state) => ({
-  isFilmsLoaded: state.isFilmsLoaded,
-  isPosterLoaded: state.isPosterLoaded,
-  films: filter[FilterType.ALL](state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadFilms() {
-    dispatch(fetchFilms());
-  },
-  onLoadPoster() {
-    dispatch(fetchPoster());
-  },
-});
-
 export {App};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
