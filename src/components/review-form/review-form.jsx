@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import {useFormData} from "../../hooks/useFormData";
 import {useDispatch} from "react-redux";
 import {redirectToRoute} from "../../store/action-creator";
+import {useLocation} from "react-router";
+
+const RATING_LENGTH = 10;
+const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
+  return index + 1;
+});
+const lastRating = ratings[RATING_LENGTH - 1];
 
 const ReviewForm = ({onSubmit}) => {
   const dispatch = useDispatch();
@@ -11,13 +18,14 @@ const ReviewForm = ({onSubmit}) => {
     dispatch(redirectToRoute(url));
   };
 
-  const RATING_LENGTH = 10;
-  const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
-    return index + 1;
-  });
-  const lastRating = ratings[RATING_LENGTH - 1];
+  const path = useLocation().pathname;
+  const regexp = /(\/.*)\/review/;
+  const [, url] = path.match(regexp);
 
-  const [formData, handleFieldChange, handleSubmit] = useFormData(lastRating, onSubmit, redirect);
+  const [formData, handleFieldChange, handleSubmit] = useFormData(lastRating, (data)=> {
+    onSubmit(data);
+    redirect(url);
+  });
 
   return <form onSubmit={handleSubmit} action="#" className="add-review__form">
     <div className="rating">

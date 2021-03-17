@@ -13,17 +13,12 @@ import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
 import browserHistory from "../../browser-history";
-import {getCurrentFilm, getCurrentFilmID, getLoadedFilmsStatus, getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
-import {changeCurrentFilmID} from "../../store/action-creator";
+import {getLoadedFilmsStatus, getLoadedPosterStatus} from "../../store/data/selectors";
 import {userProps} from "../user/user.prop";
 
 const App = ({users}) => {
-  // const {isFilmsLoaded, isPosterLoaded, currentFilmID, poster} = useSelector((state) => state[NameSpace.DATA]);
-  const currentFilm = useSelector((state) => getCurrentFilm(state));
   const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
-  const currentFilmID = useSelector((state) => getCurrentFilmID(state));
   const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
-  const poster = useSelector((state) => getPoster(state));
 
   const dispatch = useDispatch();
 
@@ -32,9 +27,6 @@ const App = ({users}) => {
   };
   const onLoadPoster = () => {
     dispatch(fetchPoster());
-  };
-  const onChangeCurrentFilmID = (id) => {
-    dispatch(changeCurrentFilmID(id));
   };
 
   useEffect(() => {
@@ -57,10 +49,6 @@ const App = ({users}) => {
           exact
           render={
             ()=>{
-              if (isPosterLoaded && currentFilmID !== poster.id) {
-                onChangeCurrentFilmID(poster.id);
-              }
-
               return <MainScreen />;
             }
           }
@@ -78,13 +66,7 @@ const App = ({users}) => {
             (props)=>{
               const id = props.match.params.id;
 
-              if (currentFilmID !== id) {
-                onChangeCurrentFilmID(id);
-              }
-
-              return currentFilm
-                ? <PlayerScreen currentFilm={currentFilm} />
-                : <NotFoundScreen />;
+              return <PlayerScreen currentFilmID={id || null} />;
             }
           }
         />
@@ -93,31 +75,21 @@ const App = ({users}) => {
           exact
           render={
             (props)=>{
-              let currentFilmReviews = [];
               const id = props.match.params.id;
+              let currentFilmReviews = reviews
+                .slice()
+                .filter((review)=>review.filmId === id)
+                .map((review)=>{
+                  return Object.assign(
+                      {},
+                      review,
+                      {
+                        autorName: users.find((autor)=>autor.id === review.autorId).name
+                      }
+                  );
+                });
 
-              if (currentFilmID !== id) {
-                onChangeCurrentFilmID(id);
-              }
-
-              if (currentFilm) {
-                currentFilmReviews = reviews
-                    .slice()
-                    .filter((review)=>review.filmId === currentFilm.id)
-                    .map((review)=>{
-                      return Object.assign(
-                          {},
-                          review,
-                          {
-                            autorName: users.find((autor)=>autor.id === review.autorId).name
-                          }
-                      );
-                    });
-              }
-
-              return currentFilm
-                ? <FilmScreen currentFilm={currentFilm} reviews={currentFilmReviews}/>
-                : <NotFoundScreen />;
+              return <FilmScreen currentFilmID={id || null} reviews={currentFilmReviews}/>;
             }
           }
         />
@@ -128,13 +100,7 @@ const App = ({users}) => {
             (props)=> {
               const id = props.match.params.id;
 
-              if (currentFilmID !== id) {
-                onChangeCurrentFilmID(id);
-              }
-
-              return currentFilm
-                ? <AddReviewScreen currentFilm={currentFilm} />
-                : <NotFoundScreen />;
+              return <AddReviewScreen currentFilmID={id || null} />;
             }
           }
         />

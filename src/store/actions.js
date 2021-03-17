@@ -8,5 +8,5 @@ export const ActionType = {
   CHANGE_AUTHORIZATION_STATUS: `/changeAuthorizationStatus`,
   CHANGE_IS_SENDING: `login/changeIsSendingData`,
   SET_USER: `login/setUser`,
-  REDIRECT_TO_ROUTE: `login/redirectToRoute`,
+  REDIRECT_TO_ROUTE: `app/redirectToRoute`,
 };

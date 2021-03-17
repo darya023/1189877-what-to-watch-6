@@ -6,6 +6,60 @@ import OverwiewPanel from "../overview-panel/overview-panel";
 import DetailsPanel from "../details-panel/details-panel";
 import ReviewsPanel from "../reviews-panel/reviews-panel";
 
+const getPanel = (
+    id,
+    genre,
+    year,
+    description,
+    director,
+    starring,
+    duration,
+    rating,
+    reviewsCount,
+    reviews
+) => {
+  switch (id) {
+    case Tab.OVERVIEW:
+      return <OverwiewPanel
+        description={description}
+        director={director}
+        starring={starring}
+        rating={rating}
+        reviewsCount={reviewsCount}
+      />;
+    case Tab.DETAILS:
+      return <DetailsPanel
+        genre={genre}
+        year={year}
+        director={director}
+        starring={starring}
+        duration={duration}
+      />;
+    case Tab.REVIEWS:
+      return <ReviewsPanel reviews={reviews} />;
+  }
+
+  return null;
+};
+
+const tabs = [
+  {
+    id: Tab.OVERVIEW,
+    name: Tab.OVERVIEW,
+    isActive: true
+  },
+  {
+    id: Tab.DETAILS,
+    name: Tab.DETAILS,
+    isActive: false
+  },
+  {
+    id: Tab.REVIEWS,
+    name: Tab.REVIEWS,
+    isActive: false
+  },
+];
+
 const Tabs = ({
   genre,
   year,
@@ -17,50 +71,7 @@ const Tabs = ({
   reviewsCount,
   reviews
 }) => {
-  const tabs = [
-    {
-      id: Tab.OVERVIEW,
-      name: Tab.OVERVIEW,
-      isActive: true
-    },
-    {
-      id: Tab.DETAILS,
-      name: Tab.DETAILS,
-      isActive: false
-    },
-    {
-      id: Tab.REVIEWS,
-      name: Tab.REVIEWS,
-      isActive: false
-    },
-  ];
-
   const [activeTabId, setActiveTabId] = useState(tabs.find((tab)=>tab.isActive === true).id);
-
-  const getPanel = (id) => {
-    switch (id) {
-      case Tab.OVERVIEW:
-        return <OverwiewPanel
-          description={description}
-          director={director}
-          starring={starring}
-          rating={rating}
-          reviewsCount={reviewsCount}
-        />;
-      case Tab.DETAILS:
-        return <DetailsPanel
-          genre={genre}
-          year={year}
-          director={director}
-          starring={starring}
-          duration={duration}
-        />;
-      case Tab.REVIEWS:
-        return <ReviewsPanel reviews={reviews} />;
-    }
-
-    return null;
-  };
 
   return <>
     <nav className="movie-nav movie-card__nav">
@@ -88,7 +99,18 @@ const Tabs = ({
         }
       </ul>
     </nav>
-    {getPanel(activeTabId)}
+    {getPanel(
+        activeTabId,
+        genre,
+        year,
+        description,
+        director,
+        starring,
+        duration,
+        rating,
+        reviewsCount,
+        reviews
+    )}
   </>;
 };
 

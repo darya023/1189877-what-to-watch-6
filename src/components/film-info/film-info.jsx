@@ -9,7 +9,6 @@ const FilmInfo = ({
   year,
   hasAddReviewButton
 }) => {
-
   return <div className="movie-card__desc">
     <h2 className="movie-card__title">{title}</h2>
     <p className="movie-card__meta">

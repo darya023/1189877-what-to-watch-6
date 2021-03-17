@@ -30,5 +30,3 @@ const CatalogMain = () => {
 
 export {CatalogMain};
 export default CatalogMain;
-// export default React.memo(CatalogMain);
-

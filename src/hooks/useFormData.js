@@ -1,11 +1,6 @@
 import {useState} from "react";
-import {useLocation} from "react-router";
 
-export const useFormData = (lastRating, onSubmit, redirect) => {
-  const path = useLocation().pathname;
-  const regexp = /(\/.*)\/review/;
-  const [, url] = path.match(regexp);
-
+export const useFormData = (lastRating, onSubmit) => {
   const [formData, setFormData] = useState({
     "rating": lastRating,
     "review-text": ``
@@ -23,7 +18,6 @@ export const useFormData = (lastRating, onSubmit, redirect) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     onSubmit(formData);
-    redirect(url);
   };
 
   return [formData, handleFieldChange, handleSubmit];
