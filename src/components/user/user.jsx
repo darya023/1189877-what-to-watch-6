@@ -1,10 +1,12 @@
 import React from "react";
-import PropTypes from 'prop-types';
-import {userProps} from "../user/user.prop";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
+import {getAuthorizationStatus, getUser} from "../../store/user/selectors";
+import {useSelector} from "react-redux";
 
-const User = ({user, authorizationStatus}) => {
+const User = () => {
+  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
+  const user = useSelector((state) => getUser(state));
+
   return <div className="user-block">
     {authorizationStatus
       ? <>
@@ -20,15 +22,5 @@ const User = ({user, authorizationStatus}) => {
   </div>;
 };
 
-User.propTypes = {
-  user: PropTypes.shape(userProps).isRequired,
-  authorizationStatus: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
-  user: state.user,
-});
-
 export {User};
-export default connect(mapStateToProps, null)(User);
+export default User;

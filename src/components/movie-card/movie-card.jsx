@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import VideoPlayer from "../video-player/video-player";
 
+const PLAYING_DELAY = 1000;
+
 const MovieCard = ({
   id,
   title,
@@ -12,7 +14,6 @@ const MovieCard = ({
   onMouseLeave,
   isActive
 }) => {
-  const PLAYING_DELAY = 1000;
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(()=>{
@@ -58,4 +59,7 @@ MovieCard.propTypes = {
   promoVideo: PropTypes.string.isRequired,
 };
 
-export default MovieCard;
+export {MovieCard};
+export default React.memo(MovieCard, (prevProps, nextProps) => {
+  return prevProps.isActive === nextProps.isActive;
+});

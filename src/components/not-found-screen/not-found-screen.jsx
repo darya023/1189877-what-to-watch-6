@@ -1,12 +1,11 @@
 import React from "react";
-import Logo from "../logo/logo";
+import Footer from "../footer/footer";
+import HeaderUserPage from "../header/header-user-page";
 
 const NotFoundScreen = () => {
   return <React.Fragment>
     <div className="user-page user-page--fill">
-      <header className="page-header">
-        <Logo />
-      </header>
+      <HeaderUserPage withoutUserComponent={true}/>
       <main className="user-page__content">
         <div className="page">
           <div className="page__text">
@@ -19,12 +18,7 @@ const NotFoundScreen = () => {
         </div>
 
       </main>
-      <footer className="page-footer">
-        <Logo />
-        <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   </React.Fragment>;
 

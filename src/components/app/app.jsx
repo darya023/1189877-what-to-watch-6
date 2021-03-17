@@ -8,24 +8,27 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {userProps} from "../user/user.prop";
-import {filmProps} from "../film-screen/film-screen.prop";
 import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
-import {filter} from "../../utils/filter";
-import {FilterType} from "../../const";
 import browserHistory from "../../browser-history";
+import {getLoadedFilmsStatus, getLoadedPosterStatus} from "../../store/data/selectors";
+import {userProps} from "../user/user.prop";
 
-const App = ({
-  users,
-  isFilmsLoaded,
-  isPosterLoaded,
-  onLoadFilms,
-  onLoadPoster,
-  films
-}) => {
+const App = ({users}) => {
+  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
+  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+
+  const dispatch = useDispatch();
+
+  const onLoadFilms = () => {
+    dispatch(fetchFilms());
+  };
+  const onLoadPoster = () => {
+    dispatch(fetchPoster());
+  };
+
   useEffect(() => {
     if (!isFilmsLoaded) {
       onLoadFilms();
@@ -44,7 +47,11 @@ const App = ({
         <Route
           path="/"
           exact
-          render={()=><MainScreen />}
+          render={
+            ()=>{
+              return <MainScreen />;
+            }
+          }
         />
         <Route path="/login" exact component={SignInScreen} />
         <PrivateRoute
@@ -58,11 +65,8 @@ const App = ({
           render={
             (props)=>{
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
 
-              return currentFilm
-                ? <PlayerScreen currentFilm={currentFilm} />
-                : <NotFoundScreen />;
+              return <PlayerScreen currentFilmID={id || null} />;
             }
           }
         />
@@ -71,28 +75,21 @@ const App = ({
           exact
           render={
             (props)=>{
-              let currentFilmReviews = [];
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
+              let currentFilmReviews = reviews
+                .slice()
+                .filter((review)=>review.filmId === id)
+                .map((review)=>{
+                  return Object.assign(
+                      {},
+                      review,
+                      {
+                        autorName: users.find((autor)=>autor.id === review.autorId).name
+                      }
+                  );
+                });
 
-              if (currentFilm) {
-                currentFilmReviews = reviews
-                    .slice()
-                    .filter((review)=>review.filmId === currentFilm.id)
-                    .map((review)=>{
-                      return Object.assign(
-                          {},
-                          review,
-                          {
-                            autorName: users.find((autor)=>autor.id === review.autorId).name
-                          }
-                      );
-                    });
-              }
-
-              return currentFilm
-                ? <FilmScreen currentFilm={currentFilm} reviews={currentFilmReviews}/>
-                : <NotFoundScreen />;
+              return <FilmScreen currentFilmID={id || null} reviews={currentFilmReviews}/>;
             }
           }
         />
@@ -102,11 +99,8 @@ const App = ({
           component={
             (props)=> {
               const id = props.match.params.id;
-              const currentFilm = filter[FilterType.ID]({films}, id);
 
-              return currentFilm
-                ? <AddReviewScreen currentFilm={currentFilm} />
-                : <NotFoundScreen />;
+              return <AddReviewScreen currentFilmID={id || null} />;
             }
           }
         />
@@ -118,35 +112,10 @@ const App = ({
 
 App.propTypes = {
   match: PropTypes.object,
-  location: PropTypes.object,
-  history: PropTypes.object,
   users: PropTypes.arrayOf(
       PropTypes.shape(userProps)
   ).isRequired,
-  onLoadFilms: PropTypes.func.isRequired,
-  onLoadPoster: PropTypes.func.isRequired,
-  isPosterLoaded: PropTypes.bool.isRequired,
-  isFilmsLoaded: PropTypes.bool.isRequired,
-  films: PropTypes.arrayOf(
-      PropTypes.shape(filmProps)
-  ).isRequired,
 };
 
-
-const mapStateToProps = (state) => ({
-  isFilmsLoaded: state.isFilmsLoaded,
-  isPosterLoaded: state.isPosterLoaded,
-  films: filter[FilterType.ALL](state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onLoadFilms() {
-    dispatch(fetchFilms());
-  },
-  onLoadPoster() {
-    dispatch(fetchPoster());
-  },
-});
-
 export {App};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

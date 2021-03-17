@@ -24,3 +24,5 @@ export const APIRoute = {
   FILMS: `/films`,
   POSTER: `/films/promo`,
 };
+
+export const COUNT_SIMILAR_FILMS = 4;
