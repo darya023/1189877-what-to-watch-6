@@ -56,3 +56,9 @@ export const changeCurrentFilmID = createAction(ActionType.CHANGE_CURRENT_FILM_I
     payload: id
   };
 });
+
+export const updateFilm = createAction(ActionType.UPDATE_FILM, (film) => {
+  return {
+    payload: film
+  };
+});

@@ -23,6 +23,12 @@ export const APIRoute = {
   LOGIN: `/login`,
   FILMS: `/films`,
   POSTER: `/films/promo`,
+  FAVORITE: `/favorite`,
 };
 
 export const COUNT_SIMILAR_FILMS = 4;
+
+export const DurationView = {
+  LETTERS: `LETTERS`,
+  COLON: `COLON`,
+};

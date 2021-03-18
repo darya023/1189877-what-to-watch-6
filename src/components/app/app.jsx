@@ -66,7 +66,7 @@ const App = ({users}) => {
             (props)=>{
               const id = props.match.params.id;
 
-              return <PlayerScreen currentFilmID={id || null} />;
+              return <PlayerScreen currentFilmID={id || null} onExitButtonClick={() => props.history.goBack()} />;
             }
           }
         />
@@ -112,6 +112,7 @@ const App = ({users}) => {
 
 App.propTypes = {
   match: PropTypes.object,
+  history: PropTypes.object,
   users: PropTypes.arrayOf(
       PropTypes.shape(userProps)
   ).isRequired,

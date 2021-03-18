@@ -1,7 +1,7 @@
 import {batch} from "react-redux";
 import {APIRoute, DataType} from "../const";
 import {adaptDataToClient} from "../utils/adaptDataToClient";
-import {changeAuthorizationStatus, changeIsSendingData, loadFilms, loadPoster, redirectToRoute, setGenres, setUser} from "./action-creator";
+import {changeAuthorizationStatus, changeIsSendingData, loadFilms, loadPoster, redirectToRoute, setGenres, setUser, updateFilm} from "./action-creator";
 
 export const fetchFilms = () => (dispatch, _getState, api) => (
   api.get(APIRoute.FILMS)
@@ -47,5 +47,19 @@ export const login = ({email, password}) => (dispatch, _getState, api) => {
         dispatch(changeIsSendingData(false));
         dispatch(changeAuthorizationStatus(false));
       });
+    });
+};
+
+export const toggleIsFavoriteKey = ({updatedFilmID, wasFavorite}) => (dispatch, _getState, api) => {
+  api.post(`${APIRoute.FAVORITE}/${updatedFilmID}/${wasFavorite ? 0 : 1}`)
+    .then(({data})=>adaptDataToClient[DataType.FILMS](data))
+    .then((data) => {
+      batch(() => {
+        dispatch(updateFilm(data));
+        dispatch(changeIsSendingData(false));
+      });
+    })
+    .catch(() => {
+      dispatch(changeIsSendingData(false));
     });
 };

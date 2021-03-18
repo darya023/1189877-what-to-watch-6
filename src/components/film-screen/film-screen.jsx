@@ -38,6 +38,7 @@ const FilmScreen = ({reviews, currentFilmID}) => {
               title={currentFilm.title}
               genre={currentFilm.genre}
               year={currentFilm.year}
+              isFavorite={currentFilm.isFavorite}
               hasAddReviewButton={authorizationStatus}
             />
           </div>

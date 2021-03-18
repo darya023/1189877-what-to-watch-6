@@ -41,6 +41,7 @@ const MainScreen = () => {
                   title={poster.title}
                   genre={poster.genre}
                   year={poster.year}
+                  isFavorite={poster.isFavorite}
                   hasAddReviewButton={false}
                 />
               </div>

@@ -7,6 +7,9 @@ const VideoPlayer = ({
   isMuted,
   isPreview,
   isPlaying,
+  newCurrentTime = 0,
+  onTimeUpdate = ()=>{},
+  onDurationChange = ()=>{},
 }) => {
   const videoRef = useRef();
 
@@ -18,7 +21,11 @@ const VideoPlayer = ({
     }
 
     videoRef.current.pause();
-  });
+  }, [isPlaying]);
+
+  useEffect(()=>{
+    videoRef.current.currentTime = newCurrentTime;
+  }, [newCurrentTime]);
 
   return <video
     className={
@@ -32,6 +39,8 @@ const VideoPlayer = ({
     height='100%'
     poster={image}
     ref={videoRef}
+    onDurationChange={()=>onDurationChange(videoRef.current.duration)}
+    onTimeUpdate={()=>onTimeUpdate(videoRef.current.currentTime)}
   />;
 };
 
@@ -41,6 +50,9 @@ VideoPlayer.propTypes = {
   isMuted: PropTypes.bool.isRequired,
   isPreview: PropTypes.bool.isRequired,
   isPlaying: PropTypes.bool.isRequired,
+  newCurrentTime: PropTypes.number,
+  onTimeUpdate: PropTypes.func,
+  onDurationChange: PropTypes.func,
 };
 
 export default VideoPlayer;
