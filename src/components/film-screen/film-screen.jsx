@@ -29,7 +29,7 @@ const FilmScreen = ({reviews, currentFilmID}) => {
 
   return currentFilm
     ? <React.Fragment>
-      <section className="movie-card movie-card--full">
+      <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
         <div className="movie-card__hero">
           <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage} />
           <div className="movie-card__wrap">

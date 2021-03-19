@@ -27,8 +27,7 @@ const data = createReducer(initialState, (builder) => {
   });
   builder.addCase(updateFilm, (state, action) => {
     const updatedFilm = action.payload;
-    const prevFilm = state.films.find((film) => film.id === updatedFilm.id);
-    const prevFilmIndex = state.films.indexOf(prevFilm);
+    const prevFilmIndex = state.films.findIndex((film) => film.id === updatedFilm.id);
 
     if (prevFilmIndex !== -1) {
       state.films = [

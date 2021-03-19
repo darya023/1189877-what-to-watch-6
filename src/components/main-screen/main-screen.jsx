@@ -27,28 +27,26 @@ const MainScreen = () => {
   }, [currentFilmID]);
 
   return <React.Fragment>
-    <section className="movie-card">
-      {
-        !isPosterLoaded
-          ? <Spinner />
-          : <>
-            <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
-            <div className="movie-card__wrap">
-              <div id="info" className="movie-card__info">
-                <Poster src={poster.poster} alt={poster.title} />
-                <FilmInfo
-                  id={poster.id}
-                  title={poster.title}
-                  genre={poster.genre}
-                  year={poster.year}
-                  isFavorite={poster.isFavorite}
-                  hasAddReviewButton={false}
-                />
-              </div>
+    {
+      !isPosterLoaded
+        ? <Spinner />
+        : <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
+          <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
+          <div className="movie-card__wrap">
+            <div id="info" className="movie-card__info">
+              <Poster src={poster.poster} alt={poster.title} />
+              <FilmInfo
+                id={poster.id}
+                title={poster.title}
+                genre={poster.genre}
+                year={poster.year}
+                isFavorite={poster.isFavorite}
+                hasAddReviewButton={false}
+              />
             </div>
-          </>
-      }
-    </section>
+          </div>
+        </section>
+    }
     <div className="page-content">
       <CatalogMain />
       <Footer />

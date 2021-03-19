@@ -24,7 +24,7 @@ const AddReviewScreen = ({currentFilmID}) => {
 
   return currentFilm
     ? <React.Fragment>
-      <section className="movie-card movie-card--full">
+      <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
         <div className="movie-card__header">
           <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage}>
             <nav className="breadcrumbs">
