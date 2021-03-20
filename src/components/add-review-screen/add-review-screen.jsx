@@ -10,7 +10,7 @@ import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 
 const AddReviewScreen = ({currentFilmID}) => {
-  const currentFilm = useSelector((state) => getCurrentFilm(state));
+  const currentFilm = useSelector(getCurrentFilm);
 
   const dispatch = useDispatch();
 

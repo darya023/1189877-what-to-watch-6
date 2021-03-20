@@ -11,9 +11,9 @@ import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 
-const MainScreen = () => {
-  const poster = useSelector((state) => getPoster(state));
-  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+const MainScreen = ({path}) => {
+  const poster = useSelector(getPoster);
+  const isPosterLoaded = useSelector(getLoadedPosterStatus);
   const currentFilmID = poster ? poster.id : null;
 
   const dispatch = useDispatch();
@@ -42,6 +42,7 @@ const MainScreen = () => {
                 year={poster.year}
                 isFavorite={poster.isFavorite}
                 hasAddReviewButton={false}
+                path={path}
               />
             </div>
           </div>
@@ -56,6 +57,7 @@ const MainScreen = () => {
 
 MainScreen.propTypes = {
   poster: PropTypes.shape(filmProps),
+  path: PropTypes.string.isRequired,
 };
 
 export {MainScreen};

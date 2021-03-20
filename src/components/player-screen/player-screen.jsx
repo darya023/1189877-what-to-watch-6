@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import PropTypes from 'prop-types';
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
-import {changeCurrentFilmID} from "../../store/action-creator";
+import {changeCurrentFilmID, redirectToRoute} from "../../store/action-creator";
 import {getCurrentFilm} from "../../store/data/selectors";
 import {humanizeDuration} from "../../utils/humanize-duration";
 import {DurationView} from "../../const";
@@ -16,13 +16,17 @@ const countRatio = (progressRef, x) => {
   return ratio;
 };
 
-const PlayerScreen = ({currentFilmID, onExitButtonClick}) => {
-  const currentFilm = useSelector((state) => getCurrentFilm(state));
+const PlayerScreen = ({currentFilmID, prevPath}) => {
+  const currentFilm = useSelector(getCurrentFilm);
 
   const dispatch = useDispatch();
 
   const onChangeCurrentFilmID = (id) => {
     dispatch(changeCurrentFilmID(id));
+  };
+
+  const redirect = (url) => {
+    dispatch(redirectToRoute(url));
   };
 
   const progressRef = useRef();
@@ -115,7 +119,7 @@ const PlayerScreen = ({currentFilmID, onExitButtonClick}) => {
         onTimeUpdate={onTimeUpdate}
         onDurationChange={onDurationChange}
       />
-      <button className="player__exit" onClick={onExitButtonClick}>Exit</button>
+      <button className="player__exit" onClick={() => redirect(prevPath)}>Exit</button>
       <div className="player__controls">
         <div className="player__controls-row">
           <div className="player__time" >
@@ -168,9 +172,9 @@ const PlayerScreen = ({currentFilmID, onExitButtonClick}) => {
 };
 
 PlayerScreen.propTypes = {
+  history: PropTypes.object,
   currentFilmID: PropTypes.string.isRequired,
-  onExitButtonClick: PropTypes.func.isRequired,
+  prevPath: PropTypes.string.isRequired,
 };
 
 export default PlayerScreen;
-

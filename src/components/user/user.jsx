@@ -4,8 +4,8 @@ import {getAuthorizationStatus, getUser} from "../../store/user/selectors";
 import {useSelector} from "react-redux";
 
 const User = () => {
-  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
-  const user = useSelector((state) => getUser(state));
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const user = useSelector(getUser);
 
   return <div className="user-block">
     {authorizationStatus

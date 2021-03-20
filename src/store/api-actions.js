@@ -32,6 +32,7 @@ export const checkAuthorization = () => (dispatch, _getState, api) => {
 };
 
 export const login = ({email, password}) => (dispatch, _getState, api) => {
+  dispatch(changeIsSendingData(true));
   api.post(APIRoute.LOGIN, {email, password})
     .then(({data})=>adaptDataToClient[DataType.USER](data))
     .then((data) => {
@@ -50,8 +51,9 @@ export const login = ({email, password}) => (dispatch, _getState, api) => {
     });
 };
 
-export const toggleIsFavoriteKey = ({updatedFilmID, wasFavorite}) => (dispatch, _getState, api) => {
-  api.post(`${APIRoute.FAVORITE}/${updatedFilmID}/${wasFavorite ? 0 : 1}`)
+export const toggleIsFavoriteKey = ({id, isFavorite}) => (dispatch, _getState, api) => {
+  dispatch(changeIsSendingData(true));
+  api.post(`${APIRoute.FAVORITE}/${id}/${isFavorite ? 0 : 1}`)
     .then(({data})=>adaptDataToClient[DataType.FILMS](data))
     .then((data) => {
       batch(() => {

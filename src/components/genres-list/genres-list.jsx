@@ -5,8 +5,8 @@ import {getGenres} from "../../store/genres/selectors";
 import {getActiveGenre} from "../../store/genres/selectors";
 
 const GenresList = () => {
-  const activeGenre = useSelector((state) => getActiveGenre(state));
-  const genres = useSelector((state) => getGenres(state));
+  const activeGenre = useSelector(getActiveGenre);
+  const genres = useSelector(getGenres);
 
   const dispatch = useDispatch();
 

@@ -6,8 +6,8 @@ import {getFilmsByActiveGenre, getLoadedFilmsStatus} from "../../store/data/sele
 import {useSelector} from "react-redux";
 
 const CatalogMain = () => {
-  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
-  const films = useSelector((state) => getFilmsByActiveGenre(state));
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const films = useSelector(getFilmsByActiveGenre);
 
   return <>
     {

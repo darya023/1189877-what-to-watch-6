@@ -17,8 +17,8 @@ import {getLoadedFilmsStatus, getLoadedPosterStatus} from "../../store/data/sele
 import {userProps} from "../user/user.prop";
 
 const App = ({users}) => {
-  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
-  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const isPosterLoaded = useSelector(getLoadedPosterStatus);
 
   const dispatch = useDispatch();
 
@@ -48,8 +48,8 @@ const App = ({users}) => {
           path="/"
           exact
           render={
-            ()=>{
-              return <MainScreen />;
+            (props)=>{
+              return <MainScreen path={props.history.location.pathname} />;
             }
           }
         />
@@ -66,7 +66,7 @@ const App = ({users}) => {
             (props)=>{
               const id = props.match.params.id;
 
-              return <PlayerScreen currentFilmID={id || null} onExitButtonClick={() => props.history.goBack()} />;
+              return <PlayerScreen currentFilmID={id || null} prevPath={props.history.location.state.prevPath} />;
             }
           }
         />
@@ -89,7 +89,7 @@ const App = ({users}) => {
                   );
                 });
 
-              return <FilmScreen currentFilmID={id || null} reviews={currentFilmReviews}/>;
+              return <FilmScreen currentFilmID={id || null} reviews={currentFilmReviews} path={props.history.location.pathname} />;
             }
           }
         />

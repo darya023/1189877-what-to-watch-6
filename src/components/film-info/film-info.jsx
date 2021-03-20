@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
-import {changeIsSendingData} from "../../store/action-creator";
 import {getSendingDataStatus} from "../../store/data/selectors";
 
 const FilmInfo = ({
@@ -12,18 +11,15 @@ const FilmInfo = ({
   genre,
   year,
   isFavorite,
-  hasAddReviewButton
+  hasAddReviewButton,
+  path
 }) => {
-  const isSendingData = useSelector((state) => getSendingDataStatus(state));
+  const isSendingData = useSelector(getSendingDataStatus);
 
   const dispatch = useDispatch();
 
-  const onAddButtonToggle = (updatedFilmID, wasFavorite) => {
-    dispatch(changeIsSendingData(true));
-    dispatch(toggleIsFavoriteKey({updatedFilmID, wasFavorite}));
-  };
   const handleAddButtonClick = () => {
-    onAddButtonToggle(id, isFavorite);
+    dispatch(toggleIsFavoriteKey({id, isFavorite}));
   };
 
   return <div className="movie-card__desc">
@@ -33,7 +29,7 @@ const FilmInfo = ({
       <span className="movie-card__year">{year}</span>
     </p>
     <div className="movie-card__buttons">
-      <Link to={`/player/${id}`}className="btn btn--play movie-card__button" type="button">
+      <Link to={{pathname: `/player/${id}`, state: {prevPath: path}}} className="btn btn--play movie-card__button" type="button">
         <svg viewBox="0 0 19 19" width={19} height={19}>
           <use xlinkHref="#play-s" />
         </svg>
@@ -41,7 +37,7 @@ const FilmInfo = ({
       </Link>
       <button
         onClick={handleAddButtonClick}
-        disabled={isSendingData === true}
+        disabled={isSendingData}
         className="btn btn--list movie-card__button"
         type="button"
         title={isFavorite ? `Remove from My list` : ``}
@@ -68,6 +64,7 @@ FilmInfo.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   genre: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   isFavorite: PropTypes.bool.isRequired,
   hasAddReviewButton: PropTypes.bool.isRequired

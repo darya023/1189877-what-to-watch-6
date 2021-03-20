@@ -5,8 +5,8 @@ import {getLoadedFilmsStatus, getSimilarFilms} from "../../store/data/selectors"
 import {useSelector} from "react-redux";
 
 const CatalogSimilar = () => {
-  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
-  const films = useSelector((state) => getSimilarFilms(state));
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const films = useSelector(getSimilarFilms);
 
   return <>
     {
