@@ -9,4 +9,5 @@ export const ActionType = {
   CHANGE_IS_SENDING: `login/changeIsSendingData`,
   SET_USER: `login/setUser`,
   REDIRECT_TO_ROUTE: `app/redirectToRoute`,
+  UPDATE_FILM: `app/updateFilm`,
 };

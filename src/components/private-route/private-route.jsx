@@ -5,7 +5,7 @@ import {getAuthorizationStatus} from "../../store/user/selectors";
 import {useSelector} from "react-redux";
 
 const PrivateRoute = ({component: Component, ...rest}) => {
-  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   return <Route
     {...rest}

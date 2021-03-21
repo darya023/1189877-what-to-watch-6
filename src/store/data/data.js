@@ -1,5 +1,5 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {changeCurrentFilmID, changeIsSendingData, loadFilms, loadPoster} from "../action-creator";
+import {changeCurrentFilmID, changeIsSendingData, loadFilms, loadPoster, updateFilm} from "../action-creator";
 
 const initialState = {
   films: [],
@@ -24,6 +24,22 @@ const data = createReducer(initialState, (builder) => {
   });
   builder.addCase(changeCurrentFilmID, (state, action) => {
     state.currentFilmID = action.payload;
+  });
+  builder.addCase(updateFilm, (state, action) => {
+    const updatedFilm = action.payload;
+    const prevFilmIndex = state.films.findIndex((film) => film.id === updatedFilm.id);
+
+    if (prevFilmIndex !== -1) {
+      state.films = [
+        ...state.films.slice(0, prevFilmIndex),
+        updatedFilm,
+        ...state.films.slice(prevFilmIndex + 1)
+      ];
+
+      if (updatedFilm.id === state.poster.id) {
+        state.poster = updatedFilm;
+      }
+    }
   });
 });
 

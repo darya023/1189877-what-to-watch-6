@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {humanizeDuration} from "../../utils/humanize-duration";
 import DetailsPanelItem from "../details-panel-item/details-panel-item";
+import {DurationView} from "../../const";
 
 const DetailsPanel = ({
   genre,
@@ -10,7 +11,7 @@ const DetailsPanel = ({
   starring,
   duration,
 }) => {
-  const humanizedDuration = humanizeDuration(duration);
+  const humanizedDuration = humanizeDuration(duration, DurationView.LETTERS);
 
   return <div className="movie-card__text movie-card__row">
     <div className="movie-card__text-col">

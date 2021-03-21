@@ -13,9 +13,9 @@ import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 
-const FilmScreen = ({reviews, currentFilmID}) => {
-  const currentFilm = useSelector((state) => getCurrentFilm(state));
-  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
+const FilmScreen = ({reviews, currentFilmID, path}) => {
+  const currentFilm = useSelector(getCurrentFilm);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
   const dispatch = useDispatch();
 
@@ -29,7 +29,7 @@ const FilmScreen = ({reviews, currentFilmID}) => {
 
   return currentFilm
     ? <React.Fragment>
-      <section className="movie-card movie-card--full">
+      <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
         <div className="movie-card__hero">
           <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage} />
           <div className="movie-card__wrap">
@@ -38,7 +38,9 @@ const FilmScreen = ({reviews, currentFilmID}) => {
               title={currentFilm.title}
               genre={currentFilm.genre}
               year={currentFilm.year}
+              isFavorite={currentFilm.isFavorite}
               hasAddReviewButton={authorizationStatus}
+              path={path}
             />
           </div>
         </div>
@@ -71,6 +73,7 @@ const FilmScreen = ({reviews, currentFilmID}) => {
 
 FilmScreen.propTypes = {
   currentFilmID: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
   ).isRequired,

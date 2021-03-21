@@ -5,8 +5,8 @@ import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 
 const CatalogFavorites = () => {
-  const isFilmsLoaded = useSelector((state) => getLoadedFilmsStatus(state));
-  const films = useSelector((state) => getFavoriteFilms(state));
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const films = useSelector(getFavoriteFilms);
 
   return <>
     {

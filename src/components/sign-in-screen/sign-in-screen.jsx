@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from "react";
 import {login} from "../../store/api-actions";
-import {changeIsSendingData, redirectToRoute} from "../../store/action-creator";
+import {redirectToRoute} from "../../store/action-creator";
 import {getAuthorizationStatus} from "../../store/user/selectors";
 import {getSendingDataStatus} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,16 +8,15 @@ import Footer from "../footer/footer";
 import HeaderUserPage from "../header/header-user-page";
 
 const SignInScreen = () => {
-  const authorizationStatus = useSelector((state) => getAuthorizationStatus(state));
-  const isSendingData = useSelector((state) => getSendingDataStatus(state));
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isSendingData = useSelector(getSendingDataStatus);
 
   const dispatch = useDispatch();
 
   const onSubmit = (formData) => {
-    dispatch(changeIsSendingData(true));
     dispatch(login(formData));
   };
-  const onRedirect = (url) => {
+  const redirect = (url) => {
     dispatch(redirectToRoute(url));
   };
 
@@ -35,7 +34,7 @@ const SignInScreen = () => {
 
   useEffect(() => {
     if (authorizationStatus && !isSendingData) {
-      onRedirect(`/`);
+      redirect(`/`);
     }
   }, [authorizationStatus, isSendingData]);
 
@@ -75,7 +74,7 @@ const SignInScreen = () => {
               className="sign-in__btn"
               type="submit"
               ref={buttonRef}
-              disabled={isSendingData === true}
+              disabled={isSendingData}
             >
               {
                 isSendingData

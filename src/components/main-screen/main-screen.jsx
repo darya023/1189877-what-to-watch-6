@@ -11,9 +11,9 @@ import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 
-const MainScreen = () => {
-  const poster = useSelector((state) => getPoster(state));
-  const isPosterLoaded = useSelector((state) => getLoadedPosterStatus(state));
+const MainScreen = ({path}) => {
+  const poster = useSelector(getPoster);
+  const isPosterLoaded = useSelector(getLoadedPosterStatus);
   const currentFilmID = poster ? poster.id : null;
 
   const dispatch = useDispatch();
@@ -27,27 +27,27 @@ const MainScreen = () => {
   }, [currentFilmID]);
 
   return <React.Fragment>
-    <section className="movie-card">
-      {
-        !isPosterLoaded
-          ? <Spinner />
-          : <>
-            <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
-            <div className="movie-card__wrap">
-              <div id="info" className="movie-card__info">
-                <Poster src={poster.poster} alt={poster.title} />
-                <FilmInfo
-                  id={poster.id}
-                  title={poster.title}
-                  genre={poster.genre}
-                  year={poster.year}
-                  hasAddReviewButton={false}
-                />
-              </div>
+    {
+      !isPosterLoaded
+        ? <Spinner />
+        : <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
+          <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
+          <div className="movie-card__wrap">
+            <div id="info" className="movie-card__info">
+              <Poster src={poster.poster} alt={poster.title} />
+              <FilmInfo
+                id={poster.id}
+                title={poster.title}
+                genre={poster.genre}
+                year={poster.year}
+                isFavorite={poster.isFavorite}
+                hasAddReviewButton={false}
+                path={path}
+              />
             </div>
-          </>
-      }
-    </section>
+          </div>
+        </section>
+    }
     <div className="page-content">
       <CatalogMain />
       <Footer />
@@ -57,6 +57,7 @@ const MainScreen = () => {
 
 MainScreen.propTypes = {
   poster: PropTypes.shape(filmProps),
+  path: PropTypes.string.isRequired,
 };
 
 export {MainScreen};
