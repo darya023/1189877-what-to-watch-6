@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should DetailsPanel render correctly 1`] = `
+<div>
+  <div
+    class="movie-card__text movie-card__row"
+  >
+    <div
+      class="movie-card__text-col"
+    >
+      <p
+        class="movie-card__details-item"
+      >
+        <strong
+          class="movie-card__details-name"
+        >
+          Director
+        </strong>
+        <span
+          class="movie-card__details-value"
+        >
+          Name
+        </span>
+      </p>
+      <p
+        class="movie-card__details-item"
+      >
+        <strong
+          class="movie-card__details-name"
+        >
+          Starring
+        </strong>
+        <span
+          class="movie-card__details-value"
+        >
+          Name Test
+          <br />
+          Name Test2
+          <br />
+        </span>
+      </p>
+    </div>
+    <div
+      class="movie-card__text-col"
+    >
+      <p
+        class="movie-card__details-item"
+      >
+        <strong
+          class="movie-card__details-name"
+        >
+          Run Time
+        </strong>
+        <span
+          class="movie-card__details-value"
+        >
+          2h 30m
+        </span>
+      </p>
+      <p
+        class="movie-card__details-item"
+      >
+        <strong
+          class="movie-card__details-name"
+        >
+          Genre
+        </strong>
+        <span
+          class="movie-card__details-value"
+        >
+          test
+        </span>
+      </p>
+      <p
+        class="movie-card__details-item"
+      >
+        <strong
+          class="movie-card__details-name"
+        >
+          Released
+        </strong>
+        <span
+          class="movie-card__details-value"
+        >
+          2000
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+`;

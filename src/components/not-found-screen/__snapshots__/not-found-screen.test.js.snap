@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should NotFoundScreen render correctly 1`] = `
+<div>
+  <div
+    class="user-page user-page--fill"
+  >
+    <header
+      class="page-header user-page__head"
+    >
+      <div
+        class="logo"
+      >
+        <a
+          class="logo__link"
+          href="/"
+        >
+          <span
+            class="logo__letter logo__letter--1"
+          >
+            W
+          </span>
+          <span
+            class="logo__letter logo__letter--2"
+          >
+            T
+          </span>
+          <span
+            class="logo__letter logo__letter--3"
+          >
+            W
+          </span>
+        </a>
+      </div>
+      
+    </header>
+    <main
+      class="user-page__content"
+    >
+      <div
+        class="page"
+      >
+        <div
+          class="page__text"
+        >
+          <h1>
+            404
+          </h1>
+          <p>
+            Page not found
+          </p>
+        </div>
+        <div
+          class="page__btn"
+        >
+          <a
+            class="page-btn"
+            href="/"
+          >
+            Go to homepage
+          </a>
+        </div>
+      </div>
+    </main>
+    <footer
+      class="page-footer"
+    >
+      <div
+        class="logo"
+      >
+        <a
+          class="logo__link"
+          href="/"
+        >
+          <span
+            class="logo__letter logo__letter--1"
+          >
+            W
+          </span>
+          <span
+            class="logo__letter logo__letter--2"
+          >
+            T
+          </span>
+          <span
+            class="logo__letter logo__letter--3"
+          >
+            W
+          </span>
+        </a>
+      </div>
+      <div
+        class="copyright"
+      >
+        <p>
+          © 2019 What to watch Ltd.
+        </p>
+      </div>
+    </footer>
+  </div>
+</div>
+`;

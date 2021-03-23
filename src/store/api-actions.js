@@ -20,7 +20,7 @@ export const fetchPoster = () => (dispatch, _getState, api) => (
     .then((data) => dispatch(loadPoster(data)))
 );
 
-export const checkAuthorization = () => (dispatch, _getState, api) => {
+export const checkAuthorization = () => (dispatch, _getState, api) => (
   api.get(APIRoute.LOGIN)
     .then(({data})=>adaptDataToClient[DataType.USER](data))
     .then((data) => {
@@ -28,8 +28,8 @@ export const checkAuthorization = () => (dispatch, _getState, api) => {
         dispatch(setUser(data));
         dispatch(changeAuthorizationStatus(true));
       });
-    });
-};
+    })
+);
 
 export const login = ({email, password}) => (dispatch, _getState, api) => {
   dispatch(changeIsSendingData(true));

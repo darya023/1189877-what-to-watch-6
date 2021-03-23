@@ -9,6 +9,8 @@ import {changeAuthorizationStatus} from "./store/action-creator";
 import {checkAuthorization} from "./store/api-actions";
 import {redirect} from "./store/middlewares/redirect";
 import rootReducer from "./store/root-reducer";
+import {Router} from "react-router";
+import browserHistory from "./browser-history";
 
 const api = createAPI(
     () => store.dispatch(changeAuthorizationStatus(false))
@@ -27,9 +29,11 @@ store.dispatch(checkAuthorization());
 
 ReactDOM.render(
     <Provider store={store} >
-      <App
-        users={users}
-      />
+      <Router history={browserHistory}>
+        <App
+          users={users}
+        />
+      </Router>
     </Provider>,
     document.getElementById(`root`)
 );

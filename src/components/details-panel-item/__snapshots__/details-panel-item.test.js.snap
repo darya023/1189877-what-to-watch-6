@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should DetailsPanelItem render correctly 1`] = `
+<div>
+  <p
+    class="movie-card__details-item"
+  >
+    <strong
+      class="movie-card__details-name"
+    >
+      Director
+    </strong>
+    <span
+      class="movie-card__details-value"
+    >
+      Name
+    </span>
+  </p>
+</div>
+`;
+
+exports[`Should DetailsPanelItem render correctly 2`] = `
+<div>
+  <p
+    class="movie-card__details-item"
+  >
+    <strong
+      class="movie-card__details-name"
+    >
+      Starring
+    </strong>
+    <span
+      class="movie-card__details-value"
+    >
+      Name Test
+      <br />
+      Name Test2
+      <br />
+    </span>
+  </p>
+</div>
+`;
