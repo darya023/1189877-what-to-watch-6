@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should PosterSmall render correctly 1`] = `
+<div>
+  <div
+    class="movie-card__poster movie-card__poster--small"
+  >
+    <img
+      alt="Test"
+      height="327"
+      src=""
+      width="218"
+    />
+  </div>
+</div>
+`;

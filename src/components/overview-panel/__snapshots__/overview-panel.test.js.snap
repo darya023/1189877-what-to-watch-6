@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should OverwiewPanel render correctly 1`] = `
+<div>
+  <div
+    class="movie-rating"
+  >
+    <div
+      class="movie-rating__score"
+    >
+      4.5
+    </div>
+    <p
+      class="movie-rating__meta"
+    >
+      <span
+        class="movie-rating__level"
+      >
+        Normal
+      </span>
+      <span
+        class="movie-rating__count"
+      >
+        500
+         ratings
+      </span>
+    </p>
+  </div>
+  <div
+    class="movie-card__text"
+  >
+    <p>
+      Test
+    </p>
+    <p
+      class="movie-card__director"
+    >
+      <strong>
+        Director: 
+        Test
+      </strong>
+    </p>
+    <p
+      class="movie-card__starring"
+    >
+      <strong>
+        Starring: 
+        Name Test, Name Test2
+         and other
+      </strong>
+    </p>
+  </div>
+</div>
+`;

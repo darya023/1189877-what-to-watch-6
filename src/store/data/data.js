@@ -36,7 +36,7 @@ const data = createReducer(initialState, (builder) => {
         ...state.films.slice(prevFilmIndex + 1)
       ];
 
-      if (updatedFilm.id === state.poster.id) {
+      if (state.poster && updatedFilm.id === state.poster.id) {
         state.poster = updatedFilm;
       }
     }

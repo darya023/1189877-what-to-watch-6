@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import {getSendingDataStatus} from "../../store/data/selectors";
@@ -12,7 +12,6 @@ const FilmInfo = ({
   year,
   isFavorite,
   hasAddReviewButton,
-  path
 }) => {
   const isSendingData = useSelector(getSendingDataStatus);
 
@@ -21,6 +20,8 @@ const FilmInfo = ({
   const handleAddButtonClick = () => {
     dispatch(toggleIsFavoriteKey({id, isFavorite}));
   };
+
+  const path = useHistory().location.pathname;
 
   return <div className="movie-card__desc">
     <h2 className="movie-card__title">{title}</h2>
@@ -64,7 +65,6 @@ FilmInfo.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   genre: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   isFavorite: PropTypes.bool.isRequired,
   hasAddReviewButton: PropTypes.bool.isRequired

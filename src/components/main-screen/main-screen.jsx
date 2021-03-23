@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
+import {getLoadedFilmsStatus, getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
@@ -11,9 +11,10 @@ import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 
-const MainScreen = ({path}) => {
+const MainScreen = () => {
   const poster = useSelector(getPoster);
   const isPosterLoaded = useSelector(getLoadedPosterStatus);
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
   const currentFilmID = poster ? poster.id : null;
 
   const dispatch = useDispatch();
@@ -26,6 +27,9 @@ const MainScreen = ({path}) => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
+  if (!isPosterLoaded && !isFilmsLoaded) {
+    return <Spinner />;
+  }
   return <React.Fragment>
     {
       !isPosterLoaded
@@ -42,7 +46,6 @@ const MainScreen = ({path}) => {
                 year={poster.year}
                 isFavorite={poster.isFavorite}
                 hasAddReviewButton={false}
-                path={path}
               />
             </div>
           </div>
@@ -57,7 +60,6 @@ const MainScreen = ({path}) => {
 
 MainScreen.propTypes = {
   poster: PropTypes.shape(filmProps),
-  path: PropTypes.string.isRequired,
 };
 
 export {MainScreen};

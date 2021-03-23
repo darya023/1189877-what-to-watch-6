@@ -4,7 +4,7 @@ import Tabs from "../tabs/tabs";
 import {reviewsProp} from "../reviews-panel/reviews.prop";
 import CatalogSimilar from "../catalog-similar/catalog-similar";
 import {getAuthorizationStatus} from "../../store/user/selectors";
-import {getCurrentFilm} from "../../store/data/selectors";
+import {getCurrentFilm, getLoadedFilmsStatus} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
@@ -12,10 +12,12 @@ import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
+import Spinner from "../spinner/spinner";
 
-const FilmScreen = ({reviews, currentFilmID, path}) => {
+const FilmScreen = ({reviews, currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
   const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
 
   const dispatch = useDispatch();
 
@@ -27,53 +29,55 @@ const FilmScreen = ({reviews, currentFilmID, path}) => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  return currentFilm
-    ? <React.Fragment>
-      <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
-        <div className="movie-card__hero">
-          <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage} />
-          <div className="movie-card__wrap">
-            <FilmInfo
-              id={currentFilm.id}
-              title={currentFilm.title}
+  if (!isFilmsLoaded) {
+    return <Spinner />;
+  }
+  if (!currentFilm) {
+    return <NotFoundScreen />;
+  }
+  return <React.Fragment>
+    <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
+      <div className="movie-card__hero">
+        <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage} />
+        <div className="movie-card__wrap">
+          <FilmInfo
+            id={currentFilm.id}
+            title={currentFilm.title}
+            genre={currentFilm.genre}
+            year={currentFilm.year}
+            isFavorite={currentFilm.isFavorite}
+            hasAddReviewButton={authorizationStatus}
+          />
+        </div>
+      </div>
+      <div className="movie-card__wrap movie-card__translate-top">
+        <div className="movie-card__info">
+          <Poster src={currentFilm.poster} alt={currentFilm.title} />
+          <div className="movie-card__desc">
+            <Tabs
               genre={currentFilm.genre}
               year={currentFilm.year}
-              isFavorite={currentFilm.isFavorite}
-              hasAddReviewButton={authorizationStatus}
-              path={path}
+              description={currentFilm.description}
+              director={currentFilm.director}
+              starring={currentFilm.starring}
+              duration={currentFilm.duration}
+              rating={currentFilm.rating}
+              reviewsCount={currentFilm.reviewsCount}
+              reviews={reviews}
             />
           </div>
         </div>
-        <div className="movie-card__wrap movie-card__translate-top">
-          <div className="movie-card__info">
-            <Poster src={currentFilm.poster} alt={currentFilm.title} />
-            <div className="movie-card__desc">
-              <Tabs
-                genre={currentFilm.genre}
-                year={currentFilm.year}
-                description={currentFilm.description}
-                director={currentFilm.director}
-                starring={currentFilm.starring}
-                duration={currentFilm.duration}
-                rating={currentFilm.rating}
-                reviewsCount={currentFilm.reviewsCount}
-                reviews={reviews}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="page-content">
-        <CatalogSimilar currentFilm={currentFilm} />
-        <Footer />
       </div>
-    </React.Fragment>
-    : <NotFoundScreen />;
+    </section>
+    <div className="page-content">
+      <CatalogSimilar currentFilm={currentFilm} />
+      <Footer />
+    </div>
+  </React.Fragment>;
 };
 
 FilmScreen.propTypes = {
   currentFilmID: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
   reviews: PropTypes.arrayOf(
       PropTypes.shape(reviewsProp)
   ).isRequired,

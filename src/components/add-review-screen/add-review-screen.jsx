@@ -5,12 +5,14 @@ import ReviewForm from "../review-form/review-form";
 import FilmHeader from "../film-header/film-header";
 import PosterSmall from "../poster/poster-small";
 import {useDispatch, useSelector} from "react-redux";
-import {getCurrentFilm} from "../../store/data/selectors";
+import {getCurrentFilm, getLoadedFilmsStatus} from "../../store/data/selectors";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
+import Spinner from "../spinner/spinner";
 
 const AddReviewScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
+  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
 
   const dispatch = useDispatch();
 
@@ -22,30 +24,32 @@ const AddReviewScreen = ({currentFilmID}) => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  return currentFilm
-    ? <React.Fragment>
-      <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
-        <div className="movie-card__header">
-          <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage}>
-            <nav className="breadcrumbs">
-              <ul className="breadcrumbs__list">
-                <li className="breadcrumbs__item">
-                  <Link to={`/films/${currentFilm.id}`} className="breadcrumbs__link">{currentFilm.title}</ Link>
-                </li>
-                <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link">Add review</a>
-                </li>
-              </ul>
-            </nav>
-          </FilmHeader>
-          <PosterSmall src={currentFilm.poster} alt={currentFilm.title} />
-        </div>
-        <div className="add-review">
-          <ReviewForm onSubmit={()=>{}}/>
-        </div>
-      </section>
-    </React.Fragment>
-    : <NotFoundScreen />;
+  if (!isFilmsLoaded) {
+    return <Spinner />;
+  }
+  if (!currentFilm) {
+    return <NotFoundScreen />;
+  }
+  return <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>
+    <div className="movie-card__header">
+      <FilmHeader title={currentFilm.title} backgroundImage={currentFilm.backgroundImage}>
+        <nav className="breadcrumbs">
+          <ul className="breadcrumbs__list">
+            <li className="breadcrumbs__item">
+              <Link to={`/films/${currentFilm.id}`} className="breadcrumbs__link">{currentFilm.title}</ Link>
+            </li>
+            <li className="breadcrumbs__item">
+              <a className="breadcrumbs__link">Add review</a>
+            </li>
+          </ul>
+        </nav>
+      </FilmHeader>
+      <PosterSmall src={currentFilm.poster} alt={currentFilm.title} />
+    </div>
+    <div className="add-review">
+      <ReviewForm onSubmit={()=>{}}/>
+    </div>
+  </section>;
 };
 
 AddReviewScreen.propTypes = {
