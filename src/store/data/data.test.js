@@ -377,8 +377,8 @@ describe(`Async operations work correctly: data`, () => {
 
     apiMock
       .onPost(`${APIRoute.FAVORITE}/1/0}`)
-      .reply(200, fakeFilmFromServer)
-      
+      .reply(200, fakeFilmFromServer);
+
     axios.get(`${APIRoute.FAVORITE}/1/0}`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);

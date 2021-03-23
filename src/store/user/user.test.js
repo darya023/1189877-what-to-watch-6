@@ -83,8 +83,8 @@ describe(`Async operations work correctly: user`, () => {
 
     apiMock
       .onPost(APIRoute.LOGIN)
-      .reply(200, fakeUserFromServer)
-      
+      .reply(200, fakeUserFromServer);
+
     axios.get(APIRoute.LOGIN)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
