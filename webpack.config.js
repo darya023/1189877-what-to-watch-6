@@ -27,19 +27,10 @@ module.exports = {
         {
             test:/\.(s*)css$/,
             use: [
-               miniCss.loader,
-               'css-loader',
-               {
-                    loader: "postcss-loader",
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers:['ie >= 8', 'last 4 version']
-                            })
-                        ]
-                    }
-                },
-               'sass-loader',
+                miniCss.loader,
+                'css-loader',
+                'postcss-loader',
+                'sass-loader'               
             ]
         }
         ],
