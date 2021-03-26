@@ -68,7 +68,6 @@ const App = () => {
         render={
           (props)=>{
             const id = props.match.params.id;
-
             return <FilmScreen currentFilmID={id || null} />;
           }
         }

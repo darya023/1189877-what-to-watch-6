@@ -41,7 +41,8 @@ const fakeReviews = [
     id: `1`,
     rating: 3.2,
     authorId: `19`,
-    authorName: `Test1`
+    authorName: `Test1`,
+    text: `text`
   },
   {
     review: `Test 2`,
@@ -49,7 +50,8 @@ const fakeReviews = [
     id: `1`,
     rating: 7,
     authorId: `2`,
-    authorName: `Test2`
+    authorName: `Test2`,
+    text: `text`
   }
 ];
 const fakeStore = {
@@ -80,7 +82,9 @@ describe(`Test routing`, () => {
     jest.clearAllMocks();
   });
   jest.spyOn(redux, `useSelector`);
-  jest.spyOn(redux, `useDispatch`);
+
+  const fakeDispatch = jest.fn();
+  jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
   it(`Render 'MainScreen' when user navigate to '/' url`, () => {
     const history = createMemoryHistory();
     render(
@@ -151,6 +155,8 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Drama/i)).toBeInTheDocument();
     expect(screen.getByText(/2014/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
+
+    expect(fakeDispatch).toHaveBeenCalledTimes(3);
   });
   it(`Render 'AddReviewScreen' when user navigate to '/films/1/review' url`, () => {
     const testStore = mockStore({
