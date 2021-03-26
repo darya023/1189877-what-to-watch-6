@@ -53,7 +53,9 @@ const store = mockStore({
 });
 describe(`Test routing`, () => {
   jest.spyOn(redux, `useSelector`);
-  jest.spyOn(redux, `useDispatch`);
+
+  const fakeDispatch = jest.fn();
+  jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
   it(`Render 'MainScreen' when user navigate to '/' url`, () => {
     const history = createMemoryHistory();
     render(
@@ -135,6 +137,8 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Drama/i)).toBeInTheDocument();
     expect(screen.getByText(/2014/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
+
+    expect(fakeDispatch).toHaveBeenCalledTimes(3);
   });
   it(`Render 'AddReviewScreen' when user navigate to '/films/1/review' url`, () => {
     const testStore = mockStore({
