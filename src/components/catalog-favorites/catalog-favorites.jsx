@@ -1,16 +1,17 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {getFavoriteFilms, getLoadedFilmsStatus} from "../../store/data/selectors";
+import {LoadingStatus} from "../../const";
+import {getFavoriteFilms, getFilmsLoadingStatus} from "../../store/data/selectors";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 
 const CatalogFavorites = () => {
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
   const films = useSelector(getFavoriteFilms);
 
   return <>
     {
-      !isFilmsLoaded && <Spinner />
+      filmsLoadingStatus === LoadingStatus.PENDING && <Spinner />
     }
     {
       films.some(Boolean)

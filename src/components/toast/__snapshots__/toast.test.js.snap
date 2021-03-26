@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Should Toast render correctly 1`] = `
+<div>
+  <div
+    class="toast"
+  >
+    <div
+      class="toast__item"
+    >
+      test
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Should Toast render correctly 2`] = `
+<div>
+  <div
+    class="toast"
+  >
+    <div
+      class="toast__item"
+    >
+      test
+      <div>
+        Test
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,7 +1,10 @@
-import {changeAuthorizationStatus, changeCurrentFilmID, changeGenre, changeIsSendingData, loadFilms, loadPoster, redirectToRoute, resetGenre, setGenres, setUser, updateFilm} from "./action-creator";
+import {changeAuthorizationStatus, changeCurrentFilmID, changeGenre, changeSendingDataStatus, loadFilms, loadPoster, redirectToRoute, resetGenre, setGenres, setUser, updateFilm} from "./action-creator";
 import {ActionType} from "./actions";
 
 describe(`Action creators work correctly`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it(`Action creator for changing active genre returns correct action`, () => {
     const genre = `genre`;
     const expectedAction = {
@@ -150,14 +153,14 @@ describe(`Action creators work correctly`, () => {
 
     expect(changeAuthorizationStatus(status)).toEqual(expectedAction);
   });
-  it(`Action creator for changing isSendingData status returns correct action`, () => {
+  it(`Action creator for changing sendingDataStatus status returns correct action`, () => {
     const status = true;
     const expectedAction = {
-      type: ActionType.CHANGE_IS_SENDING,
+      type: ActionType.CHANGE_SENDING_DATA_STATUS,
       payload: status
     };
 
-    expect(changeIsSendingData(status)).toEqual(expectedAction);
+    expect(changeSendingDataStatus(status)).toEqual(expectedAction);
   });
   it(`Action creator for setting user returns correct action`, () => {
     const user = {

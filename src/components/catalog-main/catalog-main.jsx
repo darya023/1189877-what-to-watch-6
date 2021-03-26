@@ -2,16 +2,17 @@ import React from "react";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 import GenresList from "../genres-list/genres-list";
-import {getFilmsByActiveGenre, getLoadedFilmsStatus} from "../../store/data/selectors";
+import {getFilmsByActiveGenre, getFilmsLoadingStatus} from "../../store/data/selectors";
 import {useSelector} from "react-redux";
+import {LoadingStatus} from "../../const";
 
 const CatalogMain = () => {
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
   const films = useSelector(getFilmsByActiveGenre);
 
   return <>
     {
-      !isFilmsLoaded && <Spinner />
+      filmsLoadingStatus === LoadingStatus.PENDING && <Spinner />
     }
     {
       films.some(Boolean)

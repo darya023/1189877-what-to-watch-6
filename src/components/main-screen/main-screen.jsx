@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {getLoadedFilmsStatus, getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
+import {getFilmsLoadingStatus, getPosterLoadingStatus, getPoster} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
 import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
-import {changeCurrentFilmID} from "../../store/action-creator";
+import {changeCurrentFilmID, loadCurrentFilm} from "../../store/action-creator";
+import {LoadingStatus} from "../../const";
 
 const MainScreen = () => {
   const poster = useSelector(getPoster);
-  const isPosterLoaded = useSelector(getLoadedPosterStatus);
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
+  const posterLoadingStatus = useSelector(getPosterLoadingStatus);
+
   const currentFilmID = poster ? poster.id : null;
 
   const dispatch = useDispatch();
@@ -27,29 +29,37 @@ const MainScreen = () => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  if (!isPosterLoaded && !isFilmsLoaded) {
+  useEffect(() => {
+    if (posterLoadingStatus === LoadingStatus.FULFILLED) {
+      dispatch(loadCurrentFilm(poster));
+    }
+  }, [posterLoadingStatus]);
+
+  if (posterLoadingStatus === LoadingStatus.PENDING && filmsLoadingStatus === LoadingStatus.PENDING) {
     return <Spinner />;
   }
   return <React.Fragment>
     {
-      !isPosterLoaded
-        ? <Spinner />
-        : <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
-          <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
-          <div className="movie-card__wrap">
-            <div id="info" className="movie-card__info">
-              <Poster src={poster.poster} alt={poster.title} />
-              <FilmInfo
-                id={poster.id}
-                title={poster.title}
-                genre={poster.genre}
-                year={poster.year}
-                isFavorite={poster.isFavorite}
-                hasAddReviewButton={false}
-              />
-            </div>
+      posterLoadingStatus === LoadingStatus.PENDING && <Spinner />
+    }
+    {
+      posterLoadingStatus === LoadingStatus.FULFILLED
+      && <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
+        <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
+        <div className="movie-card__wrap">
+          <div id="info" className="movie-card__info">
+            <Poster src={poster.poster} alt={poster.title} />
+            <FilmInfo
+              id={poster.id}
+              title={poster.title}
+              genre={poster.genre}
+              year={poster.year}
+              isFavorite={poster.isFavorite}
+              hasAddReviewButton={false}
+            />
           </div>
-        </section>
+        </div>
+      </section>
     }
     <div className="page-content">
       <CatalogMain />

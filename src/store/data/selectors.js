@@ -6,10 +6,13 @@ import {NameSpace} from '../root-reducer';
 
 export const getFilms = (state) => state[NameSpace.DATA].films;
 export const getCurrentFilmID = (state) => state[NameSpace.DATA].currentFilmID;
+export const getCurrentFilm = (state) => state[NameSpace.DATA].currentFilm;
+export const getCurrentFilmReviews = (state) => state[NameSpace.DATA].currentFilmReviews;
 export const getPoster = (state) => state[NameSpace.DATA].poster;
-export const getLoadedFilmsStatus = (state) => state[NameSpace.DATA].isFilmsLoaded;
-export const getLoadedPosterStatus = (state) => state[NameSpace.DATA].isPosterLoaded;
-export const getSendingDataStatus = (state) => state[NameSpace.DATA].isSendingData;
+export const getFilmsLoadingStatus = (state) => state[NameSpace.DATA].filmsLoadingStatus;
+export const getFilmLoadingStatus = (state) => state[NameSpace.DATA].filmLoadingStatus;
+export const getPosterLoadingStatus = (state) => state[NameSpace.DATA].posterLoadingStatus;
+export const getSendingDataStatus = (state) => state[NameSpace.DATA].sendingDataStatus;
 
 export const getFilmsByActiveGenre = createSelector(
     [getFilms, getActiveGenre],
@@ -17,13 +20,6 @@ export const getFilmsByActiveGenre = createSelector(
       activeGenre === INITIAL_GENRE
         ? films
         : films.filter((film)=>film.genre === activeGenre)
-);
-
-export const getCurrentFilm = createSelector(
-    [getFilms, getCurrentFilmID],
-    (films, id) => {
-      return films.find((film) => film.id === id) || null;
-    }
 );
 
 export const getFavoriteFilms = createSelector(

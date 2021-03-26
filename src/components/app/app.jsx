@@ -8,16 +8,14 @@ import SignInScreen from "../sign-in-screen/sign-in-screen";
 import PlayerScreen from "../player-screen/player-screen";
 import FilmScreen from "../film-screen/film-screen";
 import AddReviewScreen from "../add-review-screen/add-review-screen";
-import {reviews} from "../../mocks/reviews";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
-import {getLoadedFilmsStatus, getLoadedPosterStatus} from "../../store/data/selectors";
-import {userProps} from "../user/user.prop";
+import {getFilmsLoadingStatus, getPosterLoadingStatus} from "../../store/data/selectors";
 
-const App = ({users}) => {
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
-  const isPosterLoaded = useSelector(getLoadedPosterStatus);
+const App = () => {
+  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
+  const posterLoadingStatus = useSelector(getPosterLoadingStatus);
 
   const dispatch = useDispatch();
 
@@ -29,16 +27,16 @@ const App = ({users}) => {
   };
 
   useEffect(() => {
-    if (!isFilmsLoaded) {
+    if (filmsLoadingStatus === null) {
       onLoadFilms();
     }
-  }, [isFilmsLoaded]);
+  }, [filmsLoadingStatus]);
 
   useEffect(() => {
-    if (!isPosterLoaded) {
+    if (posterLoadingStatus === null) {
       onLoadPoster();
     }
-  }, [isPosterLoaded]);
+  }, [posterLoadingStatus]);
 
   return (
     <Switch>
@@ -70,20 +68,8 @@ const App = ({users}) => {
         render={
           (props)=>{
             const id = props.match.params.id;
-            let currentFilmReviews = reviews
-              .slice()
-              .filter((review)=>review.filmId === id)
-              .map((review)=>{
-                return Object.assign(
-                    {},
-                    review,
-                    {
-                      autorName: users.find((autor)=>autor.id === review.autorId) && users.find((autor)=>autor.id === review.autorId).name
-                    }
-                );
-              });
 
-            return <FilmScreen currentFilmID={id || null} reviews={currentFilmReviews} />;
+            return <FilmScreen currentFilmID={id || null} />;
           }
         }
       />
@@ -105,9 +91,6 @@ const App = ({users}) => {
 
 App.propTypes = {
   match: PropTypes.object,
-  users: PropTypes.arrayOf(
-      PropTypes.shape(userProps)
-  ).isRequired,
 };
 
 export {App};

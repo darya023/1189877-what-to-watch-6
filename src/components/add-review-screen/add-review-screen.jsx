@@ -5,14 +5,15 @@ import ReviewForm from "../review-form/review-form";
 import FilmHeader from "../film-header/film-header";
 import PosterSmall from "../poster/poster-small";
 import {useDispatch, useSelector} from "react-redux";
-import {getCurrentFilm, getLoadedFilmsStatus} from "../../store/data/selectors";
+import {getCurrentFilm, getFilmLoadingStatus} from "../../store/data/selectors";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
+import {LoadingStatus} from "../../const";
 
 const AddReviewScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const filmLoadingStatus = useSelector(getFilmLoadingStatus);
 
   const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ const AddReviewScreen = ({currentFilmID}) => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  if (!isFilmsLoaded) {
+  if (filmLoadingStatus === LoadingStatus.PENDING && !currentFilm) {
     return <Spinner />;
   }
   if (!currentFilm) {
@@ -47,7 +48,7 @@ const AddReviewScreen = ({currentFilmID}) => {
       <PosterSmall src={currentFilm.poster} alt={currentFilm.title} />
     </div>
     <div className="add-review">
-      <ReviewForm onSubmit={()=>{}}/>
+      <ReviewForm currentFilmID={currentFilm.id} />
     </div>
   </section>;
 };
