@@ -5,14 +5,14 @@ import ReviewForm from "../review-form/review-form";
 import FilmHeader from "../film-header/film-header";
 import PosterSmall from "../poster/poster-small";
 import {useDispatch, useSelector} from "react-redux";
-import {getCurrentFilm} from "../../store/data/selectors";
+import {getCurrentFilmFromFilmsList} from "../../store/data/selectors";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
 import {needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors-with-loading-status";
 
 const AddReviewScreen = ({currentFilmID}) => {
-  const currentFilm = useSelector(getCurrentFilm);
+  const currentFilm = useSelector(getCurrentFilmFromFilmsList);
   const isSpinnerShown = useSelector(needShowSpinnerInsteadCurrentFilm);
 
   const dispatch = useDispatch();

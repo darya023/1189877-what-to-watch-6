@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentFilmID, redirectToRoute} from "../../store/action-creator";
-import {getCurrentFilm} from "../../store/data/selectors";
+import {getCurrentFilmFromFilmsList} from "../../store/data/selectors";
 import {humanizeDuration} from "../../utils/humanize-duration";
 import {DurationView} from "../../const";
 import VideoPlayer from "../video-player/video-player";
@@ -20,7 +20,7 @@ const countRatio = (progressRef, x) => {
 };
 
 const PlayerScreen = ({currentFilmID}) => {
-  const currentFilm = useSelector(getCurrentFilm);
+  const currentFilm = useSelector(getCurrentFilmFromFilmsList);
   const isSpinnerShown = useSelector(needShowSpinnerInsteadFilms);
 
   const dispatch = useDispatch();

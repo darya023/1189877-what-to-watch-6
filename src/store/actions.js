@@ -8,7 +8,7 @@ export const ActionType = {
   LOAD_CURRENT_FILM: `films/:id/loadCurrentFilm`,
   LOAD_REVIEWS: `films/:id/loadReviews`,
   CHANGE_AUTHORIZATION_STATUS: `/changeAuthorizationStatus`,
-  CHANGE_SENDING_DATA_STATUS: `login/changeSendingDataStatus`,
+  CHANGE_SENDING_DATA_STATUS: `app/changeSendingDataStatus`,
   CHANGE_POSTER_LOADING_STATUS: `app/changePosterLoadingStatus`,
   CHANGE_FILMS_LOADING_STATUS: `app/changeFilmsLoadingStatus`,
   CHANGE_FILM_LOADING_STATUS: `films/:id/changeFilmLoadingStatus`,

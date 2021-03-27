@@ -14,6 +14,11 @@ export const getFilmLoadingStatus = (state) => state[NameSpace.DATA].filmLoading
 export const getPosterLoadingStatus = (state) => state[NameSpace.DATA].posterLoadingStatus;
 export const getSendingDataStatus = (state) => state[NameSpace.DATA].sendingDataStatus;
 
+export const getCurrentFilmFromFilmsList = createSelector(
+    [getFilms, getCurrentFilmID],
+    (films, id) => films.find((film) => film.id === id)
+);
+
 export const getFilmsByActiveGenre = createSelector(
     [getFilms, getActiveGenre],
     (films, activeGenre) =>
