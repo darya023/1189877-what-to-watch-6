@@ -36,7 +36,7 @@ const fakeFilm = {
 };
 const fakeReviews = [
   {
-    review: `Test 1`,
+    text: `Test 1`,
     date: `2021-02-23T08:04:28.658Z`,
     id: `1`,
     rating: 3.2,
@@ -44,7 +44,7 @@ const fakeReviews = [
     authorName: `Test1`
   },
   {
-    review: `Test 2`,
+    text: `Test 2`,
     date: `2020-02-03T08:00:28.000Z`,
     id: `1`,
     rating: 7,
@@ -56,10 +56,10 @@ const fakeStore = {
   DATA: {
     films: [fakeFilm],
     poster: fakeFilm,
-    filmLoadingStatus: LoadingStatus.FULFILLED,
-    filmsLoadingStatus: LoadingStatus.FULFILLED,
-    posterLoadingStatus: LoadingStatus.FULFILLED,
-    sendingDataStatus: false,
+    filmLoadingStatus: LoadingStatus.SUCCESS,
+    filmsLoadingStatus: LoadingStatus.SUCCESS,
+    posterLoadingStatus: LoadingStatus.SUCCESS,
+    sendingDataStatus: LoadingStatus.INITIAL,
     currentFilmID: `1`,
     currentFilm: fakeFilm,
     currentFilmReviews: fakeReviews
@@ -80,7 +80,8 @@ describe(`Test routing`, () => {
     jest.clearAllMocks();
   });
   jest.spyOn(redux, `useSelector`);
-  jest.spyOn(redux, `useDispatch`);
+  const fakeDispatch = jest.fn();
+  jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
   it(`Render 'MainScreen' when user navigate to '/' url`, () => {
     const history = createMemoryHistory();
     render(
@@ -151,6 +152,8 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Drama/i)).toBeInTheDocument();
     expect(screen.getByText(/2014/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
+
+    expect(fakeDispatch).toHaveBeenCalledTimes(3);
   });
   it(`Render 'AddReviewScreen' when user navigate to '/films/1/review' url`, () => {
     const testStore = mockStore({

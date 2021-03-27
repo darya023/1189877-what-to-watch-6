@@ -84,14 +84,15 @@ describe(`Async operations work correctly: user`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_SENDING_DATA_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
       .onPost(APIRoute.LOGIN)
       .reply(200, fakeUserFromServer);
 
-    axios.get(APIRoute.LOGIN)
+    axios
+      .get(APIRoute.LOGIN)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeUserFromServer);
@@ -103,7 +104,7 @@ describe(`Async operations work correctly: user`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,
@@ -118,7 +119,7 @@ describe(`Async operations work correctly: user`, () => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentFilmID, redirectToRoute} from "../../store/action-creator";
-import {getCurrentFilm, getFilmsLoadingStatus} from "../../store/data/selectors";
+import {getCurrentFilm} from "../../store/data/selectors";
 import {humanizeDuration} from "../../utils/humanize-duration";
 import {DurationView} from "../../const";
 import VideoPlayer from "../video-player/video-player";
 import {useHistory} from "react-router";
 import Spinner from "../spinner/spinner";
+import {needShowSpinnerInsteadFilms} from "../../store/data/selectors-with-loading-status";
 
 const countRatio = (progressRef, x) => {
   const offsetX = progressRef.current.getBoundingClientRect().left;
@@ -20,7 +21,7 @@ const countRatio = (progressRef, x) => {
 
 const PlayerScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
-  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
+  const isSpinnerShown = useSelector(needShowSpinnerInsteadFilms);
 
   const dispatch = useDispatch();
 
@@ -111,7 +112,7 @@ const PlayerScreen = ({currentFilmID}) => {
     event.dataTransfer.setDragImage(dragImage, 0, 0);
   };
 
-  if (!filmsLoadingStatus) {
+  if (isSpinnerShown) {
     return <Spinner />;
   }
   if (!currentFilm) {

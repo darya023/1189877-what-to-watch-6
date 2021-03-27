@@ -1,14 +1,15 @@
 import {createReducer} from "@reduxjs/toolkit";
+import {LoadingStatus} from "../../const";
 import {changeCurrentFilmID, changeSendingDataStatus, loadReviews, loadFilms, loadPoster, updateFilm, loadCurrentFilm, changeLoadingPosterStatus, changeLoadingFilmsStatus, changeLoadingFilmStatus} from "../action-creator";
 
 const initialState = {
   films: [],
   currentFilmReviews: [],
   poster: null,
-  posterLoadingStatus: null,
-  filmLoadingStatus: null,
-  filmsLoadingStatus: null,
-  sendingDataStatus: null,
+  posterLoadingStatus: LoadingStatus.INITIAL,
+  filmLoadingStatus: LoadingStatus.INITIAL,
+  filmsLoadingStatus: LoadingStatus.INITIAL,
+  sendingDataStatus: LoadingStatus.INITIAL,
   currentFilmID: null,
   currentFilm: null,
 };

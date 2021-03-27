@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {getFilmsLoadingStatus, getPosterLoadingStatus, getPoster} from "../../store/data/selectors";
+import {getPoster} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
 import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID, loadCurrentFilm} from "../../store/action-creator";
-import {LoadingStatus} from "../../const";
+import {needSetCurrentFilm, needShowSpinnerInsteadPoster, needShowSpinnerInsteadMainScreen} from "../../store/data/selectors-with-loading-status";
 
 const MainScreen = () => {
   const poster = useSelector(getPoster);
-  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
-  const posterLoadingStatus = useSelector(getPosterLoadingStatus);
+  const isCurrentFilmNotSet = useSelector(needSetCurrentFilm);
+  const isSpinnerInsteadPosterShown = useSelector(needShowSpinnerInsteadPoster);
+  const isSpinnerInsteadMainScreenShown = useSelector(needShowSpinnerInsteadMainScreen);
 
   const currentFilmID = poster ? poster.id : null;
 
@@ -30,20 +31,20 @@ const MainScreen = () => {
   }, [currentFilmID]);
 
   useEffect(() => {
-    if (posterLoadingStatus === LoadingStatus.FULFILLED) {
+    if (isCurrentFilmNotSet) {
       dispatch(loadCurrentFilm(poster));
     }
-  }, [posterLoadingStatus]);
+  }, [isCurrentFilmNotSet]);
 
-  if (posterLoadingStatus === LoadingStatus.PENDING && filmsLoadingStatus === LoadingStatus.PENDING) {
+  if (isSpinnerInsteadMainScreenShown) {
     return <Spinner />;
   }
   return <React.Fragment>
     {
-      posterLoadingStatus === LoadingStatus.PENDING && <Spinner />
+      isSpinnerInsteadPosterShown && <Spinner />
     }
     {
-      posterLoadingStatus === LoadingStatus.FULFILLED
+      poster
       && <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
         <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
         <div className="movie-card__wrap">

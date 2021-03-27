@@ -5,15 +5,15 @@ import ReviewForm from "../review-form/review-form";
 import FilmHeader from "../film-header/film-header";
 import PosterSmall from "../poster/poster-small";
 import {useDispatch, useSelector} from "react-redux";
-import {getCurrentFilm, getFilmLoadingStatus} from "../../store/data/selectors";
+import {getCurrentFilm} from "../../store/data/selectors";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
-import {LoadingStatus} from "../../const";
+import {needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors-with-loading-status";
 
 const AddReviewScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
-  const filmLoadingStatus = useSelector(getFilmLoadingStatus);
+  const isSpinnerShown = useSelector(needShowSpinnerInsteadCurrentFilm);
 
   const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const AddReviewScreen = ({currentFilmID}) => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  if (filmLoadingStatus === LoadingStatus.PENDING && !currentFilm) {
+  if (isSpinnerShown) {
     return <Spinner />;
   }
   if (!currentFilm) {

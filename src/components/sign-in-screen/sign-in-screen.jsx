@@ -7,10 +7,14 @@ import {useDispatch, useSelector} from "react-redux";
 import Footer from "../footer/footer";
 import HeaderUserPage from "../header/header-user-page";
 import {LoadingStatus} from "../../const";
+import {needDisableElement, needRedirectFromSigninScreen, needResetSendingDataStatus} from "../../store/data/selectors-with-loading-status";
 
 const SignInScreen = () => {
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const sendingDataStatus = useSelector(getSendingDataStatus);
+  const isSendingDataStatusNotInitial = useSelector(needResetSendingDataStatus);
+  const isElementDisabled = useSelector(needDisableElement);
+  const isRedirectNeeded = useSelector(needRedirectFromSigninScreen);
 
   const dispatch = useDispatch();
 
@@ -34,19 +38,19 @@ const SignInScreen = () => {
   };
 
   useEffect(() => {
-    if (authorizationStatus && sendingDataStatus !== LoadingStatus.PENDING) {
+    if (isRedirectNeeded) {
       redirect(`/`);
     }
   }, [authorizationStatus, sendingDataStatus]);
 
   useEffect(() => {
-    if (sendingDataStatus === LoadingStatus.FULFILLED) {
-      dispatch(changeSendingDataStatus(null));
+    if (isSendingDataStatusNotInitial) {
+      dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
     }
   }, [sendingDataStatus]);
 
   useEffect(() => {
-    return () => dispatch(changeSendingDataStatus(null));
+    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
   });
 
   return <div className="user-page">
@@ -84,10 +88,10 @@ const SignInScreen = () => {
             className="sign-in__btn"
             type="submit"
             ref={buttonRef}
-            disabled={sendingDataStatus === LoadingStatus.PENDING}
+            disabled={isElementDisabled}
           >
             {
-              sendingDataStatus === LoadingStatus.PENDING
+              isElementDisabled
                 ? `Sending...`
                 : `Sign in`
             }

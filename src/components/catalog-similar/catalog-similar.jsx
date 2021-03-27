@@ -1,27 +1,23 @@
 import React from "react";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
-import {getFilmsLoadingStatus, getSimilarFilms} from "../../store/data/selectors";
+import {getSimilarFilms} from "../../store/data/selectors";
 import {useSelector} from "react-redux";
-import {LoadingStatus} from "../../const";
+import {needShowSpinnerInsteadFilms} from "../../store/data/selectors-with-loading-status";
 
 const CatalogSimilar = () => {
-  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
+  const isSpinnerShown = useSelector(needShowSpinnerInsteadFilms);
   const films = useSelector(getSimilarFilms);
 
-  return <>
-    {
-      filmsLoadingStatus === LoadingStatus.PENDING && <Spinner />
-    }
-    {
-      films.some(Boolean)
-        ? <section className={`catalog catalog--like-this`} >
-          <h2 className={`catalog__title`} >More like this</h2>
-          <Films films={films} />
-        </section>
-        : ``
-    }
-  </>;
+  if (isSpinnerShown) {
+    return <Spinner />;
+  }
+  return films.some(Boolean)
+    ? <section className={`catalog catalog--like-this`} >
+      <h2 className={`catalog__title`} >More like this</h2>
+      <Films films={films} />
+    </section>
+    : ``;
 };
 
 export {CatalogSimilar};

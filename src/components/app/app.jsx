@@ -11,11 +11,11 @@ import AddReviewScreen from "../add-review-screen/add-review-screen";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
-import {getFilmsLoadingStatus, getPosterLoadingStatus} from "../../store/data/selectors";
+import {needLoadFilms, needLoadPoster} from "../../store/data/selectors-with-loading-status";
 
 const App = () => {
-  const filmsLoadingStatus = useSelector(getFilmsLoadingStatus);
-  const posterLoadingStatus = useSelector(getPosterLoadingStatus);
+  const isPosterNotLoaded = useSelector(needLoadPoster);
+  const isFilmsNotLoaded = useSelector(needLoadFilms);
 
   const dispatch = useDispatch();
 
@@ -27,16 +27,16 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (filmsLoadingStatus === null) {
+    if (isFilmsNotLoaded) {
       onLoadFilms();
     }
-  }, [filmsLoadingStatus]);
+  }, [isFilmsNotLoaded]);
 
   useEffect(() => {
-    if (posterLoadingStatus === null) {
+    if (isPosterNotLoaded) {
       onLoadPoster();
     }
-  }, [posterLoadingStatus]);
+  }, [isPosterNotLoaded]);
 
   return (
     <Switch>

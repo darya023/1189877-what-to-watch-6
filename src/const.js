@@ -36,9 +36,10 @@ export const DurationView = {
 };
 
 export const LoadingStatus = {
-  PENDING: `PENDING`,
-  FULFILLED: `FULFILLED`,
-  REJECTED: `REJECTED`,
+  INITIAL: `INITIAL`,
+  FETCHING: `FETCHING`,
+  SUCCESS: `SUCCESS`,
+  FAILURE: `FAILURE`,
 };
 
 export const HttpCode = {

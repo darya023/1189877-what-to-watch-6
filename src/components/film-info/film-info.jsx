@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {Link, useHistory} from "react-router-dom";
 import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
-import {getSendingDataStatus} from "../../store/data/selectors";
 import {LoadingStatus} from "../../const";
 import {changeSendingDataStatus} from "../../store/action-creator";
+import {needDisableElement} from "../../store/data/selectors-with-loading-status";
 
 const FilmInfo = ({
   id,
@@ -15,7 +15,7 @@ const FilmInfo = ({
   isFavorite,
   hasAddReviewButton,
 }) => {
-  const sendingDataStatus = useSelector(getSendingDataStatus);
+  const isElementDisabled = useSelector(needDisableElement);
 
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const FilmInfo = ({
   };
 
   useEffect(() => {
-    return () => dispatch(changeSendingDataStatus(null));
+    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
   }, []);
 
   const path = useHistory().location.pathname;
@@ -44,7 +44,7 @@ const FilmInfo = ({
       </Link>
       <button
         onClick={handleAddButtonClick}
-        disabled={sendingDataStatus === LoadingStatus.PENDING}
+        disabled={isElementDisabled}
         className="btn btn--list movie-card__button"
         type="button"
         title={isFavorite ? `Remove from My list` : ``}

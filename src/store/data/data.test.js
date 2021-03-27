@@ -132,10 +132,10 @@ const initialState = {
   films: [],
   currentFilmReviews: [],
   poster: null,
-  posterLoadingStatus: null,
-  filmLoadingStatus: null,
-  filmsLoadingStatus: null,
-  sendingDataStatus: null,
+  posterLoadingStatus: LoadingStatus.INITIAL,
+  filmLoadingStatus: LoadingStatus.INITIAL,
+  filmsLoadingStatus: LoadingStatus.INITIAL,
+  sendingDataStatus: LoadingStatus.INITIAL,
   currentFilmID: null,
   currentFilm: null,
 };
@@ -163,7 +163,7 @@ const fakeReviewsFromServer = [
 ];
 const fakeReviews = [
   {
-    review: `Test 1`,
+    text: `Test 1`,
     date: `2021-02-23T08:04:28.658Z`,
     id: `1`,
     rating: 3.2,
@@ -171,7 +171,7 @@ const fakeReviews = [
     authorName: `Test1`
   },
   {
-    review: `Test 2`,
+    text: `Test 2`,
     date: `2020-02-03T08:00:28.000Z`,
     id: `1`,
     rating: 7,
@@ -209,62 +209,62 @@ describe(`Date reducers work correctly`, () => {
   it(`Reducer should change sendingDataStatus`, () => {
     const expectedState = {
       ...initialState,
-      sendingDataStatus: LoadingStatus.FULFILLED,
+      sendingDataStatus: LoadingStatus.SUCCESS,
     };
 
-    expect(data(initialState, changeSendingDataStatus(LoadingStatus.FULFILLED))).toEqual(expectedState);
+    expect(data(initialState, changeSendingDataStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
 
     const expectedStateAsInitialState = {
       ...initialState,
-      sendingDataStatus: null,
+      sendingDataStatus: LoadingStatus.INITIAL,
     };
 
-    expect(data(initialState, changeSendingDataStatus(null))).toEqual(expectedStateAsInitialState);
+    expect(data(initialState, changeSendingDataStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
   });
   it(`Reducer should change filmsLoadingStatus`, () => {
     const expectedState = {
       ...initialState,
-      filmsLoadingStatus: LoadingStatus.FULFILLED,
+      filmsLoadingStatus: LoadingStatus.SUCCESS,
     };
 
-    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.FULFILLED))).toEqual(expectedState);
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
 
     const expectedStateAsInitialState = {
       ...initialState,
-      filmsLoadingStatus: null,
+      filmsLoadingStatus: LoadingStatus.INITIAL,
     };
 
-    expect(data(initialState, changeLoadingFilmsStatus(null))).toEqual(expectedStateAsInitialState);
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
   });
   it(`Reducer should change filmLoadingStatus`, () => {
     const expectedState = {
       ...initialState,
-      filmLoadingStatus: LoadingStatus.FULFILLED,
+      filmLoadingStatus: LoadingStatus.SUCCESS,
     };
 
-    expect(data(initialState, changeLoadingFilmStatus(LoadingStatus.FULFILLED))).toEqual(expectedState);
+    expect(data(initialState, changeLoadingFilmStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
 
     const expectedStateAsInitialState = {
       ...initialState,
-      filmLoadingStatus: null,
+      filmLoadingStatus: LoadingStatus.INITIAL,
     };
 
-    expect(data(initialState, changeLoadingFilmsStatus(null))).toEqual(expectedStateAsInitialState);
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
   });
   it(`Reducer should change posterLoadingStatus`, () => {
     const expectedState = {
       ...initialState,
-      posterLoadingStatus: LoadingStatus.FULFILLED,
+      posterLoadingStatus: LoadingStatus.SUCCESS,
     };
 
-    expect(data(initialState, changeLoadingPosterStatus(LoadingStatus.FULFILLED))).toEqual(expectedState);
+    expect(data(initialState, changeLoadingPosterStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
 
     const expectedStateAsInitialState = {
       ...initialState,
-      posterLoadingStatus: null,
+      posterLoadingStatus: LoadingStatus.INITIAL,
     };
 
-    expect(data(initialState, changeLoadingPosterStatus(null))).toEqual(expectedStateAsInitialState);
+    expect(data(initialState, changeLoadingPosterStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
   });
   it(`Reducer should change current film id`, () => {
     const id = `1`;
@@ -385,7 +385,7 @@ describe(`Async operations work correctly: data`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_FILMS_LOADING_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -409,14 +409,14 @@ describe(`Async operations work correctly: data`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
           type: ActionType.CHANGE_FILMS_LOADING_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_FILMS_LOADING_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -431,7 +431,7 @@ describe(`Async operations work correctly: data`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_FILM_LOADING_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -450,14 +450,14 @@ describe(`Async operations work correctly: data`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_FILM_LOADING_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_FILM_LOADING_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -503,7 +503,7 @@ describe(`Async operations work correctly: data`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_SENDING_DATA_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -523,14 +523,14 @@ describe(`Async operations work correctly: data`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -544,7 +544,7 @@ describe(`Async operations work correctly: data`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_POSTER_LOADING_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -563,14 +563,14 @@ describe(`Async operations work correctly: data`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_POSTER_LOADING_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_POSTER_LOADING_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -585,7 +585,7 @@ describe(`Async operations work correctly: data`, () => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
       type: ActionType.CHANGE_SENDING_DATA_STATUS,
-      payload: LoadingStatus.PENDING,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -604,14 +604,14 @@ describe(`Async operations work correctly: data`, () => {
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.FULFILLED,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
-          payload: LoadingStatus.REJECTED,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });

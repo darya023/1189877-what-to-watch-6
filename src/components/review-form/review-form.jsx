@@ -8,6 +8,7 @@ import Toast from "../toast/toast";
 import {sendReview} from "../../store/api-actions";
 import {getSendingDataStatus} from "../../store/data/selectors";
 import {LoadingStatus} from "../../const";
+import {needDisableElement, needResetSendingDataStatus, needSetErrorToastText} from "../../store/data/selectors-with-loading-status";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const MIN_TEXTAREA_LENGTH = 50;
@@ -35,6 +36,9 @@ const shake = (ref, callback) => {
 
 const ReviewForm = ({currentFilmID}) => {
   const sendingDataStatus = useSelector(getSendingDataStatus);
+  const isElementDisabled = useSelector(needDisableElement);
+  const isErrorToastTextNeeded = useSelector(needSetErrorToastText);
+  const isSendingDataStatusNotInitial = useSelector(needResetSendingDataStatus);
 
   const dispatch = useDispatch();
 
@@ -74,20 +78,20 @@ const ReviewForm = ({currentFilmID}) => {
   const [formData, handleFieldChange, handleSubmit] = useFormData(lastRating, onSubmit);
 
   useEffect(() => {
-    setIsFormDisabled(sendingDataStatus === LoadingStatus.PENDING);
+    setIsFormDisabled(isElementDisabled);
 
-    if (sendingDataStatus === LoadingStatus.REJECTED) {
+    if (isErrorToastTextNeeded) {
       setToastText(ReviewFormToastText.ERROR);
     }
 
-    if (sendingDataStatus === LoadingStatus.FULFILLED) {
+    if (isSendingDataStatusNotInitial) {
       redirect(url);
-      dispatch(changeSendingDataStatus(null));
+      dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
     }
   }, [sendingDataStatus]);
 
   useEffect(() => {
-    return () => dispatch(changeSendingDataStatus(null));
+    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
   });
 
   return <form ref={formRef} onSubmit={handleSubmit} action="#" className="add-review__form">
@@ -136,7 +140,7 @@ const ReviewForm = ({currentFilmID}) => {
       />
       <div className="add-review__submit">
         <button disabled={isFormDisabled} className="add-review__btn" type="submit">{
-          sendingDataStatus === LoadingStatus.PENDING
+          isElementDisabled
             ? `Sending...`
             : `Post`
         }</button>
