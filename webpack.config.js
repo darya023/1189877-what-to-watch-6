@@ -1,6 +1,5 @@
 const path = require('path');
 const miniCss = require('mini-css-extract-plugin');
-const autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: ['./src/index.js', './src/styles/main.css', './src/styles/styles.scss'],
@@ -29,16 +28,7 @@ module.exports = {
             use: [
                miniCss.loader,
                'css-loader',
-               {
-                    loader: "postcss-loader",
-                    options: {
-                        plugins: [
-                            autoprefixer({
-                                browsers:['ie >= 8', 'last 4 version']
-                            })
-                        ]
-                    }
-                },
+               'postcss-loader',
                'sass-loader',
             ]
         }

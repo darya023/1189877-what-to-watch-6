@@ -39,6 +39,21 @@ export const adaptDataToClient = {
     image,
     ...restProps
   }),
+  [DataType.REVIEWS]: ({
+    id,
+    user: {
+      id: authorId,
+      name: authorName,
+    },
+    comment: text,
+    ...restProps
+  }) => ({
+    id: id.toString(),
+    authorId: authorId.toString(),
+    authorName,
+    text,
+    ...restProps
+  }),
 };
 
 

@@ -5,6 +5,7 @@ import {createMemoryHistory} from 'history';
 import * as redux from 'react-redux';
 import configureStore from 'redux-mock-store';
 import App from './app';
+import {LoadingStatus} from '../../const';
 
 const INITIAL_GENRE = `All genres`;
 const mockStore = configureStore({});
@@ -33,14 +34,35 @@ const fakeFilm = {
   reviewsCount: 3,
   isFavorite: false,
 };
-const store = mockStore({
+const fakeReviews = [
+  {
+    text: `Test 1`,
+    date: `2021-02-23T08:04:28.658Z`,
+    id: `1`,
+    rating: 3.2,
+    authorId: `19`,
+    authorName: `Test1`
+  },
+  {
+    text: `Test 2`,
+    date: `2020-02-03T08:00:28.000Z`,
+    id: `1`,
+    rating: 7,
+    authorId: `2`,
+    authorName: `Test2`
+  }
+];
+const fakeStore = {
   DATA: {
     films: [fakeFilm],
     poster: fakeFilm,
-    isFilmsLoaded: true,
-    isPosterLoaded: true,
-    isSendingData: false,
+    filmLoadingStatus: LoadingStatus.SUCCESS,
+    filmsLoadingStatus: LoadingStatus.SUCCESS,
+    posterLoadingStatus: LoadingStatus.SUCCESS,
+    sendingDataStatus: LoadingStatus.INITIAL,
     currentFilmID: `1`,
+    currentFilm: fakeFilm,
+    currentFilmReviews: fakeReviews
   },
   USER: {
     authorizationStatus: false,
@@ -50,16 +72,22 @@ const store = mockStore({
     activeGenre: INITIAL_GENRE,
     genres: []
   },
-});
+};
+const store = mockStore(fakeStore);
+
 describe(`Test routing`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   jest.spyOn(redux, `useSelector`);
-  jest.spyOn(redux, `useDispatch`);
+  const fakeDispatch = jest.fn();
+  jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
   it(`Render 'MainScreen' when user navigate to '/' url`, () => {
     const history = createMemoryHistory();
     render(
         <redux.Provider store={store}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
@@ -77,7 +105,7 @@ describe(`Test routing`, () => {
     render(
         <redux.Provider store={store}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
@@ -90,21 +118,10 @@ describe(`Test routing`, () => {
   });
   it(`Render 'MyListScreen' when user navigate to '/mylist' url`, () => {
     const testStore = mockStore({
-      DATA: {
-        films: [fakeFilm],
-        poster: fakeFilm,
-        isFilmsLoaded: true,
-        isPosterLoaded: true,
-        isSendingData: false,
-        currentFilmID: `1`,
-      },
+      ...fakeStore,
       USER: {
         authorizationStatus: true,
         user: fakeUser,
-      },
-      GENRES: {
-        activeGenre: INITIAL_GENRE,
-        genres: []
       },
     });
     const history = createMemoryHistory();
@@ -112,7 +129,7 @@ describe(`Test routing`, () => {
     render(
         <redux.Provider store={testStore}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
@@ -126,7 +143,7 @@ describe(`Test routing`, () => {
     render(
         <redux.Provider store={store}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
@@ -135,24 +152,15 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Drama/i)).toBeInTheDocument();
     expect(screen.getByText(/2014/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
+
+    expect(fakeDispatch).toHaveBeenCalledTimes(3);
   });
   it(`Render 'AddReviewScreen' when user navigate to '/films/1/review' url`, () => {
     const testStore = mockStore({
-      DATA: {
-        films: [fakeFilm],
-        poster: fakeFilm,
-        isFilmsLoaded: true,
-        isPosterLoaded: true,
-        isSendingData: false,
-        currentFilmID: `1`,
-      },
+      ...fakeStore,
       USER: {
         authorizationStatus: true,
         user: fakeUser,
-      },
-      GENRES: {
-        activeGenre: INITIAL_GENRE,
-        genres: []
       },
     });
     const history = createMemoryHistory();
@@ -160,7 +168,7 @@ describe(`Test routing`, () => {
     render(
         <redux.Provider store={testStore}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
@@ -170,47 +178,40 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Post/i)).toBeInTheDocument();
   });
   it(`Render 'PlayerScreen' when user navigate to '/player/1' url`, () => {
-    // does not work: ref
     const testStore = mockStore({
-      DATA: {
-        films: [fakeFilm],
-        poster: fakeFilm,
-        isFilmsLoaded: true,
-        isPosterLoaded: true,
-        isSendingData: false,
-        currentFilmID: `1`,
-      },
+      ...fakeStore,
       USER: {
         authorizationStatus: true,
         user: fakeUser,
       },
-      GENRES: {
-        activeGenre: INITIAL_GENRE,
-        genres: []
-      },
     });
     const history = createMemoryHistory();
     history.push(`/player/1`);
+    const pauseStub = jest
+  .spyOn(window.HTMLMediaElement.prototype, `pause`)
+  .mockImplementation(() => {});
     render(
         <redux.Provider store={testStore}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );
+    expect(pauseStub).toHaveBeenCalled();
+    pauseStub.mockRestore();
 
     expect(screen.getByText(/The Grand Budapest Hotel/i)).toBeInTheDocument();
     expect(screen.getByText(/Exit/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
     expect(screen.getByText(/Full screen/i)).toBeInTheDocument();
   });
-  it(`Render 'NoFoundScreen' when user navigate to '/test' url`, () => {
+  it(`Render 'NotFoundScreen' when user navigate to '/test' url`, () => {
     const history = createMemoryHistory();
     history.push(`/test`);
     render(
         <redux.Provider store={store}>
           <Router history={history}>
-            <App users={[fakeUser]} />
+            <App />
           </Router>
         </redux.Provider>
     );

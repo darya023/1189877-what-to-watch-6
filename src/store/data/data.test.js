@@ -1,12 +1,13 @@
-import {changeCurrentFilmID, changeIsSendingData, loadFilms, loadPoster, updateFilm} from "../action-creator";
+import {changeCurrentFilmID, changeLoadingFilmsStatus, changeLoadingFilmStatus, changeLoadingPosterStatus, changeSendingDataStatus, loadFilms, loadPoster, updateFilm} from "../action-creator";
 import {data} from "./data";
 import MockAdapter from 'axios-mock-adapter';
 import {createAPI} from '../../services/api';
 import {ActionType} from '../actions';
-import {fetchFilms, fetchPoster, toggleIsFavoriteKey} from '../api-actions';
-import {APIRoute, DataType} from '../../const';
+import {fetchFilm, fetchFilms, fetchPoster, fetchReviews, sendReview, toggleIsFavoriteKey} from '../api-actions';
+import {APIRoute, DataType, LoadingStatus} from '../../const';
 import {adaptDataToClient} from "../../utils/adaptDataToClient";
 import axios from "axios";
+import {adaptDataToServer} from "../../utils/adaptDataToServer";
 
 const api = createAPI(() => {});
 const fakeFilms = [
@@ -129,83 +130,153 @@ const fakeFilmFromServer = {
 };
 const initialState = {
   films: [],
+  currentFilmReviews: [],
   poster: null,
-  isFilmsLoaded: false,
-  isPosterLoaded: false,
-  isSendingData: false,
+  posterLoadingStatus: LoadingStatus.INITIAL,
+  filmLoadingStatus: LoadingStatus.INITIAL,
+  filmsLoadingStatus: LoadingStatus.INITIAL,
+  sendingDataStatus: LoadingStatus.INITIAL,
   currentFilmID: null,
+  currentFilm: null,
 };
+const fakeReviewsFromServer = [
+  {
+    comment: `Test 1`,
+    date: `2021-02-23T08:04:28.658Z`,
+    id: 1,
+    rating: 3.2,
+    user: {
+      id: 19,
+      name: `Test1`
+    }
+  },
+  {
+    comment: `Test 2`,
+    date: `2020-02-03T08:00:28.000Z`,
+    id: 1,
+    rating: 7,
+    user: {
+      id: 2,
+      name: `Test2`
+    }
+  }
+];
+const fakeReviews = [
+  {
+    text: `Test 1`,
+    date: `2021-02-23T08:04:28.658Z`,
+    id: `1`,
+    rating: 3.2,
+    authorId: `19`,
+    authorName: `Test1`
+  },
+  {
+    text: `Test 2`,
+    date: `2020-02-03T08:00:28.000Z`,
+    id: `1`,
+    rating: 7,
+    authorId: `2`,
+    authorName: `Test2`
+  }
+];
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
 describe(`Date reducers work correctly`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it(`Reducer without additional parameters should return initial state`, () => {
     expect(data(undefined, {})).toEqual(initialState);
   });
-  it(`Reducer should set loaded films and change isFilmsLoaded status`, () => {
+  it(`Reducer should set loaded films`, () => {
     const expectedState = {
+      ...initialState,
       films: fakeFilms,
-      poster: null,
-      isFilmsLoaded: true,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
     };
 
     expect(data(initialState, loadFilms(fakeFilms))).toEqual(expectedState);
   });
-  it(`Reducer should set loaded poster and change isPosterLoaded status`, () => {
+  it(`Reducer should set loaded poster`, () => {
     const expectedState = {
-      films: [],
+      ...initialState,
       poster: fakeFilm,
-      isFilmsLoaded: false,
-      isPosterLoaded: true,
-      isSendingData: false,
-      currentFilmID: null,
     };
 
     expect(data(initialState, loadPoster(fakeFilm))).toEqual(expectedState);
   });
-  it(`Reducer should change isSendingData status`, () => {
+  it(`Reducer should change sendingDataStatus`, () => {
     const expectedState = {
-      films: [],
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: true,
-      currentFilmID: null,
+      ...initialState,
+      sendingDataStatus: LoadingStatus.SUCCESS,
     };
 
-    expect(data(initialState, changeIsSendingData(true))).toEqual(expectedState);
+    expect(data(initialState, changeSendingDataStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
 
     const expectedStateAsInitialState = {
-      films: [],
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
+      ...initialState,
+      sendingDataStatus: LoadingStatus.INITIAL,
     };
 
-    expect(data(initialState, changeIsSendingData(false))).toEqual(expectedStateAsInitialState);
+    expect(data(initialState, changeSendingDataStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
+  });
+  it(`Reducer should change filmsLoadingStatus`, () => {
+    const expectedState = {
+      ...initialState,
+      filmsLoadingStatus: LoadingStatus.SUCCESS,
+    };
+
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
+
+    const expectedStateAsInitialState = {
+      ...initialState,
+      filmsLoadingStatus: LoadingStatus.INITIAL,
+    };
+
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
+  });
+  it(`Reducer should change filmLoadingStatus`, () => {
+    const expectedState = {
+      ...initialState,
+      filmLoadingStatus: LoadingStatus.SUCCESS,
+    };
+
+    expect(data(initialState, changeLoadingFilmStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
+
+    const expectedStateAsInitialState = {
+      ...initialState,
+      filmLoadingStatus: LoadingStatus.INITIAL,
+    };
+
+    expect(data(initialState, changeLoadingFilmsStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
+  });
+  it(`Reducer should change posterLoadingStatus`, () => {
+    const expectedState = {
+      ...initialState,
+      posterLoadingStatus: LoadingStatus.SUCCESS,
+    };
+
+    expect(data(initialState, changeLoadingPosterStatus(LoadingStatus.SUCCESS))).toEqual(expectedState);
+
+    const expectedStateAsInitialState = {
+      ...initialState,
+      posterLoadingStatus: LoadingStatus.INITIAL,
+    };
+
+    expect(data(initialState, changeLoadingPosterStatus(LoadingStatus.INITIAL))).toEqual(expectedStateAsInitialState);
   });
   it(`Reducer should change current film id`, () => {
     const id = `1`;
     const expectedState = {
-      films: [],
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
+      ...initialState,
       currentFilmID: id,
     };
 
     expect(data(initialState, changeCurrentFilmID(id))).toEqual(expectedState);
 
     const initialStateForSameID = {
-      films: [],
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
+      ...initialState,
       currentFilmID: id,
     };
 
@@ -272,38 +343,27 @@ describe(`Date reducers work correctly`, () => {
       }
     ];
     const expectedState = {
+      ...initialState,
       films: expectedFilms,
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
+      currentFilm: updatedFilm
     };
     const testInitialState = {
+      ...initialState,
       films: fakeFilms,
-      poster: null,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
+      currentFilm: {},
     };
 
     expect(data(testInitialState, updateFilm(updatedFilm))).toEqual(expectedState);
     const expectedStateForPoster = {
+      ...initialState,
       films: expectedFilms,
       poster: updatedFilm,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
+      currentFilm: updatedFilm,
     };
     const initialStateForPoster = {
+      ...initialState,
       films: fakeFilms,
       poster: fakeFilm,
-      isFilmsLoaded: false,
-      isPosterLoaded: false,
-      isSendingData: false,
-      currentFilmID: null,
     };
 
     expect(data(initialStateForPoster, updateFilm(updatedFilm))).toEqual(expectedStateForPoster);
@@ -312,23 +372,33 @@ describe(`Date reducers work correctly`, () => {
 });
 
 describe(`Async operations work correctly: data`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it(`Should make a correct API call to /films`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
     const adaptData = jest.spyOn(adaptDataToClient, DataType.FILMS);
     const filmsLoader = fetchFilms();
 
+    filmsLoader(dispatch, () => {}, api);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: ActionType.CHANGE_FILMS_LOADING_STATUS,
+      payload: LoadingStatus.FETCHING,
+    });
+
     apiMock
       .onGet(APIRoute.FILMS)
       .reply(200, fakeFilmsFromServer);
 
-    filmsLoader(dispatch, () => {}, api)
+    axios.get(APIRoute.FILMS)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(2);
         expect(adaptData).toHaveBeenNthCalledWith(1, fakeFilmsFromServer[0], 0, fakeFilmsFromServer);
         expect(adaptData).toHaveBeenNthCalledWith(2, fakeFilmsFromServer[1], 1, fakeFilmsFromServer);
 
-        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenCalledTimes(3);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.LOAD_FILMS,
           payload: fakeFilms,
@@ -336,6 +406,131 @@ describe(`Async operations work correctly: data`, () => {
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.SET_GENRES,
           payload: fakeFilms,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: ActionType.CHANGE_FILMS_LOADING_STATUS,
+          payload: LoadingStatus.SUCCESS,
+        });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_FILMS_LOADING_STATUS,
+          payload: LoadingStatus.FAILURE,
+        });
+      });
+  });
+  it(`Should make a correct API call to /films for update film`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const adaptData = jest.spyOn(adaptDataToClient, DataType.FILMS);
+    const id = `1`;
+    const filmLoader = fetchFilm(id);
+
+    filmLoader(dispatch, () => {}, api);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: ActionType.CHANGE_FILM_LOADING_STATUS,
+      payload: LoadingStatus.FETCHING,
+    });
+
+    apiMock
+      .onGet(`${APIRoute.FILMS}/${1}`)
+      .reply(200, fakeFilmFromServer);
+
+    axios.get(APIRoute.FILMS)
+      .then(() => {
+        expect(adaptData).toHaveBeenCalledTimes(1);
+        expect(adaptData).toHaveBeenNthCalledWith(1, fakeFilmFromServer);
+
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.UPDATE_FILM,
+          payload: fakeFilm,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_FILM_LOADING_STATUS,
+          payload: LoadingStatus.SUCCESS,
+        });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_FILM_LOADING_STATUS,
+          payload: LoadingStatus.FAILURE,
+        });
+      });
+  });
+  it(`Should make a correct API call to /reviews/:id`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const adaptData = jest.spyOn(adaptDataToClient, DataType.FILMS);
+    const id = `1`;
+    const reviewsLoader = fetchReviews(id);
+
+    apiMock
+      .onGet(`${APIRoute.REVIEWS}/${id}`)
+      .reply(200, fakeReviewsFromServer);
+
+    reviewsLoader(dispatch, () => {}, api)
+      .then(() => {
+        expect(adaptData).toHaveBeenCalledTimes(2);
+        expect(adaptData).toHaveBeenNthCalledWith(1, fakeReviewsFromServer[0], 0, fakeReviewsFromServer);
+        expect(adaptData).toHaveBeenNthCalledWith(1, fakeReviewsFromServer[1], 1, fakeReviewsFromServer);
+
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.LOAD_REVIEWS,
+          payload: fakeReviews,
+        });
+      });
+  });
+  it(`Should make a correct API call to /reviews/:id for send review`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const adaptTestDataToServer = jest.spyOn(adaptDataToServer, DataType.REVIEWS);
+    const adaptTestDataToClient = jest.spyOn(adaptDataToClient, DataType.REVIEWS);
+    const id = `1`;
+    const formData = {review: `Test 1`, rating: 3.2};
+    const reviewHandler = sendReview(formData, id);
+
+
+    reviewHandler(dispatch, () => {}, api);
+
+    expect(adaptTestDataToServer).toHaveBeenCalledTimes(1);
+    expect(adaptTestDataToServer).toHaveBeenNthCalledWith(1, formData);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: ActionType.CHANGE_SENDING_DATA_STATUS,
+      payload: LoadingStatus.FETCHING,
+    });
+
+    apiMock
+      .onPost(`${APIRoute.REVIEWS}/${id}`)
+      .reply(200, fakeReviewsFromServer);
+
+    axios.get(APIRoute.FILMS)
+      .then(() => {
+        expect(adaptTestDataToClient).toHaveBeenCalledTimes(2);
+        expect(adaptTestDataToClient).toHaveBeenNthCalledWith(1, fakeReviewsFromServer[0], 0, fakeReviewsFromServer);
+        expect(adaptTestDataToClient).toHaveBeenNthCalledWith(2, fakeReviewsFromServer[1], 1, fakeReviewsFromServer);
+
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.LOAD_REVIEWS,
+          payload: fakeReviews,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.SUCCESS,
+        });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -345,19 +540,37 @@ describe(`Async operations work correctly: data`, () => {
     const adaptData = jest.spyOn(adaptDataToClient, DataType.FILMS);
     const posterLoader = fetchPoster();
 
+    posterLoader(dispatch, () => {}, api);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: ActionType.CHANGE_POSTER_LOADING_STATUS,
+      payload: LoadingStatus.FETCHING,
+    });
+
     apiMock
       .onGet(APIRoute.POSTER)
       .reply(200, fakeFilmFromServer);
 
-    posterLoader(dispatch, () => {}, api)
+    axios.get(APIRoute.POSTER)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeFilmFromServer);
 
-        expect(dispatch).toHaveBeenCalledTimes(1);
-        expect(dispatch).toHaveBeenCalledWith({
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.LOAD_POSTER,
           payload: fakeFilm,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_POSTER_LOADING_STATUS,
+          payload: LoadingStatus.SUCCESS,
+        });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_POSTER_LOADING_STATUS,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });
@@ -371,8 +584,8 @@ describe(`Async operations work correctly: data`, () => {
     isFavoriteToggler(dispatch, () => {}, api);
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
-      type: ActionType.CHANGE_IS_SENDING,
-      payload: true,
+      type: ActionType.CHANGE_SENDING_DATA_STATUS,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
@@ -390,15 +603,15 @@ describe(`Async operations work correctly: data`, () => {
           payload: fakeFilm,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: ActionType.CHANGE_IS_SENDING,
-          payload: false,
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.SUCCESS,
         });
       })
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(1);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.CHANGE_IS_SENDING,
-          payload: false,
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.FAILURE,
         });
       });
   });

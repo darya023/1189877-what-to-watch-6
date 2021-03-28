@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {getLoadedFilmsStatus, getLoadedPosterStatus, getPoster} from "../../store/data/selectors";
+import {getPoster} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
 import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
-import {changeCurrentFilmID} from "../../store/action-creator";
+import {changeCurrentFilmID, loadCurrentFilm} from "../../store/action-creator";
+import {needSetCurrentFilm, needShowSpinnerInsteadPoster, needShowSpinnerInsteadMainScreen} from "../../store/data/selectors-with-loading-status";
 
 const MainScreen = () => {
   const poster = useSelector(getPoster);
-  const isPosterLoaded = useSelector(getLoadedPosterStatus);
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const isCurrentFilmNotSet = useSelector(needSetCurrentFilm);
+  const isSpinnerInsteadPosterShown = useSelector(needShowSpinnerInsteadPoster);
+  const isSpinnerInsteadMainScreenShown = useSelector(needShowSpinnerInsteadMainScreen);
+
   const currentFilmID = poster ? poster.id : null;
 
   const dispatch = useDispatch();
@@ -27,29 +30,37 @@ const MainScreen = () => {
     onChangeCurrentFilmID(currentFilmID);
   }, [currentFilmID]);
 
-  if (!isPosterLoaded && !isFilmsLoaded) {
+  useEffect(() => {
+    if (isCurrentFilmNotSet) {
+      dispatch(loadCurrentFilm(poster));
+    }
+  }, [isCurrentFilmNotSet]);
+
+  if (isSpinnerInsteadMainScreenShown) {
     return <Spinner />;
   }
   return <React.Fragment>
     {
-      !isPosterLoaded
-        ? <Spinner />
-        : <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
-          <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
-          <div className="movie-card__wrap">
-            <div id="info" className="movie-card__info">
-              <Poster src={poster.poster} alt={poster.title} />
-              <FilmInfo
-                id={poster.id}
-                title={poster.title}
-                genre={poster.genre}
-                year={poster.year}
-                isFavorite={poster.isFavorite}
-                hasAddReviewButton={false}
-              />
-            </div>
+      isSpinnerInsteadPosterShown && <Spinner />
+    }
+    {
+      poster
+      && <section className="movie-card" style={{backgroundColor: `${poster.backgroundColor}`}}>
+        <FilmHeader title={poster.title} backgroundImage={poster.backgroundImage} />
+        <div className="movie-card__wrap">
+          <div id="info" className="movie-card__info">
+            <Poster src={poster.poster} alt={poster.title} />
+            <FilmInfo
+              id={poster.id}
+              title={poster.title}
+              genre={poster.genre}
+              year={poster.year}
+              isFavorite={poster.isFavorite}
+              hasAddReviewButton={false}
+            />
           </div>
-        </section>
+        </div>
+      </section>
     }
     <div className="page-content">
       <CatalogMain />

@@ -6,7 +6,7 @@ import {user} from "./user/user";
 export const NameSpace = {
   DATA: `DATA`,
   GENRES: `GENRES`,
-  USER: `USER`
+  USER: `USER`,
 };
 
 export default combineReducers({

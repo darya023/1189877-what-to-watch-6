@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import {APIRoute, DataType} from "../../const";
+import {APIRoute, DataType, LoadingStatus} from "../../const";
 import {createAPI} from '../../services/api';
 import {adaptDataToClient} from "../../utils/adaptDataToClient";
 import {changeAuthorizationStatus, setUser} from "../action-creator";
@@ -23,6 +23,9 @@ const fakeUserFromServer = {
 };
 
 describe(`User reducers work correctly`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it(`Reducer without additional parameters should return initial state`, () => {
     const initialState = {
       authorizationStatus: false,
@@ -67,6 +70,9 @@ describe(`User reducers work correctly`, () => {
 
 });
 describe(`Async operations work correctly: user`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it(`Should make a correct API call to /login`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
@@ -77,15 +83,16 @@ describe(`Async operations work correctly: user`, () => {
     loginHandler(dispatch, () => {}, api);
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenNthCalledWith(1, {
-      type: ActionType.CHANGE_IS_SENDING,
-      payload: true,
+      type: ActionType.CHANGE_SENDING_DATA_STATUS,
+      payload: LoadingStatus.FETCHING,
     });
 
     apiMock
       .onPost(APIRoute.LOGIN)
       .reply(200, fakeUserFromServer);
 
-    axios.get(APIRoute.LOGIN)
+    axios
+      .get(APIRoute.LOGIN)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeUserFromServer);
@@ -96,8 +103,8 @@ describe(`Async operations work correctly: user`, () => {
           payload: fakeUser,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: ActionType.CHANGE_IS_SENDING,
-          payload: false,
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.SUCCESS,
         });
         expect(dispatch).toHaveBeenNthCalledWith(3, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,
@@ -111,8 +118,8 @@ describe(`Async operations work correctly: user`, () => {
       .catch(() => {
         expect(dispatch).toHaveBeenCalledTimes(2);
         expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.CHANGE_IS_SENDING,
-          payload: false,
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.FAILURE,
         });
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,

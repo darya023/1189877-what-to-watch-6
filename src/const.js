@@ -17,6 +17,7 @@ export const FilterType = {
 export const DataType = {
   FILMS: `FILMS`,
   USER: `USER`,
+  REVIEWS: `REVIEWS`,
 };
 
 export const APIRoute = {
@@ -24,6 +25,7 @@ export const APIRoute = {
   FILMS: `/films`,
   POSTER: `/films/promo`,
   FAVORITE: `/favorite`,
+  REVIEWS: `/comments`,
 };
 
 export const COUNT_SIMILAR_FILMS = 4;
@@ -31,4 +33,16 @@ export const COUNT_SIMILAR_FILMS = 4;
 export const DurationView = {
   LETTERS: `LETTERS`,
   COLON: `COLON`,
+};
+
+export const LoadingStatus = {
+  INITIAL: `INITIAL`,
+  FETCHING: `FETCHING`,
+  SUCCESS: `SUCCESS`,
+  FAILURE: `FAILURE`,
+};
+
+export const HttpCode = {
+  UNAUTHORIZED: 401,
+  BAD_REQUEST: 400
 };

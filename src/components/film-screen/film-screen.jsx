@@ -1,10 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import Tabs from "../tabs/tabs";
-import {reviewsProp} from "../reviews-panel/reviews.prop";
 import CatalogSimilar from "../catalog-similar/catalog-similar";
 import {getAuthorizationStatus} from "../../store/user/selectors";
-import {getCurrentFilm, getLoadedFilmsStatus} from "../../store/data/selectors";
+import {getCurrentFilm, getCurrentFilmReviews} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
@@ -13,11 +12,14 @@ import Footer from "../footer/footer";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
+import {fetchFilm, fetchReviews} from "../../store/api-actions";
+import {needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors-with-loading-status";
 
-const FilmScreen = ({reviews, currentFilmID}) => {
+const FilmScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilm);
+  const reviews = useSelector(getCurrentFilmReviews);
   const authorizationStatus = useSelector(getAuthorizationStatus);
-  const isFilmsLoaded = useSelector(getLoadedFilmsStatus);
+  const isSpinnerShown = useSelector(needShowSpinnerInsteadCurrentFilm);
 
   const dispatch = useDispatch();
 
@@ -25,11 +27,29 @@ const FilmScreen = ({reviews, currentFilmID}) => {
     dispatch(changeCurrentFilmID(id));
   };
 
+  const onLoadReviews = (id) => {
+    dispatch(fetchReviews(id));
+  };
+
+  const [wasRewiewsRequested, setWasRewiewsRequested] = useState(false);
+
+  useEffect(() => {
+    if (currentFilm && !wasRewiewsRequested) {
+      onLoadReviews(currentFilm.id);
+      setWasRewiewsRequested(true);
+
+      return;
+    }
+
+    setWasRewiewsRequested(false);
+  }, [currentFilm, reviews]);
+
   useEffect(()=> {
     onChangeCurrentFilmID(currentFilmID);
+    dispatch(fetchFilm(currentFilmID));
   }, [currentFilmID]);
 
-  if (!isFilmsLoaded) {
+  if (isSpinnerShown) {
     return <Spinner />;
   }
   if (!currentFilm) {
@@ -78,9 +98,6 @@ const FilmScreen = ({reviews, currentFilmID}) => {
 
 FilmScreen.propTypes = {
   currentFilmID: PropTypes.string.isRequired,
-  reviews: PropTypes.arrayOf(
-      PropTypes.shape(reviewsProp)
-  ).isRequired,
 };
 
 export {FilmScreen};

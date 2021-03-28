@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {Link, useHistory} from "react-router-dom";
 import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
-import {getSendingDataStatus} from "../../store/data/selectors";
+import {LoadingStatus} from "../../const";
+import {changeSendingDataStatus} from "../../store/action-creator";
+import {needDisableElement} from "../../store/data/selectors-with-loading-status";
 
 const FilmInfo = ({
   id,
@@ -13,13 +15,17 @@ const FilmInfo = ({
   isFavorite,
   hasAddReviewButton,
 }) => {
-  const isSendingData = useSelector(getSendingDataStatus);
+  const isElementDisabled = useSelector(needDisableElement);
 
   const dispatch = useDispatch();
 
   const handleAddButtonClick = () => {
     dispatch(toggleIsFavoriteKey({id, isFavorite}));
   };
+
+  useEffect(() => {
+    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
+  }, []);
 
   const path = useHistory().location.pathname;
 
@@ -38,7 +44,7 @@ const FilmInfo = ({
       </Link>
       <button
         onClick={handleAddButtonClick}
-        disabled={isSendingData}
+        disabled={isElementDisabled}
         className="btn btn--list movie-card__button"
         type="button"
         title={isFavorite ? `Remove from My list` : ``}
@@ -53,9 +59,7 @@ const FilmInfo = ({
         <span>My list</span>
       </button>
       {
-        hasAddReviewButton
-          ? <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
-          : ``
+        hasAddReviewButton && <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
       }
     </div>
   </div>;
@@ -67,7 +71,7 @@ FilmInfo.propTypes = {
   genre: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   isFavorite: PropTypes.bool.isRequired,
-  hasAddReviewButton: PropTypes.bool.isRequired
+  hasAddReviewButton: PropTypes.bool.isRequired,
 };
 
 export {FilmInfo};

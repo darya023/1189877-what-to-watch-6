@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {configureStore} from '@reduxjs/toolkit';
 import App from "./components/app/app";
-import {users} from "./mocks/users";
 import {createAPI} from "./services/api";
 import {changeAuthorizationStatus} from "./store/action-creator";
 import {checkAuthorization} from "./store/api-actions";
@@ -30,9 +29,7 @@ store.dispatch(checkAuthorization());
 ReactDOM.render(
     <Provider store={store} >
       <Router history={browserHistory}>
-        <App
-          users={users}
-        />
+        <App />
       </Router>
     </Provider>,
     document.getElementById(`root`)

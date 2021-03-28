@@ -2,21 +2,20 @@ import {INITIAL_GENRE} from "../../const";
 import {changeGenre, resetGenre, setGenres} from "../action-creator";
 import {genres} from "./genres";
 
-describe(`Genres reducers work correctly`, () => {
-  it(`Reducer without additional parameters should return initial state`, () => {
-    const initialState = {
-      activeGenre: INITIAL_GENRE,
-      genres: []
-    };
+const initialState = {
+  activeGenre: INITIAL_GENRE,
+  genres: []
+};
 
+describe(`Genres reducers work correctly`, () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  it(`Reducer without additional parameters should return initial state`, () => {
     expect(genres(undefined, {})).toEqual(initialState);
   });
   it(`Reducer should change active genre`, () => {
     const genre = `test`;
-    const initialState = {
-      activeGenre: INITIAL_GENRE,
-      genres: []
-    };
 
     const expectedState = {
       activeGenre: genre,
@@ -78,10 +77,6 @@ describe(`Genres reducers work correctly`, () => {
         isFavorite: true,
       }
     ];
-    const initialState = {
-      activeGenre: INITIAL_GENRE,
-      genres: []
-    };
 
     const expectedState = {
       activeGenre: INITIAL_GENRE,
@@ -91,11 +86,6 @@ describe(`Genres reducers work correctly`, () => {
     expect(genres(initialState, setGenres(films))).toEqual(expectedState);
   });
   it(`Reducer should reset active genre`, () => {
-    const initialState = {
-      activeGenre: INITIAL_GENRE,
-      genres: []
-    };
-
     const expectedState = {
       activeGenre: INITIAL_GENRE,
       genres: []

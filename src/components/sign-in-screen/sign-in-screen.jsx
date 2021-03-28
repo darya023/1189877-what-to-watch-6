@@ -1,15 +1,20 @@
 import React, {useEffect, useRef} from "react";
 import {login} from "../../store/api-actions";
-import {redirectToRoute} from "../../store/action-creator";
+import {changeSendingDataStatus, redirectToRoute} from "../../store/action-creator";
 import {getAuthorizationStatus} from "../../store/user/selectors";
 import {getSendingDataStatus} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Footer from "../footer/footer";
 import HeaderUserPage from "../header/header-user-page";
+import {LoadingStatus} from "../../const";
+import {needDisableElement, needRedirectFromSigninScreen, needResetSendingDataStatus} from "../../store/data/selectors-with-loading-status";
 
 const SignInScreen = () => {
   const authorizationStatus = useSelector(getAuthorizationStatus);
-  const isSendingData = useSelector(getSendingDataStatus);
+  const sendingDataStatus = useSelector(getSendingDataStatus);
+  const isSendingDataStatusNotInitial = useSelector(needResetSendingDataStatus);
+  const isElementDisabled = useSelector(needDisableElement);
+  const isRedirectNeeded = useSelector(needRedirectFromSigninScreen);
 
   const dispatch = useDispatch();
 
@@ -33,10 +38,20 @@ const SignInScreen = () => {
   };
 
   useEffect(() => {
-    if (authorizationStatus && !isSendingData) {
+    if (isRedirectNeeded) {
       redirect(`/`);
     }
-  }, [authorizationStatus, isSendingData]);
+  }, [authorizationStatus, sendingDataStatus]);
+
+  useEffect(() => {
+    if (isSendingDataStatusNotInitial) {
+      dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
+    }
+  }, [sendingDataStatus]);
+
+  useEffect(() => {
+    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
+  });
 
   return <div className="user-page">
     <HeaderUserPage withoutUserComponent={true}>
@@ -73,10 +88,10 @@ const SignInScreen = () => {
             className="sign-in__btn"
             type="submit"
             ref={buttonRef}
-            disabled={isSendingData}
+            disabled={isElementDisabled}
           >
             {
-              isSendingData
+              isElementDisabled
                 ? `Sending...`
                 : `Sign in`
             }
