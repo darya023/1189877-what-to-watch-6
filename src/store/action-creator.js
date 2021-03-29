@@ -92,3 +92,5 @@ export const loadReviews = createAction(ActionType.LOAD_REVIEWS, (reviews) => {
     payload: reviews
   };
 });
+
+export const resetCurrentFilmData = createAction(ActionType.RESET_CURRENT_FILM_DATA);

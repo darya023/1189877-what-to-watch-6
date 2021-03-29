@@ -1,7 +1,7 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {getFavoriteFilms} from "../../store/data/selectors";
-import {needShowSpinnerInsteadFilms} from "../../store/data/selectors-with-loading-status";
+import {getFavoriteFilms} from "../../store/data/selectors/films";
+import {needShowSpinnerInsteadFilms} from "../../store/data/selectors/selectors";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
 

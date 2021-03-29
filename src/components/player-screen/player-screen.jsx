@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentFilmID, redirectToRoute} from "../../store/action-creator";
-import {getCurrentFilmFromFilmsList} from "../../store/data/selectors";
 import {humanizeDuration} from "../../utils/humanize-duration";
 import {DurationView} from "../../const";
 import VideoPlayer from "../video-player/video-player";
 import {useHistory} from "react-router";
 import Spinner from "../spinner/spinner";
-import {needShowSpinnerInsteadFilms} from "../../store/data/selectors-with-loading-status";
+import {getCurrentFilmFromFilmsList} from "../../store/data/selectors/current-film";
+import {needShowSpinnerInsteadFilms} from "../../store/data/selectors/selectors";
 
 const countRatio = (progressRef, x) => {
   const offsetX = progressRef.current.getBoundingClientRect().left;

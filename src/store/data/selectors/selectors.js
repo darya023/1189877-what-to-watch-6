@@ -1,36 +1,16 @@
 import {createSelector} from 'reselect';
-import {LoadingStatus} from '../../const';
-import {getAuthorizationStatus} from '../user/selectors';
-import {getCurrentFilm, getFilmLoadingStatus, getFilmsLoadingStatus, getPosterLoadingStatus, getSendingDataStatus} from './selectors';
+import {NameSpace} from '../../root-reducer';
+import {getAuthorizationStatus} from '../../user/selectors';
+import {needShowSpinnerInsteadPoster} from './poster';
+import {LoadingStatus} from '../../../const';
 
-export const needShowSpinnerInsteadCurrentFilm = createSelector(
-    [getFilmLoadingStatus, getCurrentFilm],
-    (filmLoadingStatus, currentFilm) => filmLoadingStatus === LoadingStatus.FETCHING && !currentFilm
-);
+export const getSendingDataStatus = (state) => state[NameSpace.DATA].sendingDataStatus;
+export const getCurrentFilm = (state) => state[NameSpace.DATA].currentFilm;
+export const getFilmsLoadingStatus = (state) => state[NameSpace.DATA].filmsLoadingStatus;
 
 export const needShowSpinnerInsteadFilms = createSelector(
     [getFilmsLoadingStatus],
     (filmsLoadingStatus) => filmsLoadingStatus === LoadingStatus.FETCHING
-);
-
-export const needSetCurrentFilm = createSelector(
-    [getPosterLoadingStatus],
-    (posterLoadingStatus) => posterLoadingStatus === LoadingStatus.SUCCESS
-);
-
-export const needLoadPoster = createSelector(
-    [getPosterLoadingStatus],
-    (posterLoadingStatus) => posterLoadingStatus === LoadingStatus.INITIAL
-);
-
-export const needLoadFilms = createSelector(
-    [getFilmsLoadingStatus],
-    (filmsLoadingStatus) => filmsLoadingStatus === LoadingStatus.INITIAL
-);
-
-export const needShowSpinnerInsteadPoster = createSelector(
-    [getPosterLoadingStatus],
-    (posterLoadingStatus) => posterLoadingStatus === LoadingStatus.FETCHING
 );
 
 export const needShowSpinnerInsteadMainScreen = createSelector(

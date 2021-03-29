@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import {Link, useHistory} from "react-router-dom";
 import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
-import {LoadingStatus} from "../../const";
-import {changeSendingDataStatus} from "../../store/action-creator";
-import {needDisableElement} from "../../store/data/selectors-with-loading-status";
+import {resetCurrentFilmData} from "../../store/action-creator";
+import {needDisableElement} from "../../store/data/selectors/selectors";
 
 const FilmInfo = ({
   id,
@@ -24,7 +23,7 @@ const FilmInfo = ({
   };
 
   useEffect(() => {
-    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
+    return () => dispatch(resetCurrentFilmData());
   }, []);
 
   const path = useHistory().location.pathname;

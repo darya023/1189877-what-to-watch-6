@@ -11,7 +11,8 @@ import AddReviewScreen from "../add-review-screen/add-review-screen";
 import {fetchFilms, fetchPoster} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
-import {needLoadFilms, needLoadPoster} from "../../store/data/selectors-with-loading-status";
+import {needLoadPoster} from "../../store/data/selectors/poster";
+import {needLoadFilms} from "../../store/data/selectors/films";
 
 const App = () => {
   const isPosterNotLoaded = useSelector(needLoadPoster);

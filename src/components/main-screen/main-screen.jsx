@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import {filmProps} from "../film-screen/film-screen.prop";
 import Spinner from "../spinner/spinner";
 import CatalogMain from "../catalog-main/catalog-main";
-import {getPoster} from "../../store/data/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Poster from "../poster/poster";
 import FilmInfo from "../film-info/film-info";
 import FilmHeader from "../film-header/film-header";
 import Footer from "../footer/footer";
 import {changeCurrentFilmID, loadCurrentFilm} from "../../store/action-creator";
-import {needSetCurrentFilm, needShowSpinnerInsteadPoster, needShowSpinnerInsteadMainScreen} from "../../store/data/selectors-with-loading-status";
+import {getPoster, needSetCurrentFilm, needShowSpinnerInsteadPoster} from "../../store/data/selectors/poster";
+import {needShowSpinnerInsteadMainScreen} from "../../store/data/selectors/selectors";
 
 const MainScreen = () => {
   const poster = useSelector(getPoster);

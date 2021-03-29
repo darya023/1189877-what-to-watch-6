@@ -6,9 +6,8 @@ import {changeSendingDataStatus, redirectToRoute} from "../../store/action-creat
 import {useLocation} from "react-router";
 import Toast from "../toast/toast";
 import {sendReview} from "../../store/api-actions";
-import {getSendingDataStatus} from "../../store/data/selectors";
+import {getSendingDataStatus, needDisableElement, needResetSendingDataStatus, needSetErrorToastText} from "../../store/data/selectors/selectors";
 import {LoadingStatus} from "../../const";
-import {needDisableElement, needResetSendingDataStatus, needSetErrorToastText} from "../../store/data/selectors-with-loading-status";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 const MIN_TEXTAREA_LENGTH = 50;
