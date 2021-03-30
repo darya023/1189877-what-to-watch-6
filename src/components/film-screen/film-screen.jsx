@@ -34,7 +34,7 @@ const FilmScreen = ({currentFilmID}) => {
   const [wasRewiewsRequested, setWasRewiewsRequested] = useState(false);
 
   useEffect(() => {
-    if (currentFilm && !wasRewiewsRequested) {
+    if (currentFilm && !wasRewiewsRequested && currentFilmID) {
       onLoadReviews(currentFilm.id);
       setWasRewiewsRequested(true);
 
@@ -42,7 +42,7 @@ const FilmScreen = ({currentFilmID}) => {
     }
 
     setWasRewiewsRequested(false);
-  }, [currentFilm, reviews]);
+  }, [currentFilm]);
 
   useEffect(()=> {
     onChangeCurrentFilmID(currentFilmID);

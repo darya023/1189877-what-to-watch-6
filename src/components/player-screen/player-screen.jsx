@@ -134,7 +134,7 @@ const PlayerScreen = ({currentFilmID}) => {
     <div className="player__controls">
       <div className="player__controls-row">
         <div className="player__time" >
-          <progress ref={progressRef} onClick={handleProgressBarClick} className="player__progress" value={progress} max={100} />
+          <progress ref={progressRef} onClick={handleProgressBarClick} className="player__progress" value={progress || 0} max={100} />
           <div
             draggable="true"
             onDrag={handlePlayerTogglerDrag}

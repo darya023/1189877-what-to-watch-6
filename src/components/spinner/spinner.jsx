@@ -2,7 +2,7 @@ import React from 'react';
 
 const Spinner = () => {
   return (
-    <div className="dual-ring"></div>
+    <div className="dual-ring" data-testid="spinner"></div>
   );
 };
 

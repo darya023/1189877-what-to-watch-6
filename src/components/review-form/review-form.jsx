@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import PropTypes from 'prop-types';
-import {useFormData} from "../../hooks/useFormData";
+import {useFormData} from "../../hooks/use-form-data";
 import {useDispatch, useSelector} from "react-redux";
 import {changeSendingDataStatus, redirectToRoute} from "../../store/action-creator";
 import {useLocation} from "react-router";
@@ -22,7 +22,7 @@ const RATING_LENGTH = 10;
 const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
   return index + 1;
 });
-const lastRating = ratings[RATING_LENGTH - 1];
+const initialRating = ratings[RATING_LENGTH - 1];
 
 const shake = (ref, callback) => {
   ref.current.className += ` shake`;
@@ -74,7 +74,11 @@ const ReviewForm = ({currentFilmID}) => {
   const regexp = /(\/.*)\/review/;
   const [, url] = path.match(regexp);
 
-  const [formData, handleFieldChange, handleSubmit] = useFormData(lastRating, onSubmit);
+  const initialFormData = {
+    "rating": initialRating,
+    "review-text": ``
+  };
+  const [formData, handleFieldChange, handleSubmit] = useFormData(initialFormData, onSubmit);
 
   useEffect(() => {
     setIsFormDisabled(isElementDisabled);

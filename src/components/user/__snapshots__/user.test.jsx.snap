@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test for User User should render correctly if unauthorized 1`] = `
+<div>
+  <div
+    class="user-block"
+  >
+    <a
+      class="user-block__link"
+      href="/login"
+    >
+      Sign in
+    </a>
+  </div>
+</div>
+`;
+
+exports[`Test for User User should render correctly if unauthorized 2`] = `
+<div>
+  <div
+    class="user-block"
+  >
+    <div
+      class="user-block__avatar"
+    >
+      <a
+        href="/mylist"
+      >
+        <img
+          alt="User avatar"
+          height="63"
+          src=""
+          width="63"
+        />
+      </a>
+    </div>
+    <div>
+      test@test.ru
+    </div>
+  </div>
+</div>
+`;
