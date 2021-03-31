@@ -9,6 +9,7 @@ import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
 import {getCurrentFilmFromFilmsList, needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors/current-film";
+import {AppRoute} from "../../const";
 
 const AddReviewScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilmFromFilmsList);
@@ -36,7 +37,10 @@ const AddReviewScreen = ({currentFilmID}) => {
         <nav className="breadcrumbs">
           <ul className="breadcrumbs__list">
             <li className="breadcrumbs__item">
-              <Link to={`/films/${currentFilm.id}`} className="breadcrumbs__link">{currentFilm.title}</ Link>
+              {
+              // eslint-disable-next-line
+              <Link to={AppRoute.FILM(currentFilm.id)} className="breadcrumbs__link">{currentFilm.title}</ Link>
+              }
             </li>
             <li className="breadcrumbs__item">
               <a className="breadcrumbs__link">Add review</a>

@@ -37,6 +37,11 @@ exports[`Test for User User should render correctly if unauthorized 2`] = `
     <div>
       test@test.ru
     </div>
+    <button
+      class="btn"
+    >
+      Log out
+    </button>
   </div>
 </div>
 `;

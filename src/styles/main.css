@@ -1344,7 +1344,10 @@ main {
   color: inherit; }
 
 .user-block {
-  margin-left: auto; }
+  margin-left: auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
 
 .user-block__avatar {
   width: 63px;

@@ -32,9 +32,6 @@ describe(`Middleware works correctly`, () => {
     const {invoke} = mockRedux();
     invoke(redirectToRoute(`/login`));
     expect(fakeHistory.location.pathname).toBe(`/login`);
-
-    invoke(redirectToRoute(`/lose`));
-    expect(fakeHistory.location.pathname).toBe(`/lose`);
   });
   it(`No redirect because of bad action`, () => {
     const url = `/test`;

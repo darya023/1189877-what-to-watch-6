@@ -1,5 +1,5 @@
 import {batch} from "react-redux";
-import {APIRoute, DataType, HttpCode, LoadingStatus} from "../const";
+import {APIRoute, AppRoute, DataType, HttpCode, LoadingStatus} from "../const";
 import {adaptDataToClient} from "../utils/adaptDataToClient";
 import {adaptDataToServer} from "../utils/adaptDataToServer";
 import {changeAuthorizationStatus, changeSendingDataStatus, loadReviews, loadFilms, loadPoster, redirectToRoute, setGenres, setUser, updateFilm, loadCurrentFilm, changeLoadingPosterStatus, changeLoadingFilmsStatus, changeLoadingFilmStatus} from "./action-creator";
@@ -22,7 +22,8 @@ export const fetchFilms = () => (dispatch, _getState, api) => {
 
 export const fetchFilm = (id) => (dispatch, _getState, api) => {
   dispatch(changeLoadingFilmStatus(LoadingStatus.FETCHING));
-  api.get(`${APIRoute.FILMS}/${id}`)
+  // eslint-disable-next-line
+  api.get(APIRoute.FILM(id))
     .then(({data}) => adaptDataToClient[DataType.FILMS](data))
     .then((data) => {
       batch(() => {
@@ -47,7 +48,8 @@ export const fetchPoster = () => (dispatch, _getState, api) => {
 };
 
 export const fetchReviews = (id) => (dispatch, _getState, api) => (
-  api.get(`${APIRoute.REVIEWS}/${id}`)
+  // eslint-disable-next-line
+  api.get(APIRoute.REVIEWS(id))
     .then(({data}) => data.map(adaptDataToClient[DataType.REVIEWS]))
     .then((data) => {
       dispatch(loadReviews(data));
@@ -57,7 +59,8 @@ export const fetchReviews = (id) => (dispatch, _getState, api) => (
 export const sendReview = (formData, id) => (dispatch, _getState, api) => {
   formData = adaptDataToServer[DataType.REVIEWS](formData);
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
-  api.post(`${APIRoute.REVIEWS}/${id}`, formData)
+  // eslint-disable-next-line
+  api.post(APIRoute.REVIEWS(id), formData)
     .then(({data}) => data.map(adaptDataToClient[DataType.REVIEWS]))
     .then((data) => {
       batch(() => {
@@ -90,7 +93,7 @@ export const login = ({email, password}) => (dispatch, _getState, api) => {
         dispatch(setUser(data));
         dispatch(changeSendingDataStatus(LoadingStatus.SUCCESS));
         dispatch(changeAuthorizationStatus(true));
-        dispatch(redirectToRoute(`/`));
+        dispatch(redirectToRoute(AppRoute.MAIN));
       });
     })
     .catch(() => {
@@ -100,10 +103,30 @@ export const login = ({email, password}) => (dispatch, _getState, api) => {
       });
     });
 };
+export const logout = () => (dispatch, _getState, api) => {
+  dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
+  api.get(APIRoute.LOGOUT)
+    .then(() => {
+      batch(() => {
+        dispatch(setUser(null));
+        dispatch(changeSendingDataStatus(LoadingStatus.SUCCESS));
+        dispatch(changeAuthorizationStatus(false));
+        dispatch(changeLoadingPosterStatus(LoadingStatus.INITIAL));
+        dispatch(changeLoadingFilmStatus(LoadingStatus.INITIAL));
+      });
+    })
+    .catch(() => {
+      batch(() => {
+        dispatch(changeSendingDataStatus(LoadingStatus.FAILURE));
+        dispatch(changeAuthorizationStatus(true));
+      });
+    });
+};
 
 export const toggleIsFavoriteKey = ({id, isFavorite}) => (dispatch, _getState, api) => {
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
-  api.post(`${APIRoute.FAVORITE}/${id}/${isFavorite ? 0 : 1}`)
+  // eslint-disable-next-line
+  api.post(APIRoute.FAVORITE(id, isFavorite))
     .then(({data})=>adaptDataToClient[DataType.FILMS](data))
     .then((data) => {
       batch(() => {
@@ -115,7 +138,7 @@ export const toggleIsFavoriteKey = ({id, isFavorite}) => (dispatch, _getState, a
       dispatch(changeSendingDataStatus(LoadingStatus.FAILURE));
 
       if (error.response.status === HttpCode.UNAUTHORIZED) {
-        dispatch(redirectToRoute(`/login`));
+        dispatch(redirectToRoute(APIRoute.LOGIN));
       }
     });
 };

@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import PrivateRoute from "../private-route/private-route";
 import {needLoadPoster} from "../../store/data/selectors/poster";
 import {needLoadFilms} from "../../store/data/selectors/films";
+import {AppRoute} from "../../const";
 
 const App = () => {
   const isPosterNotLoaded = useSelector(needLoadPoster);
@@ -42,18 +43,18 @@ const App = () => {
   return (
     <Switch>
       <Route
-        path="/"
+        path={AppRoute.MAIN}
         exact
         render={()=><MainScreen />}
       />
-      <Route path="/login" exact component={SignInScreen} />
+      <Route path={AppRoute.LOGIN} exact component={SignInScreen} />
       <PrivateRoute
-        path="/mylist"
+        path={AppRoute.MY_LIST}
         exact
         component={()=><MyListScreen />}
       />
       <Route
-        path="/player/:id"
+        path={AppRoute.PLAYER_SCHEMA}
         exact
         render={
           (props)=>{
@@ -64,7 +65,7 @@ const App = () => {
         }
       />
       <Route
-        path="/films/:id"
+        path={AppRoute.FILM_SCHEMA}
         exact
         render={
           (props)=>{
@@ -75,7 +76,7 @@ const App = () => {
         }
       />
       <PrivateRoute
-        path="/films/:id/review"
+        path={AppRoute.ADD_REVIEW_SCHEMA}
         exact
         component={
           (props)=> {

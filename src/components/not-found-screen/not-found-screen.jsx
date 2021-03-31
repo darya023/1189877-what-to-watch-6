@@ -1,4 +1,5 @@
 import React from "react";
+import {AppRoute} from "../../const";
 import Footer from "../footer/footer";
 import HeaderUserPage from "../header/header-user-page";
 
@@ -12,7 +13,7 @@ const NotFoundScreen = () => {
           <p>Page not found</p>
         </div>
         <div className="page__btn">
-          <a className="page-btn" href="/">Go to homepage</a>
+          <a className="page-btn" href={AppRoute.MAIN}>Go to homepage</a>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import {createAPI} from '../../services/api';
 import {adaptDataToClient} from "../../utils/adaptDataToClient";
 import {changeAuthorizationStatus, setUser} from "../action-creator";
 import {ActionType} from "../actions";
-import {checkAuthorization, login} from "../api-actions";
+import {checkAuthorization, login, logout} from "../api-actions";
 import {user} from "./user";
 
 const api = createAPI(() => {});
@@ -146,6 +146,59 @@ describe(`Async operations work correctly: user`, () => {
         expect(dispatch).toHaveBeenNthCalledWith(1, {
           type: ActionType.SET_USER,
           payload: fakeUser,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_AUTHORIZATION_STATUS,
+          payload: true,
+        });
+      });
+  });
+  it(`Should make a correct API call to /logout`, () => {
+    const apiMock = new MockAdapter(api);
+    const dispatch = jest.fn();
+    const logoutHandler = logout();
+
+    logoutHandler(dispatch, () => {}, api);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenNthCalledWith(1, {
+      type: ActionType.CHANGE_SENDING_DATA_STATUS,
+      payload: LoadingStatus.FETCHING,
+    });
+
+    apiMock
+      .onPost(APIRoute.LOGOUT)
+      .reply(200);
+
+    axios
+      .get(APIRoute.LOGOUT)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(5);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.SET_USER,
+          payload: null,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.SUCCESS,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(3, {
+          type: ActionType.CHANGE_AUTHORIZATION_STATUS,
+          payload: false,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(4, {
+          type: ActionType.CHANGE_POSTER_LOADING_STATUS,
+          payload: LoadingStatus.INITIAL,
+        });
+        expect(dispatch).toHaveBeenNthCalledWith(5, {
+          type: ActionType.CHANGE_FILM_LOADING_STATUS,
+          payload: LoadingStatus.INITIAL,
+        });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(2);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_SENDING_DATA_STATUS,
+          payload: LoadingStatus.FAILURE,
         });
         expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,

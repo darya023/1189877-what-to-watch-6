@@ -5,6 +5,7 @@ import {toggleIsFavoriteKey} from "../../store/api-actions";
 import {useDispatch, useSelector} from "react-redux";
 import {resetCurrentFilmData} from "../../store/action-creator";
 import {needDisableElement} from "../../store/data/selectors/selectors";
+import {AppRoute} from "../../const";
 
 const FilmInfo = ({
   id,
@@ -35,12 +36,15 @@ const FilmInfo = ({
       <span className="movie-card__year">{year}</span>
     </p>
     <div className="movie-card__buttons">
-      <Link to={{pathname: `/player/${id}`, state: {prevPath: path}}} className="btn btn--play movie-card__button" type="button">
-        <svg viewBox="0 0 19 19" width={19} height={19}>
-          <use xlinkHref="#play-s" />
-        </svg>
-        <span>Play</span>
-      </Link>
+      {
+        // eslint-disable-next-line
+      <Link to={{pathname: AppRoute.PLAYER(id), state: {prevPath: path}}} className="btn btn--play movie-card__button" type="button">
+          <svg viewBox="0 0 19 19" width={19} height={19}>
+            <use xlinkHref="#play-s" />
+          </svg>
+          <span>Play</span>
+        </Link>
+      }
       <button
         onClick={handleAddButtonClick}
         disabled={isElementDisabled}
@@ -58,7 +62,8 @@ const FilmInfo = ({
         <span>My list</span>
       </button>
       {
-        hasAddReviewButton && <Link to={`/films/${id}/review`} className="btn movie-card__button">Add review</Link>
+        // eslint-disable-next-line
+        hasAddReviewButton && <Link to={AppRoute.ADD_REVIEW(id)} className="btn movie-card__button">Add review</Link>
       }
     </div>
   </div>;
