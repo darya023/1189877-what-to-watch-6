@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import PropTypes from 'prop-types';
 import {reviewsProp} from "../reviews-panel/reviews.prop";
 import {Tab} from "../../const";
-import OverwiewPanel from "../overview-panel/overview-panel";
+import OverviewPanel from "../overview-panel/overview-panel";
 import DetailsPanel from "../details-panel/details-panel";
 import ReviewsPanel from "../reviews-panel/reviews-panel";
 
@@ -20,7 +20,7 @@ const getPanel = (
 ) => {
   switch (id) {
     case Tab.OVERVIEW:
-      return <OverwiewPanel
+      return <OverviewPanel
         description={description}
         director={director}
         starring={starring}
@@ -128,4 +128,5 @@ Tabs.propTypes = {
   ).isRequired
 };
 
+export {Tabs};
 export default React.memo(Tabs);

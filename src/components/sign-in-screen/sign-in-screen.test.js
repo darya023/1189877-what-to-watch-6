@@ -5,12 +5,9 @@ import {createMemoryHistory} from 'history';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 import SignInScreen from './sign-in-screen';
-import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
+import {LoadingStatus} from '../../const.js';
 import * as redux from 'react-redux';
-
 import userEvent from '@testing-library/user-event';
-import PrivateRoute from '../private-route/private-route';
-import {getGenres} from '../../utils/get-genres';
 
 const mockStore = configureStore({});
 const fakeStore = {
@@ -50,7 +47,7 @@ describe(`Test for SignInScreen`, () => {
     expect(screen.getByPlaceholderText(/Password/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
   });
-  it(`SignInScreen should redirect to SignInScreen when user click on logo`, () => {
+  it(`SignInScreen should redirect to Mainscreen when user clicks on logo`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>

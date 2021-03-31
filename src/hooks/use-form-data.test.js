@@ -1,5 +1,4 @@
 import {renderHook, act} from '@testing-library/react-hooks';
-import {number} from 'prop-types';
 import {useFormData} from './use-form-data';
 
 const fakeInitialFormData = {

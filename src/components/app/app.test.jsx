@@ -221,4 +221,24 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Go to homepage/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
   });
+  it(`Load data when app starts`, () => {
+    const history = createMemoryHistory();
+    const testStore = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        filmsLoadingStatus: LoadingStatus.INITIAL,
+        posterLoadingStatus: LoadingStatus.INITIAL,
+      }
+    });
+    render(
+        <redux.Provider store={testStore}>
+          <Router history={history}>
+            <App />
+          </Router>
+        </redux.Provider>
+    );
+
+    expect(fakeDispatch).toHaveBeenCalled();
+  });
 });

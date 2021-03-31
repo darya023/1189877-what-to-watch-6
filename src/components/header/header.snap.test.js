@@ -1,11 +1,9 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
-import {Router, Switch, Route} from 'react-router-dom';
+import {render} from '@testing-library/react';
+import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
-import userEvent from '@testing-library/user-event';
-import * as redux from 'react-redux';
 import Header from './header.jsx';
 
 const mockStore = configureStore({});
@@ -27,7 +25,7 @@ describe(`Test for Header`, () => {
     const {container} = render(
         <Provider store={store}>
           <Router history={history}>
-            <Header />
+            <Header className="test" />
           </Router>
         </Provider>
     );
@@ -44,7 +42,7 @@ describe(`Test for Header`, () => {
     const {container} = render(
         <Provider store={store}>
           <Router history={history}>
-            <Header withoutUserComponent={true}/>
+            <Header withoutUserComponent={true} className="test" />
           </Router>
         </Provider>
     );
@@ -61,7 +59,7 @@ describe(`Test for Header`, () => {
     const {container} = render(
         <Provider store={store}>
           <Router history={history}>
-            <Header>
+            <Header className="test">
               <div>Test</div>
             </Header>
           </Router>
@@ -80,7 +78,7 @@ describe(`Test for Header`, () => {
     const {container} = render(
         <Provider store={store}>
           <Router history={history}>
-            <Header withoutUserComponent={true}>
+            <Header withoutUserComponent={true} className="test">
               <div>Test</div>
             </Header>
           </Router>

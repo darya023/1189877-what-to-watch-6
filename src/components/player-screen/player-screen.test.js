@@ -1,20 +1,18 @@
 import React from 'react';
-import {fireEvent, getByText, render, screen} from '@testing-library/react';
-import {Route, Router, Switch} from 'react-router-dom';
+import {fireEvent, render, screen} from '@testing-library/react';
+import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 import PlayerScreen from './player-screen';
 import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
 import * as redux from 'react-redux';
-
 import userEvent from '@testing-library/user-event';
-import PrivateRoute from '../private-route/private-route';
 import {getGenres} from '../../utils/get-genres';
 
 const mockStore = configureStore({});
 
-let history; let pauseStub; let playStub; let fullScreenStub;
+let history; let pauseStub; let playStub;
 const fakeFilm = {
   id: `1`,
   title: `The Grand Budapest Hotel`,
@@ -82,10 +80,6 @@ describe(`Test for PlayerScreen`, () => {
     playStub = jest
       .spyOn(window.HTMLMediaElement.prototype, `play`)
       .mockImplementation(() => {});
-    // does not work
-    fullScreenStub = jest
-      .spyOn(document.documentElement, `requestFullscreen`)
-      .mockImplementation(() => {});
   });
   const fakeDispatch = jest.fn();
   jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
@@ -110,7 +104,7 @@ describe(`Test for PlayerScreen`, () => {
     expect(screen.getByText(/Full screen/i)).toBeInTheDocument();
     expect(screen.getByText(/Toggler/i)).toBeInTheDocument();
   });
-  it(`PlayerScreen should call dispatch when user click on Exit button for poster film`, () => {
+  it(`PlayerScreen should call dispatch when user clicks on Exit button for poster film`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -127,7 +121,7 @@ describe(`Test for PlayerScreen`, () => {
     userEvent.click(screen.getByText(/Exit/i));
     expect(fakeDispatch).toHaveBeenCalled();
   });
-  it(`PlayerScreen should call playStub when user click on Play button`, () => {
+  it(`PlayerScreen should call playStub when user clicks on Play button`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -160,8 +154,15 @@ describe(`Test for PlayerScreen`, () => {
     expect(pauseStub).toHaveBeenCalled();
     // pauseStub.mockRestore();
   });
-  it(`PlayerScreen should call fullScreenStub when user click Full screen button`, () => {
-    const store = mockStore(fakeStore);
+  it(`PlayerScreen should render Spinner when data is loading`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        filmsLoadingStatus: LoadingStatus.FETCHING,
+        currentFilm: null
+      }
+    });
     render(
         <Provider store={store}>
           <Router history={history}>
@@ -172,8 +173,42 @@ describe(`Test for PlayerScreen`, () => {
         </Provider>
     );
 
-    // does not work
-    userEvent.click(screen.getByText(/Full screen/i));
-    expect(fullScreenStub).toHaveBeenCalled();
+    expect(screen.getByTestId(`spinner`)).toBeInTheDocument();
+  });
+  it(`PlayerScreen should render NotFoundScreen when there is no current film`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        currentFilmID: null
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <PlayerScreen
+              currentFilmID={fakeFilm.id}
+            />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
+  });
+  it(`PlayerScreen should update progress when user clicks on progress bar`, () => {
+    const store = mockStore(fakeStore);
+    const {container} = render(
+        <Provider store={store}>
+          <Router history={history}>
+            <PlayerScreen
+              currentFilmID={fakeFilm.id}
+            />
+          </Router>
+        </Provider>
+    );
+
+    const progressBar = container.querySelector(`progress`);
+    userEvent.click(progressBar);
+    expect(fakeDispatch).toHaveBeenCalled();
   });
 });

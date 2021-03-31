@@ -9,7 +9,6 @@ import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
 import * as redux from 'react-redux';
 
 import userEvent from '@testing-library/user-event';
-import PrivateRoute from '../private-route/private-route';
 
 const mockStore = configureStore({});
 
@@ -33,7 +32,6 @@ const fakeFilm = {
   reviewsCount: 3,
   isFavorite: false,
 };
-
 const fakeStore = {
   DATA: {
     films: [fakeFilm],
@@ -55,6 +53,7 @@ const fakeStore = {
     genres: []
   },
 };
+
 describe(`Test for FilmScreen`, () => {
   beforeEach(() => {
     history = createMemoryHistory();
@@ -102,22 +101,9 @@ describe(`Test for FilmScreen`, () => {
     expect(screen.getByText(new RegExp(fakeFilm.title))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(fakeFilm.genre))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(fakeFilm.year))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.rating))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.description))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.reviewsCount))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.director))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.starring[0]))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.starring[1]))).toBeInTheDocument();
     expect(screen.getByText(/Add review/i)).toBeInTheDocument();
     expect(screen.getByText(/My list/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
-    expect(screen.getByText(/Director/i)).toBeInTheDocument();
-    expect(screen.getByText(/Starring/i)).toBeInTheDocument();
-    expect(screen.getByText(/Good/i)).toBeInTheDocument();
-    expect(screen.getByText(/ratings/i)).toBeInTheDocument();
-    expect(screen.getByText(/Overview/i)).toBeInTheDocument();
-    expect(screen.getByText(/Details/i)).toBeInTheDocument();
-    expect(screen.getByText(/Reviews/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
     expect(screen.getByText(/More like this/i)).toBeInTheDocument();
     expect(screen.getByText(/test2/i)).toBeInTheDocument();
@@ -141,27 +127,14 @@ describe(`Test for FilmScreen`, () => {
     expect(screen.getByText(new RegExp(fakeFilm.title))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(fakeFilm.genre))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(fakeFilm.year))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.rating))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.description))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.reviewsCount))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.director))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.starring[0]))).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(fakeFilm.starring[1]))).toBeInTheDocument();
     expect(screen.getByText(/Add review/i)).toBeInTheDocument();
     expect(screen.getByText(/My list/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
-    expect(screen.getByText(/Director/i)).toBeInTheDocument();
-    expect(screen.getByText(/Starring/i)).toBeInTheDocument();
-    expect(screen.getByText(/Good/i)).toBeInTheDocument();
-    expect(screen.getByText(/ratings/i)).toBeInTheDocument();
-    expect(screen.getByText(/Overview/i)).toBeInTheDocument();
-    expect(screen.getByText(/Details/i)).toBeInTheDocument();
-    expect(screen.getByText(/Reviews/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
     expect(screen.queryByText(/More like this/i)).not.toBeInTheDocument();
     expect(fakeDispatch).toHaveBeenCalled();
   });
-  it(`FilmScreen should redirect to main screen when user click on logo`, () => {
+  it(`FilmScreen should redirect to main screen when user clicks on logo`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -230,7 +203,7 @@ describe(`Test for FilmScreen`, () => {
     userEvent.click(screen.getByRole(`link`, {name: /Sign in/i}));
     expect(screen.getByText(/Mock Signin Screen/i));
   });
-  it(`FilmScreen should redirect to player screen when user click on Play button`, () => {
+  it(`FilmScreen should redirect to player screen when user clicks on Play button`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -250,7 +223,7 @@ describe(`Test for FilmScreen`, () => {
     userEvent.click(screen.getByRole(`link`, {name: /Play/i}));
     expect(screen.getByText(/Mock Player Screen/i));
   });
-  it(`FilmScreen should redirect to add review screen when user click on Add review button`, () => {
+  it(`FilmScreen should redirect to add review screen when user clicks on Add review button`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -283,6 +256,34 @@ describe(`Test for FilmScreen`, () => {
     );
 
     userEvent.click(screen.getByRole(`button`, {name: /My list/i}));
+    const myListButton = screen.getByText(/My list/i).parentElement;
+    expect(myListButton.title).toBe(``);
+    expect(fakeDispatch).toHaveBeenCalled();
+  });
+  it(`FilmScreen should change title of My list button`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        currentFilm: {
+          ...fakeFilm,
+          isFavorite: true
+        }
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <FilmScreen
+              currentFilmID={fakeFilm.id}
+            />
+          </Router>
+        </Provider>
+    );
+
+    userEvent.click(screen.getByRole(`button`, {name: /My list/i}));
+    const myListButton = screen.getByText(/My list/i).parentElement;
+    expect(myListButton.title).toBe(`Remove from My list`);
     expect(fakeDispatch).toHaveBeenCalled();
   });
   it(`FilmScreen should redirect to signin screen when user not authorized and click on + My list button`, () => {
@@ -305,5 +306,46 @@ describe(`Test for FilmScreen`, () => {
 
     userEvent.click(screen.getByRole(`button`, {name: /My list/i}));
     expect(fakeDispatch).toHaveBeenCalled();
+  });
+  it(`FilmScreen should render Spinner when data is loading`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        filmLoadingStatus: LoadingStatus.FETCHING,
+        currentFilm: null
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <FilmScreen
+              currentFilmID={fakeFilm.id}
+            />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByTestId(`spinner`)).toBeInTheDocument();
+  });
+  it(`FilmScreen should render NotFoundScreen when there is no current film`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        currentFilm: null
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <FilmScreen
+              currentFilmID={fakeFilm.id}
+            />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 });

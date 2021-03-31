@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {humanizeRating} from "../../utils/humanize-rating";
 
-const OverwiewPanel = ({
+const OverviewPanel = ({
   description,
   director,
   starring,
@@ -29,7 +29,7 @@ const OverwiewPanel = ({
   </ React.Fragment>;
 };
 
-OverwiewPanel.propTypes = {
+OverviewPanel.propTypes = {
   description: PropTypes.string.isRequired,
   director: PropTypes.string.isRequired,
   starring: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -37,4 +37,4 @@ OverwiewPanel.propTypes = {
   reviewsCount: PropTypes.number.isRequired,
 };
 
-export default OverwiewPanel;
+export default OverviewPanel;

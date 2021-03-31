@@ -1,11 +1,9 @@
 import React from 'react';
-import {render, screen} from '@testing-library/react';
-import {Router, Switch, Route} from 'react-router-dom';
+import {render} from '@testing-library/react';
+import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
-import userEvent from '@testing-library/user-event';
-import * as redux from 'react-redux';
 import User from './user.jsx';
 
 const mockStore = configureStore({});

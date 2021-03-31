@@ -75,7 +75,7 @@ const PlayerScreen = ({currentFilmID}) => {
     const ratio = countRatio(progressRef, x);
     const newCurrentTime = (ratio * duration).toFixed(6);
 
-    setCurrentTime(Number(newCurrentTime));
+    setCurrentTime(Number(newCurrentTime) || 0);
   };
 
   const handleFullScreenButtonClick = () => {

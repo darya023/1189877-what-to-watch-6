@@ -1,10 +1,10 @@
 import React from 'react';
 import {render} from '@testing-library/react';
-import OverwiewPanel from './overview-panel';
+import OverviewPanel from './overview-panel';
 
-it(`Should OverwiewPanel render correctly`, () => {
+it(`Should OverviewPanel render correctly`, () => {
   const {container} = render(
-      <OverwiewPanel
+      <OverviewPanel
         description="Test"
         director="Test"
         starring={[`Name Test`, `Name Test2`]}

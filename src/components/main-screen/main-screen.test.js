@@ -9,7 +9,6 @@ import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
 import * as redux from 'react-redux';
 
 import userEvent from '@testing-library/user-event';
-import PrivateRoute from '../private-route/private-route';
 import {getGenres} from '../../utils/get-genres';
 
 const mockStore = configureStore({});
@@ -108,7 +107,7 @@ describe(`Test for MainScreen`, () => {
     expect(screen.getByText(/All genres/i)).toBeInTheDocument();
     expect(fakeDispatch).toHaveBeenCalled();
   });
-  it(`MainScreen should redirect to MainScreen when user click on logo`, () => {
+  it(`MainScreen should redirect to MainScreen when user clicks on logo`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -203,7 +202,7 @@ describe(`Test for MainScreen`, () => {
     userEvent.click(screen.getByRole(`link`, {name: /Sign in/i}));
     expect(screen.getByText(/Mock Signin Screen/i));
   });
-  it(`MainScreen should redirect to player screen when user click on Play button`, () => {
+  it(`MainScreen should redirect to player screen when user clicks on Play button`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -221,7 +220,7 @@ describe(`Test for MainScreen`, () => {
     userEvent.click(screen.getByRole(`link`, {name: /Play/i}));
     expect(screen.getByText(/Mock Player Screen/i));
   });
-  it(`MainScreen should redirect to film screen when user click on film card`, () => {
+  it(`MainScreen should redirect to film screen when user clicks on film card`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -270,5 +269,42 @@ describe(`Test for MainScreen`, () => {
 
     userEvent.click(screen.getByRole(`button`, {name: /My list/i}));
     expect(fakeDispatch).toHaveBeenCalled();
+  });
+  it(`MainScreen should render Spinner when data is loading`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        filmsLoadingStatus: LoadingStatus.FETCHING,
+        posterLoadingStatus: LoadingStatus.FETCHING,
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <MainScreen />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByTestId(`spinner`)).toBeInTheDocument();
+  });
+  it(`MainScreen should render Spinner when poster is loading`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        posterLoadingStatus: LoadingStatus.FETCHING,
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <MainScreen />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByTestId(`spinner`)).toBeInTheDocument();
   });
 });

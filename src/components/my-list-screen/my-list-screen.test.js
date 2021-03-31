@@ -6,7 +6,6 @@ import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 import MyListScreen from './my-list-screen';
 import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
-import * as redux from 'react-redux';
 
 import userEvent from '@testing-library/user-event';
 import PrivateRoute from '../private-route/private-route';
@@ -96,7 +95,7 @@ describe(`Test for MyListScreen`, () => {
     expect(screen.getByText(/test2/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
   });
-  it(`MyListScreen should redirect to main screen when user click on logo`, () => {
+  it(`MyListScreen should redirect to main screen when user clicks on logo`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -168,7 +167,7 @@ describe(`Test for MyListScreen`, () => {
 
     expect(screen.getByText(/Mock Signin Screen/i));
   });
-  it(`MyListScreen should redirect to film screen when user click on film card`, () => {
+  it(`MyListScreen should redirect to film screen when user clicks on film card`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>

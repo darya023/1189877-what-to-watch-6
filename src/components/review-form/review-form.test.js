@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react';
-import {Router, Switch, Route} from 'react-router-dom';
+import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
@@ -8,7 +8,6 @@ import {LoadingStatus, INITIAL_GENRE} from '../../const.js';
 import ReviewForm from './review-form';
 import userEvent from '@testing-library/user-event';
 import * as redux from 'react-redux';
-import {redirectToRoute} from '../../store/action-creator.js';
 
 const mockStore = configureStore({});
 
@@ -81,7 +80,7 @@ describe(`Test for ReviewForm`, () => {
     expect(screen.getByPlaceholderText(/Review text/i)).toBeInTheDocument();
     expect(screen.getByText(/Post/i)).toBeInTheDocument();
   });
-  it(`When user click one of Rating Button it should be checked`, () => {
+  it(`when user clicks one of Rating Button it should be checked`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -108,7 +107,7 @@ describe(`Test for ReviewForm`, () => {
     expect(screen.getByRole(`textbox`)).toHaveValue(`Test`);
 
   });
-  it(`When user click post button on ReviewForm with correct fields values it should call onSubmit and redirect`, () => {
+  it(`When user clicks post button on ReviewForm with correct fields values it should call onSubmit and redirect`, () => {
     const store = mockStore(fakeStore);
 
     render(
@@ -119,15 +118,21 @@ describe(`Test for ReviewForm`, () => {
         </Provider>
     );
 
-    userEvent.click(screen.getAllByLabelText(/Rating/i)[0]);
-    expect(screen.getAllByLabelText(/Rating/i)[0]).toBeChecked();
+    const ratingStars = screen.getAllByLabelText(/Rating/i)[0];
+    const textbox = screen.getByRole(`textbox`);
+    const button = screen.getByRole(`button`);
+    userEvent.click(ratingStars);
+    expect(ratingStars).toBeChecked();
     const text = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam consectetur repellat illo neque voluptate alias saepe officiis impedit, non autem doloribus nostrum doloremque ipsam recusandae earum. Ipsam laborum cum dolores!`;
-    userEvent.type(screen.getByRole(`textbox`), text);
-    expect(screen.getByRole(`textbox`)).toHaveValue(text);
-    userEvent.click(screen.getByRole(`button`));
+    userEvent.type(textbox, text);
+    expect(textbox).toHaveValue(text);
+    userEvent.click(button);
+    expect(textbox).not.toBeDisabled();
+    expect(button).not.toBeDisabled();
+    expect(ratingStars).not.toBeDisabled();
     expect(fakeDispatch).toHaveBeenCalled();
   });
-  it(`When user click post button on ReviewForm with incorrect (short) textarea value Toast component appears and form disable`, () => {
+  it(`When user clicks post button on ReviewForm with incorrect (short) textarea value Toast component appears and form disable`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -147,7 +152,7 @@ describe(`Test for ReviewForm`, () => {
 
     expect(screen.getByText(`Review must be more than 50 symbols.`)).toBeInTheDocument();
   });
-  it(`When user click post button on ReviewForm with incorrect (long) textarea value Toast component appears  and form disable`, () => {
+  it(`When user clicks post button on ReviewForm with incorrect (long) textarea value Toast component appears  and form disable`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>

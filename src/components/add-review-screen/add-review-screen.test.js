@@ -77,7 +77,7 @@ describe(`Test for AddReviewScreen`, () => {
     expect(screen.getByText(/Add review/i)).toBeInTheDocument();
     expect(screen.getByText(/Post/i)).toBeInTheDocument();
   });
-  it(`AddReviewScreen should redirect to previous films page when user click on breadcrumps link`, () => {
+  it(`AddReviewScreen should redirect to previous films page when user clicks on breadcrumps link`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -97,7 +97,7 @@ describe(`Test for AddReviewScreen`, () => {
     userEvent.click(screen.getByText(new RegExp(fakeFilm.title)));
     expect(screen.getByText(/Mock Film Screen/i));
   });
-  it(`AddReviewScreen should redirect to main screen when user click on logo`, () => {
+  it(`AddReviewScreen should redirect to main screen when user clicks on logo`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -117,7 +117,7 @@ describe(`Test for AddReviewScreen`, () => {
     userEvent.click(screen.getByRole(`link`, {name: /W T W/i}));
     expect(screen.getByText(/Mock Main Screen/i));
   });
-  it(`AddReviewScreen should redirect to mylist screen when user click on User avatar`, () => {
+  it(`AddReviewScreen should redirect to mylist screen when user clicks on User avatar`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>

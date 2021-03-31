@@ -3,7 +3,7 @@
 exports[`Test for Header Header should render correctly 1`] = `
 <div>
   <header
-    class="page-header undefined"
+    class="page-header test"
   >
     <div
       class="logo"
@@ -43,10 +43,10 @@ exports[`Test for Header Header should render correctly 1`] = `
 </div>
 `;
 
-exports[`Test for Header Header should render correctly with children  1`] = `
+exports[`Test for Header Header should render correctly with children 1`] = `
 <div>
   <header
-    class="page-header undefined"
+    class="page-header test"
   >
     <div
       class="logo"
@@ -92,7 +92,7 @@ exports[`Test for Header Header should render correctly with children  1`] = `
 exports[`Test for Header Header should render correctly with children and without User component 1`] = `
 <div>
   <header
-    class="page-header undefined"
+    class="page-header test"
   >
     <div
       class="logo"
@@ -126,10 +126,10 @@ exports[`Test for Header Header should render correctly with children and withou
 </div>
 `;
 
-exports[`Test for Header Header should render correctly without User component  1`] = `
+exports[`Test for Header Header should render correctly without User component 1`] = `
 <div>
   <header
-    class="page-header undefined"
+    class="page-header test"
   >
     <div
       class="logo"
