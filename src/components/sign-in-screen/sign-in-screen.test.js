@@ -95,6 +95,21 @@ describe(`Test for SignInScreen`, () => {
     userEvent.click(screen.getByRole(`button`, {name: `Sign in`}));
     expect(screen.getByText(`Please input correct email`)).toBeInTheDocument();
   });
+  it(`When user send empty password toast appears`, () => {
+    const store = mockStore(fakeStore);
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <SignInScreen />
+          </Router>
+        </Provider>
+    );
+
+    userEvent.type(screen.getByPlaceholderText(/Email address/i), `test@test.ru`);
+    userEvent.type(screen.getByPlaceholderText(/Password/i), ``);
+    userEvent.click(screen.getByRole(`button`, {name: `Sign in`}));
+    expect(screen.getByText(`Please input password`)).toBeInTheDocument();
+  });
   it(`When form submit, it disabled`, () => {
     const store = mockStore({
       ...fakeStore,

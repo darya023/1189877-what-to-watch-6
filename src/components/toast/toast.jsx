@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Toast = ({text, children}) => {
+const Toast = ({text, className}) => {
   return (
-    <div className="toast">
-      <div className="toast__item">
+    <div className={`${!className ? `toast` : ``}`}>
+      <div className={`${className || `toast__item`}`}>
         {text}
-        {children}
       </div>
     </div>
   );
@@ -14,7 +13,7 @@ const Toast = ({text, children}) => {
 
 Toast.propTypes = {
   text: PropTypes.string.isRequired,
-  children: PropTypes.node,
+  className: PropTypes.string,
 };
 
 export default Toast;
