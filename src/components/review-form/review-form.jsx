@@ -25,11 +25,13 @@ const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
 const initialRating = ratings[RATING_LENGTH - 1];
 
 const shake = (ref, callback) => {
-  ref.current.className += ` shake`;
+  const shakeClass = ` shake`;
+  ref.current.className += shakeClass;
 
   setTimeout(() => {
     callback();
-    ref.current.className -= ` shake`;
+    const classNames = ref.current.className;
+    ref.current.className = classNames.slice(0, -shakeClass.length);
   }, SHAKE_ANIMATION_TIMEOUT);
 };
 
@@ -81,7 +83,7 @@ const ReviewForm = ({currentFilmID}) => {
   const [formData, handleFieldChange, handleSubmit] = useFormData(initialFormData, onSubmit);
 
   useEffect(() => {
-    setIsFormDisabled(isElementDisabled);
+    setIsFormDisabled((prevIsFormDisabled) => isElementDisabled || prevIsFormDisabled);
 
     if (isErrorToastTextNeeded) {
       setToastText(ReviewFormToastText.ERROR);

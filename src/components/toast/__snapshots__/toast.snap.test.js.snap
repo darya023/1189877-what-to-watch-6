@@ -23,9 +23,6 @@ exports[`Should Toast render correctly 2`] = `
       class="toast__item"
     >
       test
-      <div>
-        Test
-      </div>
     </div>
   </div>
 </div>
