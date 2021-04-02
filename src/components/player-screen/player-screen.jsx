@@ -4,7 +4,7 @@ import NotFoundScreen from "../not-found-screen/not-found-screen";
 import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentFilmID, redirectToRoute} from "../../store/action-creator";
 import {humanizeDuration} from "../../utils/humanize-duration";
-import {DurationView} from "../../const";
+import {AppRoute, DurationView} from "../../const";
 import VideoPlayer from "../video-player/video-player";
 import {useHistory} from "react-router";
 import Spinner from "../spinner/spinner";
@@ -33,7 +33,7 @@ const PlayerScreen = ({currentFilmID}) => {
     dispatch(redirectToRoute(url));
   };
 
-  const prevPath = useHistory().location.state ? useHistory().location.state.prevPath : `/`;
+  const prevPath = useHistory().location.state ? useHistory().location.state.prevPath : AppRoute.MAIN;
 
   const progressRef = useRef();
   const videoPlayerRef = useRef();

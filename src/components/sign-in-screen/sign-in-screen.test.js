@@ -68,7 +68,7 @@ describe(`Test for SignInScreen`, () => {
     userEvent.click(screen.getAllByRole(`link`, {name: /W T W/i})[1]);
     expect(screen.getByText(/Mock Main Screen/i)).toBeInTheDocument();
   });
-  it(`When user write text in textarea it should be updated`, () => {
+  it(`When user write text in input it should be updated`, () => {
     const store = mockStore(fakeStore);
     render(
         <Provider store={store}>
@@ -78,8 +78,42 @@ describe(`Test for SignInScreen`, () => {
         </Provider>
     );
 
-    userEvent.type(screen.getAllByRole(`textbox`)[0], `test@test.ru`);
-    expect(screen.getAllByRole(`textbox`)[0]).toHaveValue(`test@test.ru`);
+    userEvent.type(screen.getByPlaceholderText(/Email address/i), `test@test.ru`);
+    expect(screen.getByPlaceholderText(/Email address/i)).toHaveValue(`test@test.ru`);
+  });
+  it(`When user send incorrect email toast appears`, () => {
+    const store = mockStore(fakeStore);
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <SignInScreen />
+          </Router>
+        </Provider>
+    );
+
+    userEvent.type(screen.getByPlaceholderText(/Email address/i), `test@te`);
+    userEvent.click(screen.getByRole(`button`, {name: `Sign in`}));
+    expect(screen.getByText(`Please input correct email`)).toBeInTheDocument();
+  });
+  it(`When form submit, it disabled`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        sendingDataStatus: LoadingStatus.FETCHING
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <SignInScreen />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByPlaceholderText(/Email address/i)).toBeDisabled();
+    expect(screen.getByPlaceholderText(/Password/i)).toBeDisabled();
+    expect(screen.getByRole(`button`, {name: `Sending...`})).toBeDisabled();
   });
   it(`SignInScreen should redirect to main screen when user fill inputs and click on sign in button`, () => {
     const store = mockStore(fakeStore);
@@ -91,8 +125,8 @@ describe(`Test for SignInScreen`, () => {
         </Provider>
     );
 
-    userEvent.type(screen.getAllByPlaceholderText(/Email address/i), `test@test.ru`);
-    userEvent.type(screen.getAllByPlaceholderText(/Password/i), `password`);
+    userEvent.type(screen.getByPlaceholderText(/Email address/i), `test@test.ru`);
+    userEvent.type(screen.getByPlaceholderText(/Password/i), `password`);
 
     userEvent.click(screen.getByRole(`button`, {name: /Sign in/i}));
     expect(fakeDispatch).toHaveBeenCalled();

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import VideoPlayer from "../video-player/video-player";
+import {AppRoute} from "../../const";
 
 const PLAYING_DELAY = 1000;
 
@@ -31,21 +32,26 @@ const MovieCard = ({
 
   return <article onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="small-movie-card catalog__movies-card">
     {
-      isPlaying
-        ? <VideoPlayer
-          image={image}
-          video={promoVideo}
-          isMuted={true}
-          isPreview={true}
-          isPlaying={isPlaying}
-        />
-        : <div className="small-movie-card__image">
-          <img src={image} alt={title} width={280} height={175} />
-        </div>
+      // eslint-disable-next-line
+    <Link to={AppRoute.FILM(id)} className="small-movie-card__link">
+        {
+          isPlaying
+            ? <VideoPlayer
+              image={image}
+              video={promoVideo}
+              isMuted={true}
+              isPreview={true}
+              isPlaying={isPlaying}
+            />
+            : <div className="small-movie-card__image">
+              <img src={image} alt={title} width={280} height={175} />
+            </div>
+        }
+        <h3 className="small-movie-card__title">
+          <div>{title}</div>
+        </h3>
+      </Link>
     }
-    <h3 className="small-movie-card__title">
-      <Link to={`/films/${id}`} className="small-movie-card__link">{title}</Link>
-    </h3>
   </article>;
 };
 

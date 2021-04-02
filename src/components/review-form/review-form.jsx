@@ -127,19 +127,20 @@ const ReviewForm = ({currentFilmID}) => {
       </div>
     </div>
     <div ref={textareaRef} className="add-review__text">
-      <textarea onChange={
-        (event) => {
-          setIsFormDisabled(false);
-          handleFieldChange(event);
-        }}
-      onFocus={
-        () => setToastText(false)
-      }
-      className="add-review__textarea"
-      name="review-text" id="review-text"
-      placeholder="Review text"
-      defaultValue={``}
-      disabled={isFormDisabled}
+      <textarea
+        onChange={
+          (event) => {
+            setIsFormDisabled(false);
+            handleFieldChange(event);
+          }}
+        onFocus={
+          () => setToastText(false)
+        }
+        className="add-review__textarea"
+        name="review-text" id="review-text"
+        placeholder="Review text"
+        defaultValue={``}
+        disabled={isFormDisabled}
       />
       <div className="add-review__submit">
         <button disabled={isFormDisabled} className="add-review__btn" type="submit">{

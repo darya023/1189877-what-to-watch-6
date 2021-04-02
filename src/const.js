@@ -22,10 +22,24 @@ export const DataType = {
 
 export const APIRoute = {
   LOGIN: `/login`,
-  FILMS: `/films`,
+  LOGOUT: `/logout`,
+  FILMS: `/films/`,
+  FILM: (id)=>(`/films/${id}`),
   POSTER: `/films/promo`,
-  FAVORITE: `/favorite`,
-  REVIEWS: `/comments`,
+  FAVORITE: (id, isFavorite)=>(`/favorite/${id}/${isFavorite ? 0 : 1}`),
+  REVIEWS: (id)=>(`/comments/${id}`),
+};
+
+export const AppRoute = {
+  MAIN: `/`,
+  LOGIN: `/login`,
+  MY_LIST: `/mylist`,
+  FILM: (id)=>(`/films/${id}`),
+  ADD_REVIEW: (id)=>(`/films/${id}/review`),
+  PLAYER: (id)=>(`/player/${id}`),
+  PLAYER_SCHEMA: `/player/:id`,
+  FILM_SCHEMA: `/films/:id`,
+  ADD_REVIEW_SCHEMA: `/films/:id/review`,
 };
 
 export const COUNT_SIMILAR_FILMS = 4;

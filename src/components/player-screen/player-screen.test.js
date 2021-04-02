@@ -96,8 +96,6 @@ describe(`Test for PlayerScreen`, () => {
     );
 
     expect(pauseStub).toHaveBeenCalled();
-    // pauseStub.mockRestore();
-
     expect(screen.getByText(new RegExp(fakeFilm.title))).toBeInTheDocument();
     expect(screen.getByText(/Exit/i)).toBeInTheDocument();
     expect(screen.getByText(/Play/i)).toBeInTheDocument();
@@ -117,7 +115,6 @@ describe(`Test for PlayerScreen`, () => {
     );
 
     expect(pauseStub).toHaveBeenCalled();
-    // pauseStub.mockRestore();
     userEvent.click(screen.getByText(/Exit/i));
     expect(fakeDispatch).toHaveBeenCalled();
   });
@@ -134,7 +131,6 @@ describe(`Test for PlayerScreen`, () => {
     );
 
     expect(pauseStub).toHaveBeenCalled();
-    // pauseStub.mockRestore();
     userEvent.click(screen.getByText(/Play/i));
     expect(playStub).toHaveBeenCalled();
   });
@@ -152,7 +148,6 @@ describe(`Test for PlayerScreen`, () => {
 
     fireEvent.drag(screen.getByText(/Toggler/i), {});
     expect(pauseStub).toHaveBeenCalled();
-    // pauseStub.mockRestore();
   });
   it(`PlayerScreen should render Spinner when data is loading`, () => {
     const store = mockStore({
