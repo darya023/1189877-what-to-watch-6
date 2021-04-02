@@ -11,6 +11,7 @@ import Toast from "../toast/toast";
 
 const SigninFormToastText = {
   EMAIL: `Please input correct email`,
+  PASSWORD: `Please input password`,
   ERROR: `Something went wrong. Please try later.`,
 };
 const emailRegexp = new RegExp(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`);
@@ -41,6 +42,11 @@ const SignInScreen = () => {
     event.preventDefault();
     if (!emailRegexp.test(emailRef.current.value)) {
       setToastText(SigninFormToastText.EMAIL);
+
+      return;
+    }
+    if (!passwordRef.current.value) {
+      setToastText(SigninFormToastText.PASSWORD);
 
       return;
     }
@@ -100,6 +106,9 @@ const SignInScreen = () => {
               name="user-password"
               id="user-password"
               ref={passwordRef}
+              onFocus={
+                () => setToastText(false)
+              }
               disabled={isElementDisabled}
             />
             <label className="sign-in__label visually-hidden" htmlFor="user-password">Password</label>
