@@ -5,11 +5,11 @@ exports[`Should Toast render correctly 1`] = `
   <div
     class="toast"
   >
-    <div
+    <p
       class="toast__item"
     >
       test
-    </div>
+    </p>
   </div>
 </div>
 `;
@@ -19,14 +19,11 @@ exports[`Should Toast render correctly 2`] = `
   <div
     class="toast"
   >
-    <div
+    <p
       class="toast__item"
     >
       test
-      <div>
-        Test
-      </div>
-    </div>
+    </p>
   </div>
 </div>
 `;

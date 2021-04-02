@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Toast = ({text, children}) => {
+const Toast = ({text, className}) => {
   return (
-    <div className="toast">
-      <div className="toast__item">
+    <div className={!className ? `toast` : ``}>
+      <p className={`${className || `toast__item`}`}>
         {text}
-        {children}
-      </div>
+      </p>
     </div>
   );
 };
 
 Toast.propTypes = {
   text: PropTypes.string.isRequired,
+  className: PropTypes.string,
   children: PropTypes.node,
 };
 

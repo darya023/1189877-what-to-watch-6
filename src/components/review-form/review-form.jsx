@@ -1,15 +1,14 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect} from "react";
 import PropTypes from 'prop-types';
 import {useFormData} from "../../hooks/use-form-data";
-import {useDispatch, useSelector} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
 import {changeSendingDataStatus, redirectToRoute} from "../../store/action-creator";
 import {useLocation} from "react-router";
-import Toast from "../toast/toast";
 import {sendReview} from "../../store/api-actions";
 import {getSendingDataStatus, needDisableElement, needResetSendingDataStatus, needSetErrorToastText} from "../../store/data/selectors/selectors";
 import {LoadingStatus} from "../../const";
+import withForm from "../hocs/with-form";
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
 const MIN_TEXTAREA_LENGTH = 50;
 const MAX_TEXTAREA_LENGTH = 400;
 
@@ -24,19 +23,10 @@ const ratings = new Array(RATING_LENGTH).fill().map((_item, index)=>{
 });
 const initialRating = ratings[RATING_LENGTH - 1];
 
-const shake = (ref, callback) => {
-  ref.current.className += ` shake`;
-
-  setTimeout(() => {
-    callback();
-    ref.current.className -= ` shake`;
-  }, SHAKE_ANIMATION_TIMEOUT);
-};
-
-const ReviewForm = ({currentFilmID}) => {
+const ReviewForm = React.forwardRef(({currentFilmID, onSubmit, setToastText, isFormDisabled, children}, ref) => {
+  ReviewForm.displayName = `ReviewForm`;
   const sendingDataStatus = useSelector(getSendingDataStatus);
-  const isElementDisabled = useSelector(needDisableElement);
-  const isErrorToastTextNeeded = useSelector(needSetErrorToastText);
+  const isSendingForm = useSelector(needDisableElement);
   const isSendingDataStatusNotInitial = useSelector(needResetSendingDataStatus);
 
   const dispatch = useDispatch();
@@ -45,26 +35,15 @@ const ReviewForm = ({currentFilmID}) => {
     dispatch(redirectToRoute(url));
   };
 
-  const [isFormDisabled, setIsFormDisabled] = useState(false);
-  const [toastText, setToastText] = useState(false);
-  const textareaRef = useRef();
-  const formRef = useRef();
-
-  const onSubmit = (data) => {
+  const onReviewFormSubmit = (data) => {
     if (data[`review-text`].length < MIN_TEXTAREA_LENGTH) {
-      setToastText(ReviewFormToastText.MIN);
+      setToastText({toastText: ReviewFormToastText.MIN});
     }
     if (data[`review-text`].length > MAX_TEXTAREA_LENGTH) {
-      setToastText(ReviewFormToastText.MAX);
+      setToastText({toastText: ReviewFormToastText.MAX});
     }
     if (data[`review-text`].length < MIN_TEXTAREA_LENGTH || data[`review-text`].length > MAX_TEXTAREA_LENGTH) {
-      setIsFormDisabled(true);
-      shake(
-          formRef,
-          () => {
-            setIsFormDisabled(false);
-          }
-      );
+      onSubmit(false);
       return;
     }
 
@@ -78,26 +57,15 @@ const ReviewForm = ({currentFilmID}) => {
     "rating": initialRating,
     "review-text": ``
   };
-  const [formData, handleFieldChange, handleSubmit] = useFormData(initialFormData, onSubmit);
+  const [formData, handleFieldChange, handleSubmit] = useFormData(initialFormData, onReviewFormSubmit);
 
   useEffect(() => {
-    setIsFormDisabled(isElementDisabled);
-
-    if (isErrorToastTextNeeded) {
-      setToastText(ReviewFormToastText.ERROR);
-    }
-
     if (isSendingDataStatusNotInitial) {
       redirect(url);
-      dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
     }
   }, [sendingDataStatus]);
 
-  useEffect(() => {
-    return () => dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
-  });
-
-  return <form ref={formRef} onSubmit={handleSubmit} action="#" className="add-review__form">
+  return <form ref={ref} onSubmit={handleSubmit} action="#" className="add-review__form">
     <div className="rating">
       <div className="rating__stars">
         {
@@ -108,9 +76,8 @@ const ReviewForm = ({currentFilmID}) => {
             return <React.Fragment key={id}>
               <input
                 onClick={(event) => {
-                  setIsFormDisabled(false);
                   handleFieldChange(event);
-                  setToastText(false);
+                  setToastText({toastText: false});
                 }}
                 className="rating__input"
                 id={id}
@@ -126,15 +93,15 @@ const ReviewForm = ({currentFilmID}) => {
         }
       </div>
     </div>
-    <div ref={textareaRef} className="add-review__text">
+    <div className="add-review__text">
       <textarea
         onChange={
           (event) => {
-            setIsFormDisabled(false);
             handleFieldChange(event);
-          }}
+          }
+        }
         onFocus={
-          () => setToastText(false)
+          () => setToastText({toastText: false})
         }
         className="add-review__textarea"
         name="review-text" id="review-text"
@@ -144,26 +111,35 @@ const ReviewForm = ({currentFilmID}) => {
       />
       <div className="add-review__submit">
         <button disabled={isFormDisabled} className="add-review__btn" type="submit">{
-          isElementDisabled
+          isSendingForm
             ? `Sending...`
             : `Post`
         }</button>
       </div>
-      {
-        toastText
-          ? <Toast text={toastText} />
-          : ``
-      }
+      {children}
       <div>
       </div>
     </div>
-  </form>
-
-  ;
-};
+  </form>;
+});
 
 ReviewForm.propTypes = {
   currentFilmID: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  setToastText: PropTypes.func.isRequired,
+  isFormDisabled: PropTypes.bool.isRequired,
+  children: PropTypes.node,
 };
 
-export default ReviewForm;
+const mapStateToProps = (state) => ({
+  isSendingForm: needDisableElement(state),
+  isErrorToastTextNeeded: needSetErrorToastText(state),
+  isSendingDataStatusNotInitial: needResetSendingDataStatus(state)
+});
+const mapDispatchToProps = (dispatch) => ({
+  onResetStatus() {
+    dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
+  }
+});
+export {ReviewForm};
+export default connect(mapStateToProps, mapDispatchToProps)(withForm(ReviewForm));

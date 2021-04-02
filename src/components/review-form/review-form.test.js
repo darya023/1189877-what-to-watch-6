@@ -127,9 +127,6 @@ describe(`Test for ReviewForm`, () => {
     userEvent.type(textbox, text);
     expect(textbox).toHaveValue(text);
     userEvent.click(button);
-    expect(textbox).not.toBeDisabled();
-    expect(button).not.toBeDisabled();
-    expect(ratingStars).not.toBeDisabled();
     expect(fakeDispatch).toHaveBeenCalled();
   });
   it(`When user clicks post button on ReviewForm with incorrect (short) textarea value Toast component appears and form disable`, () => {
@@ -171,5 +168,26 @@ describe(`Test for ReviewForm`, () => {
     expect(screen.getAllByLabelText(/Rating/i)[0]).toBeDisabled();
 
     expect(screen.getByText(`Review must be less than 400 symbols.`)).toBeInTheDocument();
+  });
+  it(`When form submit, it disabled`, () => {
+    const store = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        sendingDataStatus: LoadingStatus.FETCHING
+      }
+    });
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <ReviewForm currentFilmID={fakeFilm.id} />
+          </Router>
+        </Provider>
+    );
+
+    userEvent.click(screen.getByRole(`button`, {name: `Sending...`}));
+    expect(screen.getByRole(`textbox`)).toBeDisabled();
+    expect(screen.getByRole(`button`)).toBeDisabled();
+    expect(screen.getAllByLabelText(/Rating/i)[0]).toBeDisabled();
   });
 });
