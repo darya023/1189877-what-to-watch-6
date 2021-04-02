@@ -60,7 +60,7 @@ const fakeStore = {
     filmsLoadingStatus: LoadingStatus.SUCCESS,
     posterLoadingStatus: LoadingStatus.SUCCESS,
     sendingDataStatus: LoadingStatus.INITIAL,
-    currentFilmID: `1`,
+    currentFilmID: fakeFilm.id,
     currentFilm: fakeFilm,
     currentFilmReviews: fakeReviews
   },
@@ -153,7 +153,7 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/2014/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
 
-    expect(fakeDispatch).toHaveBeenCalledTimes(3);
+    expect(fakeDispatch).toHaveBeenCalled();
   });
   it(`Render 'AddReviewScreen' when user navigate to '/films/1/review' url`, () => {
     const testStore = mockStore({
@@ -188,8 +188,8 @@ describe(`Test routing`, () => {
     const history = createMemoryHistory();
     history.push(`/player/1`);
     const pauseStub = jest
-  .spyOn(window.HTMLMediaElement.prototype, `pause`)
-  .mockImplementation(() => {});
+      .spyOn(window.HTMLMediaElement.prototype, `pause`)
+      .mockImplementation(() => {});
     render(
         <redux.Provider store={testStore}>
           <Router history={history}>
@@ -220,5 +220,25 @@ describe(`Test routing`, () => {
     expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
     expect(screen.getByText(/Go to homepage/i)).toBeInTheDocument();
     expect(screen.getByText(/© 2019 What to watch Ltd./i)).toBeInTheDocument();
+  });
+  it(`Load data when app starts`, () => {
+    const history = createMemoryHistory();
+    const testStore = mockStore({
+      ...fakeStore,
+      DATA: {
+        ...fakeStore.DATA,
+        filmsLoadingStatus: LoadingStatus.INITIAL,
+        posterLoadingStatus: LoadingStatus.INITIAL,
+      }
+    });
+    render(
+        <redux.Provider store={testStore}>
+          <Router history={history}>
+            <App />
+          </Router>
+        </redux.Provider>
+    );
+
+    expect(fakeDispatch).toHaveBeenCalled();
   });
 });

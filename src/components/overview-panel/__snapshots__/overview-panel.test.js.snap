@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should OverwiewPanel render correctly 1`] = `
+exports[`Should OverviewPanel render correctly 1`] = `
 <div>
   <div
     class="movie-rating"

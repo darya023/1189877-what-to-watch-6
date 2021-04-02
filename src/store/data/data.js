@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {LoadingStatus} from "../../const";
-import {changeCurrentFilmID, changeSendingDataStatus, loadReviews, loadFilms, loadPoster, updateFilm, loadCurrentFilm, changeLoadingPosterStatus, changeLoadingFilmsStatus, changeLoadingFilmStatus} from "../action-creator";
+import {changeCurrentFilmID, changeSendingDataStatus, loadReviews, loadFilms, loadPoster, updateFilm, loadCurrentFilm, changeLoadingPosterStatus, changeLoadingFilmsStatus, changeLoadingFilmStatus, resetCurrentFilmData} from "../action-creator";
 
 const initialState = {
   films: [],
@@ -41,6 +41,10 @@ const data = createReducer(initialState, (builder) => {
   });
   builder.addCase(loadCurrentFilm, (state, action) => {
     state.currentFilm = action.payload;
+  });
+  builder.addCase(resetCurrentFilmData, (state, _action) => {
+    state.currentFilm = null;
+    state.sendingDataStatus = LoadingStatus.INITIAL;
   });
   builder.addCase(updateFilm, (state, action) => {
     const updatedFilm = action.payload;

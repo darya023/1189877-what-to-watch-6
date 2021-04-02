@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test for ReviewsPanel Should ReviewsPanel render correctly 1`] = `
+<div>
+  <div
+    class="movie-card__reviews movie-card__row"
+  >
+    <div
+      class="movie-card__reviews-col"
+    >
+      <div
+        class="review"
+      >
+        <blockquote
+          class="review__quote"
+        >
+          <p
+            class="review__text"
+          >
+            Test 1
+          </p>
+          <footer
+            class="review__details"
+          >
+            <cite
+              class="review__author"
+            >
+              Test1
+            </cite>
+            <time
+              class="review__date"
+              datetime="2021-02-23"
+            >
+              February 23, 2021
+            </time>
+          </footer>
+        </blockquote>
+        <div
+          class="review__rating"
+        >
+          3.2
+        </div>
+      </div>
+    </div>
+    <div
+      class="movie-card__reviews-col"
+    >
+      <div
+        class="review"
+      >
+        <blockquote
+          class="review__quote"
+        >
+          <p
+            class="review__text"
+          >
+            Test 2
+          </p>
+          <footer
+            class="review__details"
+          >
+            <cite
+              class="review__author"
+            >
+              Test2
+            </cite>
+            <time
+              class="review__date"
+              datetime="2020-02-03"
+            >
+              February 3, 2020
+            </time>
+          </footer>
+        </blockquote>
+        <div
+          class="review__rating"
+        >
+          7
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Test for ReviewsPanel Should ReviewsPanel render correctly without reviews 1`] = `
+<div>
+  <div
+    class="movie-card__reviews movie-card__row"
+  >
+    <div
+      class="movie-card__reviews-col"
+    >
+      <div
+        class="review"
+      >
+        There are no reviews yet
+      </div>
+    </div>
+  </div>
+</div>
+`;

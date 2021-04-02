@@ -25,7 +25,7 @@ const GenresList = () => {
   return <ul className="catalog__genres-list">
     {
       genres.map((genre) => (
-        <li key={genre} className={`catalog__genres-item ${genre === activeGenre && `catalog__genres-item--active`}`}>
+        <li key={genre} className={`catalog__genres-item ${genre === activeGenre ? `catalog__genres-item--active` : ``}`}>
           <a
             onClick={
               (event) => {

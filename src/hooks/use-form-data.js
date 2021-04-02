@@ -1,10 +1,7 @@
 import {useState} from "react";
 
-export const useFormData = (lastRating, onSubmit) => {
-  const [formData, setFormData] = useState({
-    "rating": lastRating,
-    "review-text": ``
-  });
+export const useFormData = (initialFormData, onSubmit) => {
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleFieldChange = (event) => {
     const {name, value} = event.target;

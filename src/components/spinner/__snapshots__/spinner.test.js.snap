@@ -4,6 +4,7 @@ exports[`Should Spinner render correctly 1`] = `
 <div>
   <div
     class="dual-ring"
+    data-testid="spinner"
   />
 </div>
 `;

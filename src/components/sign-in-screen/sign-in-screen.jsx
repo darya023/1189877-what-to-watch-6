@@ -2,12 +2,11 @@ import React, {useEffect, useRef} from "react";
 import {login} from "../../store/api-actions";
 import {changeSendingDataStatus, redirectToRoute} from "../../store/action-creator";
 import {getAuthorizationStatus} from "../../store/user/selectors";
-import {getSendingDataStatus} from "../../store/data/selectors";
+import {getSendingDataStatus, needDisableElement, needRedirectFromSigninScreen, needResetSendingDataStatus} from "../../store/data/selectors/selectors";
 import {useDispatch, useSelector} from "react-redux";
 import Footer from "../footer/footer";
 import HeaderUserPage from "../header/header-user-page";
 import {LoadingStatus} from "../../const";
-import {needDisableElement, needRedirectFromSigninScreen, needResetSendingDataStatus} from "../../store/data/selectors-with-loading-status";
 
 const SignInScreen = () => {
   const authorizationStatus = useSelector(getAuthorizationStatus);

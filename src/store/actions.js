@@ -1,8 +1,9 @@
 export const ActionType = {
   CHANGE_GENRE: `/changeGenre`,
   CHANGE_CURRENT_FILM_ID: `/changeCurrentFilmID`,
-  RESET_GENRE: `/resetGenre`,
   SET_GENRES: `/setGenres`,
+  RESET_GENRE: `/resetGenre`,
+  RESET_CURRENT_FILM_DATA: `/resetCurrentFilmData`,
   LOAD_FILMS: `app/loadFilms`,
   LOAD_POSTER: `app/loadPoster`,
   LOAD_CURRENT_FILM: `films/:id/loadCurrentFilm`,

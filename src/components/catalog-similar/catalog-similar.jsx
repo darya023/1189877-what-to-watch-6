@@ -1,9 +1,9 @@
 import React from "react";
 import Films from "../films/films";
 import Spinner from "../spinner/spinner";
-import {getSimilarFilms} from "../../store/data/selectors";
 import {useSelector} from "react-redux";
-import {needShowSpinnerInsteadFilms} from "../../store/data/selectors-with-loading-status";
+import {getSimilarFilms} from "../../store/data/selectors/films";
+import {needShowSpinnerInsteadFilms} from "../../store/data/selectors/selectors";
 
 const CatalogSimilar = () => {
   const isSpinnerShown = useSelector(needShowSpinnerInsteadFilms);
