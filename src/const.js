@@ -23,7 +23,7 @@ export const DataType = {
 export const APIRoute = {
   LOGIN: `/login`,
   LOGOUT: `/logout`,
-  FILMS: `/films/`,
+  FILMS: `/films`,
   FILM: (id)=>(`/films/${id}`),
   POSTER: `/films/promo`,
   FAVORITE: (id, isFavorite)=>(`/favorite/${id}/${isFavorite ? 0 : 1}`),

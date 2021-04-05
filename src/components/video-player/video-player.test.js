@@ -4,21 +4,6 @@ import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import VideoPlayer from './video-player';
 
-const renderIgnoringUnstableFlushDiscreteUpdates = (component) => {
-  // tslint:disable: no-console
-  const originalError = console.error;
-  const error = jest.fn();
-  console.error = error;
-  const result = render(component);
-  expect(error).toHaveBeenCalledTimes(1);
-  expect(error).toHaveBeenCalledWith(
-  'Warning: unstable_flushDiscreteUpdates: Cannot flush updates when React is already rendering.%s',
-  expect.any(String),
-  );
-  console.error = originalError;
-  // tslint:enable: no-console
-  return result;
-  };
 let history; let pauseStub; let playStub;
 const fakeFilm = {
   id: `1`,

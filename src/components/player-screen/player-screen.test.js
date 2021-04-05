@@ -86,9 +86,6 @@ describe(`Test for PlayerScreen`, () => {
       .spyOn(window.HTMLMediaElement.prototype, `play`)
       .mockImplementation(() => {});
   });
-  // const fakeDispatch = jest.fn();
-  // jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
-
   it(`PlayerScreen should render correctly`, () => {
     const store = mockStore(fakeStore);
 
