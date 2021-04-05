@@ -333,7 +333,8 @@ describe(`Test for FilmScreen`, () => {
       ...fakeStore,
       DATA: {
         ...fakeStore.DATA,
-        currentFilm: null
+        currentFilm: null,
+        filmLoadingStatus: LoadingStatus.FAILURE
       }
     });
     render(

@@ -8,12 +8,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
-import {getCurrentFilmFromFilmsList, needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors/current-film";
+import {getCurrentFilmFromFilmsList} from "../../store/data/selectors/current-film";
 import {AppRoute} from "../../const";
+import {needShowSpinnerInsteadFilms, needShowNotFoundScreenInsteadAddReviewPage} from "../../store/data/selectors/selectors";
 
 const AddReviewScreen = ({currentFilmID}) => {
   const currentFilm = useSelector(getCurrentFilmFromFilmsList);
-  const isSpinnerShown = useSelector(needShowSpinnerInsteadCurrentFilm);
+  const isSpinnerShown = useSelector(needShowSpinnerInsteadFilms);
+  const isNotFoundScreenShown = useSelector(needShowNotFoundScreenInsteadAddReviewPage);
 
   const dispatch = useDispatch();
 
@@ -28,7 +30,7 @@ const AddReviewScreen = ({currentFilmID}) => {
   if (isSpinnerShown) {
     return <Spinner />;
   }
-  if (!currentFilm) {
+  if (isNotFoundScreenShown) {
     return <NotFoundScreen />;
   }
   return <section className="movie-card movie-card--full" style={{backgroundColor: `${currentFilm.backgroundColor}`}}>

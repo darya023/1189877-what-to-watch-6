@@ -6,7 +6,7 @@ import {changeAuthorizationStatus, changeSendingDataStatus, loadReviews, loadFil
 
 export const fetchFilms = () => (dispatch, _getState, api) => {
   dispatch(changeLoadingFilmsStatus(LoadingStatus.FETCHING));
-  api.get(APIRoute.FILMS)
+  return api.get(APIRoute.FILMS)
     .then(({data}) => data.map(adaptDataToClient[DataType.FILMS]))
     .then((data) => {
       batch(() => {
@@ -23,7 +23,7 @@ export const fetchFilms = () => (dispatch, _getState, api) => {
 export const fetchFilm = (id) => (dispatch, _getState, api) => {
   dispatch(changeLoadingFilmStatus(LoadingStatus.FETCHING));
   // eslint-disable-next-line
-  api.get(APIRoute.FILM(id))
+  return api.get(APIRoute.FILM(id))
     .then(({data}) => adaptDataToClient[DataType.FILMS](data))
     .then((data) => {
       batch(() => {
@@ -38,7 +38,7 @@ export const fetchFilm = (id) => (dispatch, _getState, api) => {
 
 export const fetchPoster = () => (dispatch, _getState, api) => {
   dispatch(changeLoadingPosterStatus(LoadingStatus.FETCHING));
-  api.get(APIRoute.POSTER)
+  return api.get(APIRoute.POSTER)
     .then(({data}) => adaptDataToClient[DataType.FILMS](data))
     .then((data) => dispatch(loadPoster(data)))
     .then(() => dispatch(changeLoadingPosterStatus(LoadingStatus.SUCCESS)))
@@ -60,7 +60,7 @@ export const sendReview = (formData, id) => (dispatch, _getState, api) => {
   formData = adaptDataToServer[DataType.REVIEWS](formData);
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
   // eslint-disable-next-line
-  api.post(APIRoute.REVIEWS(id), formData)
+  return api.post(APIRoute.REVIEWS(id), formData)
     .then(({data}) => data.map(adaptDataToClient[DataType.REVIEWS]))
     .then((data) => {
       batch(() => {
@@ -82,11 +82,14 @@ export const checkAuthorization = () => (dispatch, _getState, api) => (
         dispatch(changeAuthorizationStatus(true));
       });
     })
+    .catch(()=> {
+      dispatch(changeAuthorizationStatus(false));
+    })
 );
 
 export const login = ({email, password}) => (dispatch, _getState, api) => {
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
-  api.post(APIRoute.LOGIN, {email, password})
+  return api.post(APIRoute.LOGIN, {email, password})
     .then(({data})=>adaptDataToClient[DataType.USER](data))
     .then((data) => {
       batch(() => {
@@ -105,7 +108,7 @@ export const login = ({email, password}) => (dispatch, _getState, api) => {
 };
 export const logout = () => (dispatch, _getState, api) => {
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
-  api.get(APIRoute.LOGOUT)
+  return api.get(APIRoute.LOGOUT)
     .then(() => {
       batch(() => {
         dispatch(setUser(null));
@@ -126,7 +129,7 @@ export const logout = () => (dispatch, _getState, api) => {
 export const toggleIsFavoriteKey = ({id, isFavorite}) => (dispatch, _getState, api) => {
   dispatch(changeSendingDataStatus(LoadingStatus.FETCHING));
   // eslint-disable-next-line
-  api.post(APIRoute.FAVORITE(id, isFavorite))
+  return api.post(APIRoute.FAVORITE(id, isFavorite))
     .then(({data})=>adaptDataToClient[DataType.FILMS](data))
     .then((data) => {
       batch(() => {

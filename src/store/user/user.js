@@ -2,7 +2,7 @@ import {createReducer} from "@reduxjs/toolkit";
 import {changeAuthorizationStatus, setUser} from "../action-creator";
 
 const initialState = {
-  authorizationStatus: false,
+  authorizationStatus: null,
   user: null,
 };
 

@@ -37,13 +37,13 @@ describe(`Test for VideoPlayer`, () => {
       .mockImplementation(() => {});
   });
 
-  it(`VideoPlayer should render correctly with pause video`, () => {
+  it(`VideoPlayer should render correctly with paused video`, () => {
     render(
         <Router history={history}>
           <VideoPlayer
             image={fakeFilm.poster}
             video={fakeFilm.video}
-            isMuted={true}
+            isMuted={false}
             isPreview={true}
             isPlaying={false}
             onDurationChange={jest.fn()}
@@ -54,7 +54,7 @@ describe(`Test for VideoPlayer`, () => {
 
     expect(pauseStub).toHaveBeenCalled();
   });
-  it(`VideoPlayer should render correctly with play video and video must be not muted`, () => {
+  it(`VideoPlayer should render correctly with playing video and video must be not muted`, () => {
     const {container} = render(
         <Router history={history}>
           <VideoPlayer
