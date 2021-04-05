@@ -1,7 +1,7 @@
 import {batch} from "react-redux";
 import {APIRoute, AppRoute, DataType, HttpCode, LoadingStatus} from "../const";
-import {adaptDataToClient} from "../utils/adaptDataToClient";
-import {adaptDataToServer} from "../utils/adaptDataToServer";
+import {adaptDataToClient} from "../utils/adapt-data-to-client";
+import {adaptDataToServer} from "../utils/adapt-data-to-server";
 import {changeAuthorizationStatus, changeSendingDataStatus, loadReviews, loadFilms, loadPoster, redirectToRoute, setGenres, setUser, updateFilm, loadCurrentFilm, changeLoadingPosterStatus, changeLoadingFilmsStatus, changeLoadingFilmStatus} from "./action-creator";
 
 export const fetchFilms = () => (dispatch, _getState, api) => {
@@ -138,10 +138,13 @@ export const toggleIsFavoriteKey = ({id, isFavorite}) => (dispatch, _getState, a
       });
     })
     .catch((error) => {
-      dispatch(changeSendingDataStatus(LoadingStatus.FAILURE));
-
       if (error.response.status === HttpCode.UNAUTHORIZED) {
+        dispatch(changeSendingDataStatus(LoadingStatus.INITIAL));
         dispatch(redirectToRoute(APIRoute.LOGIN));
+
+        return;
       }
+
+      dispatch(changeSendingDataStatus(LoadingStatus.FAILURE));
     });
 };
