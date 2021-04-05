@@ -82,6 +82,9 @@ export const checkAuthorization = () => (dispatch, _getState, api) => (
         dispatch(changeAuthorizationStatus(true));
       });
     })
+    .catch(()=> {
+      dispatch(changeAuthorizationStatus(false));
+    })
 );
 
 export const login = ({email, password}) => (dispatch, _getState, api) => {

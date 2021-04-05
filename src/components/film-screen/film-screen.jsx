@@ -12,7 +12,7 @@ import {changeCurrentFilmID} from "../../store/action-creator";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import Spinner from "../spinner/spinner";
 import {fetchFilm, fetchReviews} from "../../store/api-actions";
-import {getCurrentFilmReviews, needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors/current-film";
+import {getCurrentFilmReviews, needShowNotFoundScreenInsteadFilmsPage, needShowSpinnerInsteadCurrentFilm} from "../../store/data/selectors/current-film";
 import {getCurrentFilm} from "../../store/data/selectors/selectors";
 
 const FilmScreen = ({currentFilmID}) => {
@@ -20,6 +20,7 @@ const FilmScreen = ({currentFilmID}) => {
   const reviews = useSelector(getCurrentFilmReviews);
   const authorizationStatus = useSelector(getAuthorizationStatus);
   const isSpinnerShown = useSelector(needShowSpinnerInsteadCurrentFilm);
+  const isNotFoundScreenShown = useSelector(needShowNotFoundScreenInsteadFilmsPage);
 
   const dispatch = useDispatch();
 
@@ -52,7 +53,7 @@ const FilmScreen = ({currentFilmID}) => {
   if (isSpinnerShown) {
     return <Spinner />;
   }
-  if (!currentFilm) {
+  if (isNotFoundScreenShown) {
     return <NotFoundScreen />;
   }
   return <React.Fragment>

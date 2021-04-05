@@ -4,6 +4,21 @@ import {Router} from 'react-router-dom';
 import {createMemoryHistory} from 'history';
 import VideoPlayer from './video-player';
 
+const renderIgnoringUnstableFlushDiscreteUpdates = (component) => {
+  // tslint:disable: no-console
+  const originalError = console.error;
+  const error = jest.fn();
+  console.error = error;
+  const result = render(component);
+  expect(error).toHaveBeenCalledTimes(1);
+  expect(error).toHaveBeenCalledWith(
+  'Warning: unstable_flushDiscreteUpdates: Cannot flush updates when React is already rendering.%s',
+  expect.any(String),
+  );
+  console.error = originalError;
+  // tslint:enable: no-console
+  return result;
+  };
 let history; let pauseStub; let playStub;
 const fakeFilm = {
   id: `1`,
@@ -37,13 +52,13 @@ describe(`Test for VideoPlayer`, () => {
       .mockImplementation(() => {});
   });
 
-  it(`VideoPlayer should render correctly with pause video`, () => {
+  it(`VideoPlayer should render correctly with paused video`, () => {
     render(
         <Router history={history}>
           <VideoPlayer
             image={fakeFilm.poster}
             video={fakeFilm.video}
-            isMuted={true}
+            isMuted={false}
             isPreview={true}
             isPlaying={false}
             onDurationChange={jest.fn()}
@@ -54,7 +69,7 @@ describe(`Test for VideoPlayer`, () => {
 
     expect(pauseStub).toHaveBeenCalled();
   });
-  it(`VideoPlayer should render correctly with play video and video must be not muted`, () => {
+  it(`VideoPlayer should render correctly with playing video and video must be not muted`, () => {
     const {container} = render(
         <Router history={history}>
           <VideoPlayer

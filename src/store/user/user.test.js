@@ -1,12 +1,13 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import {APIRoute, DataType, LoadingStatus} from "../../const";
+import {DataType, LoadingStatus} from "../../const";
 import {createAPI} from '../../services/api';
 import {adaptDataToClient} from "../../utils/adaptDataToClient";
 import {changeAuthorizationStatus, setUser} from "../action-creator";
 import {ActionType} from "../actions";
 import {checkAuthorization, login, logout} from "../api-actions";
 import {user} from "./user";
+import * as redux from 'react-redux';
 
 const api = createAPI(() => {});
 const fakeUser = {
@@ -28,7 +29,7 @@ describe(`User reducers work correctly`, () => {
   });
   it(`Reducer without additional parameters should return initial state`, () => {
     const initialState = {
-      authorizationStatus: false,
+      authorizationStatus: null,
       user: null,
     };
 
@@ -70,7 +71,7 @@ describe(`User reducers work correctly`, () => {
 
 });
 describe(`Async operations work correctly: user`, () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
   it(`Should make a correct API call to /login`, () => {
@@ -88,11 +89,11 @@ describe(`Async operations work correctly: user`, () => {
     });
 
     apiMock
-      .onPost(APIRoute.LOGIN)
+      .onPost(`/login`)
       .reply(200, fakeUserFromServer);
 
     axios
-      .get(APIRoute.LOGIN)
+      .get(`/login`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeUserFromServer);
@@ -121,7 +122,7 @@ describe(`Async operations work correctly: user`, () => {
           type: ActionType.CHANGE_SENDING_DATA_STATUS,
           payload: LoadingStatus.FAILURE,
         });
-        expect(dispatch).toHaveBeenNthCalledWith(1, {
+        expect(dispatch).toHaveBeenNthCalledWith(2, {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,
           payload: false,
         });
@@ -134,7 +135,7 @@ describe(`Async operations work correctly: user`, () => {
     const checkAuthorizationHandler = checkAuthorization();
 
     apiMock
-      .onGet(APIRoute.LOGIN)
+      .onGet(`/login`)
       .reply(200, fakeUserFromServer);
 
     checkAuthorizationHandler(dispatch, () => {}, api)
@@ -151,6 +152,13 @@ describe(`Async operations work correctly: user`, () => {
           type: ActionType.CHANGE_AUTHORIZATION_STATUS,
           payload: true,
         });
+      })
+      .catch(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenNthCalledWith(1, {
+          type: ActionType.CHANGE_AUTHORIZATION_STATUS,
+          payload: false,
+        });
       });
   });
   it(`Should make a correct API call to /logout`, () => {
@@ -166,11 +174,11 @@ describe(`Async operations work correctly: user`, () => {
     });
 
     apiMock
-      .onPost(APIRoute.LOGOUT)
+      .onPost(`/logout`)
       .reply(200);
 
     axios
-      .get(APIRoute.LOGOUT)
+      .get(`/logout`)
       .then(() => {
         expect(dispatch).toHaveBeenCalledTimes(5);
         expect(dispatch).toHaveBeenNthCalledWith(1, {

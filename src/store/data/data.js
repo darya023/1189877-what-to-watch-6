@@ -45,6 +45,7 @@ const data = createReducer(initialState, (builder) => {
   builder.addCase(resetCurrentFilmData, (state, _action) => {
     state.currentFilm = null;
     state.sendingDataStatus = LoadingStatus.INITIAL;
+    state.filmLoadingStatus = LoadingStatus.INITIAL;
   });
   builder.addCase(updateFilm, (state, action) => {
     const updatedFilm = action.payload;

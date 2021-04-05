@@ -142,7 +142,7 @@ describe(`Test for AddReviewScreen`, () => {
       ...fakeStore,
       DATA: {
         ...fakeStore.DATA,
-        filmLoadingStatus: LoadingStatus.FETCHING
+        filmsLoadingStatus: LoadingStatus.FETCHING
       }
     });
     render(
@@ -165,7 +165,8 @@ describe(`Test for AddReviewScreen`, () => {
       ...fakeStore,
       DATA: {
         ...fakeStore.DATA,
-        currentFilmID: `test`
+        currentFilmID: `test`,
+        filmsLoadingStatus: LoadingStatus.FAILURE,
       }
     });
 

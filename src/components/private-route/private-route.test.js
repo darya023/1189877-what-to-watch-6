@@ -56,4 +56,26 @@ describe(`Test for PrivateRouter`, () => {
     expect(screen.getByText(/Private Route/i)).toBeInTheDocument();
     expect(screen.queryByText(/Public Route/i)).not.toBeInTheDocument();
   });
+  it(`Should render Spinner for private route while is waiting autharization status`, () => {
+    const store = mockStore({
+      USER: {authorizationStatus: null}
+    });
+
+    render(
+        <Provider store={store}>
+          <Router history={history}>
+            <Route exact path="/login"><div>Public Route</div></Route>
+            <PrivateRoute
+              exact
+              path="/private"
+              component={() => (<div>Private Route</div>)}
+            />
+          </Router>
+        </Provider>
+    );
+
+    expect(screen.getByTestId(`spinner`)).toBeInTheDocument();
+    expect(screen.queryByText(/Private Route/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Public Route/i)).not.toBeInTheDocument();
+  });
 });

@@ -10,10 +10,15 @@ export const getFilmLoadingStatus = (state) => state[NameSpace.DATA].filmLoading
 
 export const needShowSpinnerInsteadCurrentFilm = createSelector(
     [getFilmLoadingStatus, getCurrentFilm],
-    (filmLoadingStatus, currentFilm) => filmLoadingStatus === LoadingStatus.FETCHING && !currentFilm
+    (filmLoadingStatus, currentFilm) => filmLoadingStatus === LoadingStatus.INITIAL || filmLoadingStatus === LoadingStatus.FETCHING && !currentFilm
+);
+
+export const needShowNotFoundScreenInsteadFilmsPage = createSelector(
+    [getFilmLoadingStatus, getCurrentFilm],
+    (filmLoadingStatus, currentFilm) => filmLoadingStatus === LoadingStatus.FAILURE && !currentFilm
 );
 
 export const getCurrentFilmFromFilmsList = createSelector(
     [getFilms, getCurrentFilmID],
-    (films, id) => films.find((film) => film.id === id)
+    (films, id) => films.find((film) => film.id === id) || null
 );

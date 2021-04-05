@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {createAPI} from '../../services/api';
 import {ActionType} from '../actions';
 import {fetchFilm, fetchFilms, fetchPoster, fetchReviews, sendReview, toggleIsFavoriteKey} from '../api-actions';
-import {APIRoute, DataType, LoadingStatus} from '../../const';
+import {DataType, LoadingStatus} from '../../const';
 import {adaptDataToClient} from "../../utils/adaptDataToClient";
 import axios from "axios";
 import {adaptDataToServer} from "../../utils/adaptDataToServer";
@@ -389,10 +389,10 @@ describe(`Async operations work correctly: data`, () => {
     });
 
     apiMock
-      .onGet(APIRoute.FILMS)
+      .onGet(`/films`)
       .reply(200, fakeFilmsFromServer);
 
-    axios.get(APIRoute.FILMS)
+    axios.get(`/films`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(2);
         expect(adaptData).toHaveBeenNthCalledWith(1, fakeFilmsFromServer[0], 0, fakeFilmsFromServer);
@@ -435,10 +435,10 @@ describe(`Async operations work correctly: data`, () => {
     });
 
     apiMock
-      .onGet(`${APIRoute.FILMS}/${1}`)
+      .onGet(`/films/${1}`)
       .reply(200, fakeFilmFromServer);
 
-    axios.get(APIRoute.FILMS)
+    axios.get(`/films/${1}`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenNthCalledWith(1, fakeFilmFromServer);
@@ -461,7 +461,7 @@ describe(`Async operations work correctly: data`, () => {
         });
       });
   });
-  it(`Should make a correct API call to /reviews/:id`, () => {
+  it(`Should make a correct API call to /comments/:id`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
     const adaptData = jest.spyOn(adaptDataToClient, DataType.FILMS);
@@ -469,7 +469,7 @@ describe(`Async operations work correctly: data`, () => {
     const reviewsLoader = fetchReviews(id);
 
     apiMock
-      .onGet(`${APIRoute.REVIEWS}/${id}`)
+      .onGet(`/comments/${id}`)
       .reply(200, fakeReviewsFromServer);
 
     reviewsLoader(dispatch, () => {}, api)
@@ -485,7 +485,7 @@ describe(`Async operations work correctly: data`, () => {
         });
       });
   });
-  it(`Should make a correct API call to /reviews/:id for send review`, () => {
+  it(`Should make a correct API call to /comments/:id for send review`, () => {
     const apiMock = new MockAdapter(api);
     const dispatch = jest.fn();
     const adaptTestDataToServer = jest.spyOn(adaptDataToServer, DataType.REVIEWS);
@@ -507,10 +507,10 @@ describe(`Async operations work correctly: data`, () => {
     });
 
     apiMock
-      .onPost(`${APIRoute.REVIEWS}/${id}`)
+      .onPost(`comments/${id}`)
       .reply(200, fakeReviewsFromServer);
 
-    axios.get(APIRoute.FILMS)
+    axios.get(`comments/${id}`)
       .then(() => {
         expect(adaptTestDataToClient).toHaveBeenCalledTimes(2);
         expect(adaptTestDataToClient).toHaveBeenNthCalledWith(1, fakeReviewsFromServer[0], 0, fakeReviewsFromServer);
@@ -548,10 +548,10 @@ describe(`Async operations work correctly: data`, () => {
     });
 
     apiMock
-      .onGet(APIRoute.POSTER)
+      .onGet(`/films/promo`)
       .reply(200, fakeFilmFromServer);
 
-    axios.get(APIRoute.POSTER)
+    axios.get(`/films/promo`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeFilmFromServer);
@@ -589,10 +589,10 @@ describe(`Async operations work correctly: data`, () => {
     });
 
     apiMock
-      .onPost(`${APIRoute.FAVORITE}/1/0}`)
+      .onPost(`/favorite/1/0}`)
       .reply(200, fakeFilmFromServer);
 
-    axios.get(`${APIRoute.FAVORITE}/1/0}`)
+    axios.get(`/favorite/1/0}`)
       .then(() => {
         expect(adaptData).toHaveBeenCalledTimes(1);
         expect(adaptData).toHaveBeenCalledWith(fakeFilmFromServer);

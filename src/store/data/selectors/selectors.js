@@ -13,6 +13,11 @@ export const needShowSpinnerInsteadFilms = createSelector(
     (filmsLoadingStatus) => filmsLoadingStatus === LoadingStatus.FETCHING
 );
 
+export const needShowNotFoundScreenInsteadAddReviewPage = createSelector(
+    [getFilmsLoadingStatus, getCurrentFilm],
+    (filmsLoadingStatus, currentFilm) => filmsLoadingStatus === LoadingStatus.FAILURE && !currentFilm
+);
+
 export const needShowSpinnerInsteadMainScreen = createSelector(
     [needShowSpinnerInsteadFilms, needShowSpinnerInsteadPoster],
     (isSpinnerInsteadFilmsShown, isSpinnerInsteadPosterShown) => isSpinnerInsteadPosterShown && isSpinnerInsteadFilmsShown

@@ -70,6 +70,11 @@ const fakeStore = {
   },
 };
 describe(`Test for PlayerScreen`, () => {
+  const fakeDispatch = jest.fn();
+  beforeAll(() => {
+    jest.restoreAllMocks();
+    jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
+  });
   beforeEach(() => {
     history = createMemoryHistory();
     history.push(`/player/${fakeFilm.id}`);
@@ -81,8 +86,8 @@ describe(`Test for PlayerScreen`, () => {
       .spyOn(window.HTMLMediaElement.prototype, `play`)
       .mockImplementation(() => {});
   });
-  const fakeDispatch = jest.fn();
-  jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
+  // const fakeDispatch = jest.fn();
+  // jest.spyOn(redux, `useDispatch`).mockImplementation(() => fakeDispatch);
 
   it(`PlayerScreen should render correctly`, () => {
     const store = mockStore(fakeStore);
