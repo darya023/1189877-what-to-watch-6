@@ -10,12 +10,14 @@ import {getSendingDataStatus, needDisableElement, needResetSendingDataStatus, ne
 import {LoadingStatus} from "../../const";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
-const MIN_TEXTAREA_LENGTH = 50;
-const MAX_TEXTAREA_LENGTH = 400;
+const TextareaLength = {
+  MIN: 50,
+  MAX: 400,
+};
 
 const ReviewFormToastText = {
-  MIN: `Review must be more than ${MIN_TEXTAREA_LENGTH} symbols.`,
-  MAX: `Review must be less than ${MAX_TEXTAREA_LENGTH} symbols.`,
+  MIN: `Review must be more than ${TextareaLength.MIN} symbols.`,
+  MAX: `Review must be less than ${TextareaLength.MAX} symbols.`,
   ERROR: `Something went wrong. Please try later.`,
 };
 const RATING_LENGTH = 10;
@@ -53,13 +55,13 @@ const ReviewForm = ({currentFilmID}) => {
   const formRef = useRef();
 
   const onSubmit = (data) => {
-    if (data[`review-text`].length < MIN_TEXTAREA_LENGTH) {
+    if (data[`review-text`].length < TextareaLength.MIN) {
       setToastText(ReviewFormToastText.MIN);
     }
-    if (data[`review-text`].length > MAX_TEXTAREA_LENGTH) {
+    if (data[`review-text`].length > TextareaLength.MAX) {
       setToastText(ReviewFormToastText.MAX);
     }
-    if (data[`review-text`].length < MIN_TEXTAREA_LENGTH || data[`review-text`].length > MAX_TEXTAREA_LENGTH) {
+    if (data[`review-text`].length < TextareaLength.MIN || data[`review-text`].length > TextareaLength.MAX) {
       setIsFormDisabled(true);
       shake(
           formRef,

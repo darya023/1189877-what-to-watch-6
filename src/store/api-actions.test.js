@@ -3,8 +3,8 @@ import {createAPI} from '../services/api';
 import {ActionType} from './actions';
 import {fetchFilm, fetchFilms, fetchPoster, fetchReviews, sendReview, toggleIsFavoriteKey, checkAuthorization, login, logout} from './api-actions';
 import {DataType, LoadingStatus} from '../const';
-import {adaptDataToClient} from "../utils/adaptDataToClient";
-import {adaptDataToServer} from "../utils/adaptDataToServer";
+import {adaptDataToClient} from "../utils/adapt-data-to-client";
+import {adaptDataToServer} from "../utils/adapt-data-to-server";
 
 
 const api = createAPI(() => {});
@@ -508,7 +508,7 @@ describe(`Async operations work correctly`, () => {
       });
       expect(dispatch).toHaveBeenNthCalledWith(2, {
         type: ActionType.CHANGE_SENDING_DATA_STATUS,
-        payload: LoadingStatus.FAILURE,
+        payload: LoadingStatus.INITIAL,
       });
       expect(dispatch).toHaveBeenNthCalledWith(3, {
         type: ActionType.REDIRECT_TO_ROUTE,

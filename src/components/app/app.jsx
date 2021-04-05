@@ -92,7 +92,14 @@ const App = () => {
 };
 
 App.propTypes = {
-  match: PropTypes.object,
+  match: PropTypes.objectOf({
+    isExact: PropTypes.bool.isRequired,
+    path: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    params: PropTypes.objectOf({
+      id: PropTypes.string.isRequired,
+    })
+  }),
 };
 
 export {App};
